@@ -1,31 +1,219 @@
+
+
 <!DOCTYPE html>
 <html layout:decorate="~{layout/main_layout}">
-<head><title>Manage Users</title></head>
+
+<head>
+    <title>Manage Users</title>
+    <style>
+        /* Card Component Styling */
+        .card-custom {
+            background-color: white;
+            border: 1px solid #dbeafe;
+            /* border-blue-100 */
+            border-radius: 0.75rem;
+            /* rounded-xl */
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            /* shadow-md */
+            transition: box-shadow 0.2s;
+        }
+
+        .card-custom:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            /* shadow-lg */
+        }
+
+        /* Gradient Button */
+        .btn-gradient-primary {
+            background: linear-gradient(to right, #3b82f6, #22c55e);
+            border: none;
+            color: white;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-gradient-primary:hover {
+            background: linear-gradient(to right, #2563eb, #16a34a);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Table Styling */
+        .table-custom {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .table-custom thead {
+            background-color: rgba(239, 246, 255, 0.5);
+            /* bg-blue-50/50 */
+        }
+
+        .table-custom thead th {
+            color: #1e3a8a;
+            /* text-blue-900 */
+            font-weight: 600;
+            font-size: 0.875rem;
+            padding: 1rem;
+            border-bottom: 1px solid #dbeafe;
+        }
+
+        .table-custom tbody tr {
+            transition: background-color 0.2s;
+        }
+
+        .table-custom tbody tr:hover {
+            background-color: rgba(239, 246, 255, 0.3);
+            /* hover:bg-blue-50/30 */
+        }
+
+        .table-custom tbody td {
+            padding: 1rem;
+            vertical-align: middle;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        /* Badge Styling */
+        .badge-outline {
+            border: 1px solid currentColor;
+            background-color: transparent;
+            font-weight: 500;
+            text-transform: capitalize;
+        }
+
+        .badge-role {
+            border: 1px solid #dbeafe;
+            background-color: #eff6ff;
+            color: #2563eb;
+        }
+
+        .badge-active {
+            background-color: #22c55e;
+            color: white;
+        }
+
+        .badge-inactive {
+            background-color: #9ca3af;
+            color: white;
+        }
+
+        /* Search Input */
+        .search-input-wrapper {
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #93c5fd;
+            /* text-blue-400 */
+        }
+
+        .search-input {
+            padding-left: 2.5rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Action Buttons */
+        .btn-action {
+            padding: 0.375rem 0.75rem;
+            border: none;
+            background-color: transparent;
+            transition: all 0.2s;
+            border-radius: 0.375rem;
+        }
+
+        .btn-action:hover {
+            background-color: #f3f4f6;
+        }
+
+        .btn-action-blue {
+            color: #2563eb;
+        }
+
+        .btn-action-blue:hover {
+            color: #1d4ed8;
+            background-color: #eff6ff;
+        }
+
+        .btn-action-red {
+            color: #dc2626;
+        }
+
+        .btn-action-red:hover {
+            color: #b91c1c;
+            background-color: #fee2e2;
+        }
+
+        .btn-action-green {
+            color: #16a34a;
+        }
+
+        .btn-action-green:hover {
+            color: #15803d;
+            background-color: #dcfce7;
+        }
+
+        /* Text Colors */
+        .text-blue-900 {
+            color: #1e3a8a;
+        }
+
+        .text-blue-700 {
+            color: #1d4ed8;
+        }
+
+        .text-blue-600 {
+            color: #2563eb;
+        }
+
+        .text-muted {
+            color: #6b7280;
+        }
+    </style>
+</head>
+
 <body>
     <div layout:fragment="content">
-        
-        <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <!-- Page Header -->
+        <div class="d-flex justify-content-between align-items-start mb-4">
             <div>
-                <h2 class="fw-bold" style="color: #1e3a8a;">Manage User Accounts</h2>
-                <p class="text-muted">View and manage all registered users</p>
+                <h1 class="text-blue-900 mb-2 fw-bold" style="font-size: 2rem;">Manage User Accounts</h1>
+                <p class="text-blue-600">View and manage all registered users</p>
             </div>
-            <button class="btn btn-success text-white fw-bold d-flex align-items-center gap-2" 
-                    data-bs-toggle="modal" data-bs-target="#addUserModal">
-                <i class="fas fa-user-plus"></i> Add New User
+            <button class="btn btn-gradient-primary d-flex align-items-center gap-2" data-bs-toggle="modal"
+                data-bs-target="#addUserModal">
+                <i class="fas fa-user-plus"></i>
+                Add New User
             </button>
         </div>
 
-        <div class="card card-custom mb-4">
-            <div class="card-body p-3">
-                <div class="row g-3">
-                    <div class="col-md-8">
-                        <div class="input-group">
-                            <span class="input-group-text bg-light border-end-0"><i class="fas fa-search text-muted"></i></span>
-                            <input type="text" class="form-control bg-light border-start-0" placeholder="Search users by name or email...">
+        <!-- User Directory Card -->
+        <div class="card card-custom border-0">
+            <div class="card-header bg-white border-0 pt-4 pb-3">
+                <div class="row g-3 align-items-center">
+                    <div class="col-12 col-md-8">
+                        <h5 class="text-blue-900 fw-bold mb-3">User Directory</h5>
+                        <div class="search-input-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" class="form-control search-input" placeholder="Search users..."
+                                id="searchInput">
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <select class="form-select bg-light">
+                    <div class="col-12 col-md-4">
+                        <label class="form-label small text-muted mb-2">Filter by Role</label>
+                        <select class="form-select" id="roleFilter">
                             <option value="all">All Roles</option>
                             <option value="STUDENT">Student</option>
                             <option value="COUNSELOR">Counselor</option>
@@ -34,70 +222,245 @@
                     </div>
                 </div>
             </div>
-        </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-custom mb-0">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Verified</th>
+                                <th>Join Date</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- User Row 1 -->
+                            <tr>
+                                <td class="fw-semibold text-blue-900">Sarah Johnson</td>
+                                <td class="text-muted">sarah.j@example.com</td>
+                                <td>
+                                    <span class="badge badge-role">Student</span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-active">Active</span>
+                                </td>
+                                <td>
+                                    <i class="fas fa-check-circle text-success" style="font-size: 1.25rem;"></i>
+                                </td>
+                                <td class="text-muted">2024-01-15</td>
+                                <td>
+                                    <div class="d-flex gap-1 justify-content-end">
+                                        <button class="btn btn-action btn-action-blue" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-action btn-action-red" title="Deactivate">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
 
-        <div class="card card-custom overflow-hidden">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
-                        <tr>
-                            <th class="ps-4">Name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                            <th>Verified</th>
-                            <th class="text-end pe-4">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="i : ${#numbers.sequence(1, 5)}"> 
-                            <td class="ps-4 fw-bold text-dark">Sarah Johnson</td>
-                            <td class="text-muted">sarah.j@example.com</td>
-                            <td><span class="badge bg-light text-primary border border-primary-subtle">Student</span></td>
-                            <td><span class="badge bg-success-subtle text-success">Active</span></td>
-                            <td><i class="fas fa-check-circle text-success"></i></td>
-                            <td class="text-end pe-4">
-                                <button class="btn btn-sm btn-light text-primary me-1"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm btn-light text-danger"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                            <!-- User Row 2 -->
+                            <tr>
+                                <td class="fw-semibold text-blue-900">Michael Chen</td>
+                                <td class="text-muted">michael.c@example.com</td>
+                                <td>
+                                    <span class="badge badge-role">Student</span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-active">Active</span>
+                                </td>
+                                <td>
+                                    <i class="fas fa-check-circle text-success" style="font-size: 1.25rem;"></i>
+                                </td>
+                                <td class="text-muted">2024-02-20</td>
+                                <td>
+                                    <div class="d-flex gap-1 justify-content-end">
+                                        <button class="btn btn-action btn-action-blue" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-action btn-action-red" title="Deactivate">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- User Row 3 - Unverified -->
+                            <tr>
+                                <td class="fw-semibold text-blue-900">Emily Davis</td>
+                                <td class="text-muted">emily.d@example.com</td>
+                                <td>
+                                    <span class="badge badge-role">Counselor</span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-active">Active</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-action btn-action-blue small" data-bs-toggle="modal"
+                                        data-bs-target="#verifyEmailModal" data-user-name="Emily Davis"
+                                        data-user-email="emily.d@example.com">
+                                        <i class="fas fa-envelope me-1"></i>
+                                        Verify
+                                    </button>
+                                </td>
+                                <td class="text-muted">2024-03-10</td>
+                                <td>
+                                    <div class="d-flex gap-1 justify-content-end">
+                                        <button class="btn btn-action btn-action-blue" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-action btn-action-red" title="Deactivate">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- User Row 4 - Inactive -->
+                            <tr>
+                                <td class="fw-semibold text-blue-900">James Wilson</td>
+                                <td class="text-muted">james.w@example.com</td>
+                                <td>
+                                    <span class="badge badge-role">Student</span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-inactive">Inactive</span>
+                                </td>
+                                <td>
+                                    <i class="fas fa-check-circle text-success" style="font-size: 1.25rem;"></i>
+                                </td>
+                                <td class="text-muted">2024-01-05</td>
+                                <td>
+                                    <div class="d-flex gap-1 justify-content-end">
+                                        <button class="btn btn-action btn-action-blue" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-action btn-action-green" title="Activate">
+                                            <i class="fas fa-check"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- User Row 5 -->
+                            <tr>
+                                <td class="fw-semibold text-blue-900">Lisa Anderson</td>
+                                <td class="text-muted">lisa.a@example.com</td>
+                                <td>
+                                    <span class="badge badge-role">Admin</span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-active">Active</span>
+                                </td>
+                                <td>
+                                    <i class="fas fa-check-circle text-success" style="font-size: 1.25rem;"></i>
+                                </td>
+                                <td class="text-muted">2023-12-01</td>
+                                <td>
+                                    <div class="d-flex gap-1 justify-content-end">
+                                        <button class="btn btn-action btn-action-blue" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-action btn-action-red" title="Deactivate">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
-        <div class="modal fade" id="addUserModal" tabindex="-1">
+        <!-- Add User Modal -->
+        <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title fw-bold">Add New User</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <div class="modal-content" style="border-radius: 0.75rem; border: 1px solid #dbeafe;">
+                    <div class="modal-header border-0 pb-0">
+                        <div>
+                            <h5 class="modal-title fw-bold text-blue-900" id="addUserModalLabel">Add New User</h5>
+                            <p class="text-muted small mb-0">Create a new user account</p>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body pt-3">
                         <form>
                             <div class="mb-3">
-                                <label class="form-label">Full Name</label>
+                                <label class="form-label fw-semibold text-blue-900">Full Name</label>
                                 <input type="text" class="form-control" placeholder="John Doe">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Email</label>
+                                <label class="form-label fw-semibold text-blue-900">Email</label>
                                 <input type="email" class="form-control" placeholder="john@example.com">
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label">Role</label>
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold text-blue-900">Role</label>
                                 <select class="form-select">
+                                    <option value="">Select role</option>
                                     <option value="STUDENT">Student</option>
                                     <option value="COUNSELOR">Counselor</option>
                                     <option value="ADMIN">Admin</option>
                                 </select>
                             </div>
-                            <button type="submit" class="btn btn-primary w-100">Create User</button>
+                            <button type="submit" class="btn btn-gradient-primary w-100">
+                                Create User
+                            </button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Verify Email Modal -->
+        <div class="modal fade" id="verifyEmailModal" tabindex="-1" aria-labelledby="verifyEmailModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" style="border-radius: 0.75rem; border: 1px solid #dbeafe;">
+                    <div class="modal-header border-0 pb-0">
+                        <div>
+                            <h5 class="modal-title fw-bold text-blue-900" id="verifyEmailModalLabel">Verify User Email
+                            </h5>
+                            <p class="text-muted small mb-0">Confirm email verification</p>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body pt-3">
+                        <p class="text-blue-900 mb-4">
+                            Are you sure you want to verify the email address:
+                            <span class="fw-semibold" id="verifyEmailAddress"></span>?
+                        </p>
+                        <div class="d-flex gap-2 justify-content-end">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                Cancel
+                            </button>
+                            <button type="button" class="btn btn-gradient-primary">
+                                Verify Email
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Handle verify email modal data
+            const verifyEmailModal = document.getElementById('verifyEmailModal');
+            if (verifyEmailModal) {
+                verifyEmailModal.addEventListener('show.bs.modal', function (event) {
+                    const button = event.relatedTarget;
+                    const userEmail = button.getAttribute('data-user-email');
+                    const emailSpan = verifyEmailModal.querySelector('#verifyEmailAddress');
+                    emailSpan.textContent = userEmail;
+                });
+            }
+        </script>
+
     </div>
 </body>
+
 </html>
