@@ -114,6 +114,14 @@
                             <cargo.servlet.port>8080</cargo.servlet.port>
                         </properties>
                     </configuration>
+                    <!-- Deploy at root context -->
+                    <deployables>
+                        <deployable>
+                            <properties>
+                                <context>/</context>
+                            </properties>
+                        </deployable>
+                    </deployables>
                 </configuration>
             </plugin>
         </plugins>

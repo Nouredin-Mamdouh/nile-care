@@ -1,97 +1,390 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout/main_layout}">
-<head><title>Admin Dashboard</title></head>
+
+<head>
+    <title>Admin Dashboard</title>
+    <style>
+        /* Card Component Styling */
+        .card-custom {
+            background-color: white;
+            border: 1px solid #dbeafe;
+            /* border-blue-100 */
+            border-radius: 0.75rem;
+            /* rounded-xl */
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            /* shadow-md */
+            transition: box-shadow 0.2s;
+        }
+
+        .card-custom:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            /* shadow-lg */
+        }
+
+        /* Icon Box Gradients */
+        .icon-box {
+            width: 3rem;
+            /* 48px */
+            height: 3rem;
+            border-radius: 0.75rem;
+            /* rounded-xl */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .bg-gradient-blue {
+            background: linear-gradient(to bottom right, #3b82f6, #2563eb);
+        }
+
+        .bg-gradient-green {
+            background: linear-gradient(to bottom right, #22c55e, #16a34a);
+        }
+
+        .bg-gradient-purple {
+            background: linear-gradient(to bottom right, #a855f7, #9333ea);
+        }
+
+        .bg-gradient-orange {
+            background: linear-gradient(to bottom right, #f97316, #ea580c);
+        }
+
+        /* Button Gradients */
+        .btn-gradient-blue {
+            background: linear-gradient(to right, #3b82f6, #2563eb);
+            border: none;
+            color: white;
+            transition: all 0.2s;
+        }
+
+        .btn-gradient-blue:hover {
+            background: linear-gradient(to right, #2563eb, #1d4ed8);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-gradient-green {
+            background: linear-gradient(to right, #22c55e, #16a34a);
+            border: none;
+            color: white;
+            transition: all 0.2s;
+        }
+
+        .btn-gradient-green:hover {
+            background: linear-gradient(to right, #16a34a, #15803d);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-gradient-purple {
+            background: linear-gradient(to right, #a855f7, #9333ea);
+            border: none;
+            color: white;
+            transition: all 0.2s;
+        }
+
+        .btn-gradient-purple:hover {
+            background: linear-gradient(to right, #9333ea, #7e22ce);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Activity Item Styling */
+        .activity-item {
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            background-color: rgba(239, 246, 255, 0.5);
+            /* bg-blue-50/50 */
+            transition: background-color 0.2s;
+        }
+
+        .activity-item:hover {
+            background-color: #eff6ff;
+            /* bg-blue-50 */
+        }
+
+        /* Progress Bar Styling */
+        .progress-custom {
+            height: 0.5rem;
+            /* h-2 */
+            background-color: #e5e7eb;
+            /* gray-200 */
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        .progress-bar-custom {
+            height: 100%;
+            background: linear-gradient(to right, #3b82f6, #22c55e);
+            border-radius: 9999px;
+            transition: width 0.3s ease;
+        }
+
+        /* Text Colors */
+        .text-blue-900 {
+            color: #1e3a8a;
+        }
+
+        .text-blue-700 {
+            color: #1d4ed8;
+        }
+
+        .text-blue-600 {
+            color: #2563eb;
+        }
+
+        .text-blue-500 {
+            color: #3b82f6;
+        }
+
+        .text-green-600 {
+            color: #16a34a;
+        }
+    </style>
+</head>
+
 <body>
     <div layout:fragment="content">
-        
+
+        <!-- Page Header -->
         <div class="mb-4">
-            <h2 class="fw-bold text-blue-900">Admin Dashboard</h2>
+            <h1 class="text-blue-900 mb-2 fw-bold" style="font-size: 2rem;">Admin Dashboard</h1>
             <p class="text-blue-600">Welcome back! Here's what's happening today.</p>
         </div>
 
+        <!-- Stats Grid -->
         <div class="row g-4 mb-4">
-            <div class="col-md-6 col-lg-3">
-                <div class="card card-custom h-100 p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="icon-box bg-gradient-blue">
-                            <i class="fas fa-users fa-lg"></i>
+            <!-- Total Users Card -->
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="card card-custom border-0">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div class="icon-box bg-gradient-blue">
+                                <i class="fas fa-users fa-lg"></i>
+                            </div>
+                            <span class="badge bg-success-subtle text-success">+12%</span>
                         </div>
-                        <span class="badge bg-success-subtle text-success">+12%</span>
+                        <div>
+                            <p class="text-blue-600 small mb-1">Total Users</p>
+                            <h2 class="text-blue-900 fw-bold mb-0" style="font-size: 1.875rem;">1,248</h2>
+                        </div>
                     </div>
-                    <div class="text-blue-600 small">Total Users</div>
-                    <h3 class="fw-bold mb-0 text-blue-900">1,248</h3>
                 </div>
             </div>
 
-            <div class="col-md-6 col-lg-3">
-                <div class="card card-custom h-100 p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="icon-box bg-gradient-green">
-                            <i class="fas fa-chart-line fa-lg"></i>
+            <!-- Active Sessions Card -->
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="card card-custom border-0">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div class="icon-box bg-gradient-green">
+                                <i class="fas fa-chart-line fa-lg"></i>
+                            </div>
+                            <span class="badge bg-success-subtle text-success">+5%</span>
                         </div>
-                        <span class="badge bg-success-subtle text-success">+5%</span>
+                        <div>
+                            <p class="text-blue-600 small mb-1">Active Sessions</p>
+                            <h2 class="text-blue-900 fw-bold mb-0" style="font-size: 1.875rem;">87</h2>
+                        </div>
                     </div>
-                    <div class="text-blue-600 small">Active Sessions</div>
-                    <h3 class="fw-bold mb-0 text-blue-900">87</h3>
                 </div>
             </div>
 
-            <div class="col-md-6 col-lg-3">
-                <div class="card card-custom h-100 p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="icon-box bg-gradient-purple">
-                            <i class="fas fa-file-alt fa-lg"></i>
+            <!-- Reports Generated Card -->
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="card card-custom border-0">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div class="icon-box bg-gradient-purple">
+                                <i class="fas fa-file-alt fa-lg"></i>
+                            </div>
+                            <span class="badge bg-success-subtle text-success">+23%</span>
                         </div>
-                        <span class="badge bg-success-subtle text-success">+23%</span>
+                        <div>
+                            <p class="text-blue-600 small mb-1">Reports Generated</p>
+                            <h2 class="text-blue-900 fw-bold mb-0" style="font-size: 1.875rem;">342</h2>
+                        </div>
                     </div>
-                    <div class="text-blue-600 small">Reports Generated</div>
-                    <h3 class="fw-bold mb-0 text-blue-900">342</h3>
                 </div>
             </div>
 
-            <div class="col-md-6 col-lg-3">
-                <div class="card card-custom h-100 p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="icon-box bg-gradient-orange">
-                            <i class="fas fa-calendar-check fa-lg"></i>
+            <!-- Counseling Appointments Card -->
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="card card-custom border-0">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                            <div class="icon-box bg-gradient-orange">
+                                <i class="fas fa-calendar-check fa-lg"></i>
+                            </div>
+                            <span class="badge bg-success-subtle text-success">+8%</span>
                         </div>
-                        <span class="badge bg-success-subtle text-success">+8%</span>
+                        <div>
+                            <p class="text-blue-600 small mb-1">Counseling Appointments</p>
+                            <h2 class="text-blue-900 fw-bold mb-0" style="font-size: 1.875rem;">156</h2>
+                        </div>
                     </div>
-                    <div class="text-blue-600 small">Counseling Appointments</div>
-                    <h3 class="fw-bold mb-0 text-blue-900">156</h3>
                 </div>
             </div>
         </div>
 
-        <div class="row g-4">
-            <div class="col-lg-8">
-                <div class="card card-custom p-4 h-100">
-                    <h5 class="fw-bold text-blue-900 mb-4">Recent Activity</h5>
-                    <div class="d-flex flex-column gap-3">
-                        <div class="d-flex justify-content-between p-3 bg-light rounded-3 align-items-center">
-                            <div>
-                                <h6 class="fw-bold text-blue-900 mb-0">Sarah Johnson</h6>
-                                <small class="text-blue-600">Completed Module 3</small>
-                            </div>
-                            <small class="text-muted">5 min ago</small>
-                        </div>
-                        </div>
+        <!-- Quick Actions Card -->
+        <div class="card card-custom border-0 mb-4">
+            <div class="card-header bg-white border-0 pt-4">
+                <h5 class="text-blue-900 fw-bold mb-0">Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-12 col-md-4">
+                        <a th:href="@{/admin/users}"
+                            class="btn btn-gradient-blue w-100 py-4 d-flex flex-column align-items-center gap-2">
+                            <i class="fas fa-user-plus" style="font-size: 1.5rem;"></i>
+                            <span>Add New User</span>
+                        </a>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <a th:href="@{/admin/reports}"
+                            class="btn btn-gradient-green w-100 py-4 d-flex flex-column align-items-center gap-2">
+                            <i class="fas fa-chart-bar" style="font-size: 1.5rem;"></i>
+                            <span>Generate Report</span>
+                        </a>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <a th:href="@{/admin/roles}"
+                            class="btn btn-gradient-purple w-100 py-4 d-flex flex-column align-items-center gap-2">
+                            <i class="fas fa-shield-alt" style="font-size: 1.5rem;"></i>
+                            <span>Set User Roles</span>
+                        </a>
+                    </div>
                 </div>
             </div>
-            
-            <div class="col-lg-4">
-                <div class="card card-custom p-4 h-100">
-                    <h5 class="fw-bold text-blue-900 mb-4">Quick Actions</h5>
-                    <div class="d-grid gap-3">
-                        <a href="#" class="btn btn-outline-primary py-3 text-start px-4 fw-bold border-2">
-                            <i class="fas fa-user-plus me-2"></i> Add New User
-                        </a>
-                        <a href="#" class="btn btn-outline-success py-3 text-start px-4 fw-bold border-2">
-                            <i class="fas fa-file-export me-2"></i> Generate Report
-                        </a>
-                        <a href="#" class="btn btn-outline-secondary py-3 text-start px-4 fw-bold border-2">
-                            <i class="fas fa-cog me-2"></i> System Settings
-                        </a>
+        </div>
+
+        <!-- Recent Activity & Module Completion -->
+        <div class="row g-4">
+            <!-- Recent Activity Card -->
+            <div class="col-12 col-lg-6">
+                <div class="card card-custom border-0 h-100">
+                    <div class="card-header bg-white border-0 pt-4">
+                        <h5 class="text-blue-900 fw-bold mb-0">Recent Activity</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column gap-3">
+                            <!-- Activity Item 1 -->
+                            <div class="activity-item d-flex justify-content-between align-items-center">
+                                <div class="flex-grow-1">
+                                    <p class="text-blue-900 fw-semibold mb-0">Sarah Johnson</p>
+                                    <p class="text-blue-600 small mb-0">Completed Module 3</p>
+                                </div>
+                                <span class="text-blue-500 small">5 min ago</span>
+                            </div>
+
+                            <!-- Activity Item 2 -->
+                            <div class="activity-item d-flex justify-content-between align-items-center">
+                                <div class="flex-grow-1">
+                                    <p class="text-blue-900 fw-semibold mb-0">Michael Chen</p>
+                                    <p class="text-blue-600 small mb-0">Booked counseling session</p>
+                                </div>
+                                <span class="text-blue-500 small">12 min ago</span>
+                            </div>
+
+                            <!-- Activity Item 3 -->
+                            <div class="activity-item d-flex justify-content-between align-items-center">
+                                <div class="flex-grow-1">
+                                    <p class="text-blue-900 fw-semibold mb-0">Emily Davis</p>
+                                    <p class="text-blue-600 small mb-0">Submitted help request</p>
+                                </div>
+                                <span class="text-blue-500 small">25 min ago</span>
+                            </div>
+
+                            <!-- Activity Item 4 -->
+                            <div class="activity-item d-flex justify-content-between align-items-center">
+                                <div class="flex-grow-1">
+                                    <p class="text-blue-900 fw-semibold mb-0">James Wilson</p>
+                                    <p class="text-blue-600 small mb-0">Completed self-assessment</p>
+                                </div>
+                                <span class="text-blue-500 small">1 hour ago</span>
+                            </div>
+
+                            <!-- Activity Item 5 -->
+                            <div class="activity-item d-flex justify-content-between align-items-center">
+                                <div class="flex-grow-1">
+                                    <p class="text-blue-900 fw-semibold mb-0">Lisa Anderson</p>
+                                    <p class="text-blue-600 small mb-0">Provided feedback</p>
+                                </div>
+                                <span class="text-blue-500 small">2 hours ago</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Module Completion Stats Card -->
+            <div class="col-12 col-lg-6">
+                <div class="card card-custom border-0 h-100">
+                    <div class="card-header bg-white border-0 pt-4">
+                        <h5 class="text-blue-900 fw-bold mb-0">Module Completion Rates</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column gap-4">
+                            <!-- Module 1 -->
+                            <div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-blue-900 small">Stress Management</span>
+                                    <span class="text-blue-600 small fw-semibold">85%</span>
+                                </div>
+                                <div class="progress-custom">
+                                    <div class="progress-bar-custom" style="width: 85%;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Module 2 -->
+                            <div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-blue-900 small">Anxiety Coping Skills</span>
+                                    <span class="text-blue-600 small fw-semibold">72%</span>
+                                </div>
+                                <div class="progress-custom">
+                                    <div class="progress-bar-custom" style="width: 72%;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Module 3 -->
+                            <div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-blue-900 small">Mindfulness Basics</span>
+                                    <span class="text-blue-600 small fw-semibold">91%</span>
+                                </div>
+                                <div class="progress-custom">
+                                    <div class="progress-bar-custom" style="width: 91%;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Module 4 -->
+                            <div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-blue-900 small">Sleep Hygiene</span>
+                                    <span class="text-blue-600 small fw-semibold">68%</span>
+                                </div>
+                                <div class="progress-custom">
+                                    <div class="progress-bar-custom" style="width: 68%;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Module 5 -->
+                            <div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="text-blue-900 small">Emotional Regulation</span>
+                                    <span class="text-blue-600 small fw-semibold">79%</span>
+                                </div>
+                                <div class="progress-custom">
+                                    <div class="progress-bar-custom" style="width: 79%;"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -99,4 +392,5 @@
 
     </div>
 </body>
+
 </html>
