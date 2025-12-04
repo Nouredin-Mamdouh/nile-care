@@ -1,179 +1,41 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout/main_layout}">
 <head>
-    <title>Welcome - MindCare</title>
+    <title>Welcome - NileCare</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
-   <style>
-        /* --- PAGE LAYOUT --- */
-        body { font-family: 'Inter', sans-serif; overflow: hidden; } 
-        .sidebar, .top-nav { display: none !important; }
-        .main-content { margin-left: 0 !important; }
-        
-        /* Visual Container (Matches Tailwind relative container) */
-        .visual-container {
-            position: relative; width: 100%; height: 400px; /* h-96 matches approx 384px, bumped to 400 for spacing */
-            max-width: 450px; margin: 0 auto;
-        }
-
-        /* --- 1. CENTRAL BRAIN (Duration 4s, Y -15) --- */
-        .brand-circle-lg {
-            width: 192px; height: 192px; /* w-48 h-48 */
-            border-radius: 50%;
-            background: linear-gradient(135deg, #22d3ee 0%, #34d399 100%);
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.5);
-            position: absolute; top: 50%; left: 50%; z-index: 10;
-            /* Animation applied directly here */
-            animation: float-brain 4s ease-in-out infinite;
-        }
-
-        @keyframes float-brain {
-            0%, 100% { transform: translate(-50%, -50%) translateY(0px); }
-            50% { transform: translate(-50%, -50%) translateY(-15px); }
-        }
-
-        /* --- 2. ORBITING ICONS (Specific Motions) --- */
-        .icon-float {
-            width: 64px; height: 64px; /* w-16 h-16 */
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15);
-            position: absolute; z-index: 20; color: white; font-size: 1.75rem;
-        }
-
-        /* HEART: top-20 (80px) left-12 (48px) */
-        .pos-heart { top: 80px; left: 48px; animation: float-heart 3s ease-in-out infinite 0.2s; }
-        
-        @keyframes float-heart {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            50% { transform: translate(10px, -20px) rotate(10deg); }
-        }
-
-        /* STAR: top-32 (128px) right-16 (64px) */
-        .pos-star { top: 128px; right: 64px; animation: float-star 3.5s ease-in-out infinite 0.5s; }
-
-        @keyframes float-star {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            50% { transform: translate(-10px, -15px) rotate(-15deg); }
-        }
-
-        /* MESSAGE: bottom-24 (96px) left-8 (32px) */
-        .pos-message { bottom: 96px; left: 32px; animation: float-message 3.2s ease-in-out infinite 0.8s; }
-
-        @keyframes float-message {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-12px) rotate(5deg); }
-        }
-
-        /* --- 3. MICRO BUBBLES (Randomized) --- */
-        /* Logic: y -20, scale 1.5, opacity 0.3->0.8->0.3 */
-        .bubble-micro {
-            position: absolute; border-radius: 50%;
-            background: linear-gradient(135deg, #93c5fd, #86efac); /* Blue-300 to Green-300 */
-            z-index: 5;
-        }
-
-        @keyframes float-bubble {
-            0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
-            50% { transform: translateY(-20px) scale(1.5); opacity: 0.8; }
-        }
-
-        /* Hardcoded random positions to match the loop logic */
-        .b1 { width: 12px; height: 12px; top: 20%; left: 60%; animation: float-bubble 3s ease-in-out infinite 0s; }
-        .b2 { width: 16px; height: 16px; top: 60%; right: 20%; animation: float-bubble 4s ease-in-out infinite 1s; }
-        .b3 { width: 10px; height: 10px; bottom: 30%; left: 45%; animation: float-bubble 2.5s ease-in-out infinite 0.5s; }
-        .b4 { width: 14px; height: 14px; top: 30%; left: 30%; animation: float-bubble 3.5s ease-in-out infinite 1.5s; }
-        .b5 { width: 8px; height: 8px; bottom: 20%; right: 35%; animation: float-bubble 4.2s ease-in-out infinite 2s; }
-        .b6 { width: 12px; height: 12px; top: 15%; right: 40%; animation: float-bubble 3.8s ease-in-out infinite 0.2s; }
-
-
-        /* --- AUTH CARD STYLES --- */
-        .card-glass {
-            background: rgba(255, 255, 255, 0.98);
-            border: 1px solid #e2e8f0; border-radius: 24px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.05);
-        }
-        .input-group-text {
-            background-color: #f8fafc; border: 1px solid #e2e8f0; border-right: none;
-            color: #94a3b8; border-top-left-radius: 12px; border-bottom-left-radius: 12px; padding-left: 1rem;
-        }
-        .form-control-custom {
-            background-color: #f8fafc; border: 1px solid #e2e8f0; border-left: none;
-            border-top-right-radius: 12px; border-bottom-right-radius: 12px; padding: 0.8rem;
-            color: #1e293b; font-size: 0.95rem;
-        }
-        .form-control-custom:focus { background-color: #fff; border-color: #cbd5e1; box-shadow: none; }
-        .form-control-custom:focus + .input-group-text, .input-group:focus-within .input-group-text {
-            background-color: #fff; border-color: #cbd5e1; color: #3b82f6;
-        }
-        .btn-gradient {
-            background: linear-gradient(to right, #0ea5e9, #10b981);
-            border: none; color: white !important; font-weight: 600; padding: 12px;
-            border-radius: 12px; width: 100%; transition: opacity 0.2s; cursor: pointer;
-            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2);
-        }
-        .btn-gradient:hover { opacity: 0.9; transform: translateY(-1px); }
-        .toggle-container {
-            background-color: #f1f5f9; border-radius: 50px; padding: 4px;
-            display: flex; margin-bottom: 2rem; border: 1px solid #e2e8f0;
-        }
-        .toggle-btn {
-            flex: 1; padding: 8px; border-radius: 50px; cursor: pointer;
-            font-weight: 500; font-size: 0.9rem; color: #64748b; border: none;
-            background: transparent; transition: all 0.2s;
-        }
-        .toggle-btn.active {
-            background-color: white; color: #0f172a; font-weight: 600;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .role-card {
-            display: flex; align-items: center; padding: 12px 16px;
-            border: 1px solid #e2e8f0; border-radius: 12px; cursor: pointer;
-            background-color: white; transition: all 0.2s ease; width: 100%;
-            margin-bottom: 0.75rem;
-        }
-        .role-card:hover { background-color: #f8fafc; border-color: #cbd5e1; }
-        .role-card:has(input:checked) {
-            border-color: #3b82f6; background-color: #eff6ff; box-shadow: 0 0 0 1px #3b82f6;
-        }
-        .role-card input[type="radio"] {
-            margin: 0 12px 0 0 !important; width: 1.1em; height: 1.1em; accent-color: #3b82f6; cursor: pointer;
-        }
-        .role-card span { font-size: 0.95rem; font-weight: 500; color: #1e293b; }
-    </style>
 </head>
-<body>
+<body class="auth-page">
     <div layout:fragment="content" class="d-flex align-items-center justify-content-center min-vh-100 p-4">
         
-        <div class="container" style="max-width: 1100px;">
+        <div class="container auth-container">
             <div class="row align-items-center">
                 
                 <div class="col-lg-6 d-none d-lg-block">
                     <div class="padding-start-xl pt-2 pb-4 d-flex align-items-center gap-3">
-                        <div class="d-flex align-items-center justify-content-center rounded-4 text-white" 
-                             style="width: 48px; height: 48px; background: linear-gradient(135deg, #22d3ee, #10b981); box-shadow: 0 4px 10px rgba(34, 211, 238, 0.3);">
+                        <div class="d-flex align-items-center justify-content-center rounded-4 text-white auth-brand-badge bg-gradient-custom">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path></svg>
                         </div>
                         <div>
-                            <h4 class="mb-0 fw-semibold" style="color: #1e3a8a; font-size: 1.25rem;">NileCare</h4>
-                            <small style="color: #3b82f6; font-weight: 500;">Learning & Wellness Platform</small>
+                            <h4 class="mb-0 fw-semibold auth-brand-title">NileCare</h4>
+                            <small class="auth-brand-subtitle">Learning & Wellness Platform</small>
                         </div>
                     </div>
 
                     <div class="visual-container">
-                        <div class="brand-circle-lg">
+                        <div class="visual-bg"></div>
+                        <div class="brand-circle-lg bg-gradient-custom">
                             <svg width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/></svg>
                         </div>
 
-                        <div class="icon-float pos-heart" style="background: linear-gradient(135deg, #f472b6, #e11d48);">
+                        <div class="icon-float pos-heart icon-heart">
                             <i class="fas fa-heart"></i>
                         </div>
-                        <div class="icon-float pos-message" style="background: linear-gradient(135deg, #a855f7, #7c3aed);">
-                            <i class="fas fa-comment"></i>
+                        <div class="icon-float pos-message icon-message">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path></svg>
                         </div>
-                        <div class="icon-float pos-star" style="background: linear-gradient(135deg, #fbbf24, #f59e0b);">
+                        <div class="icon-float pos-star icon-star">
                             <i class="fas fa-star"></i>
                         </div>
                         
@@ -186,8 +48,8 @@
                     </div>
 
                     <div class="text-center mt-2">
-                        <h3 class="fw-semibold fs-5 mb-2" style="color: #1e3a8a;">Your Journey to Wellness</h3>
-                        <p style="color: #3b82f6; font-size: 0.95rem; max-width: 500px; margin: 0 auto; line-height: 1.5;">Access mental health resources, connect with counselors, and track your progress.</p>
+                        <h3 class="fw-semibold fs-5 mb-2 auth-cta-title">Your Journey to Wellness</h3>
+                        <p class="auth-cta-text">Access mental health resources, connect with counselors, and track your progress.</p>
                     </div>
                 </div>
 
@@ -195,7 +57,7 @@
                     <div class="card card-glass p-5">
                         <div class="mb-4">
                             <h4 class="fw-semibold text-dark mb-1" id="formTitle">Welcome</h4>
-                            <p class="text-muted" style="font-size: 0.9rem;" id="formSubtitle">Sign in to your account or create a new one</p>
+                            <p class="text-muted auth-form-subtitle" id="formSubtitle">Sign in to your account or create a new one</p>
                         </div>
 
                         <div th:if="${error}" class="alert alert-danger d-flex align-items-center mb-4 p-2 small border-0 bg-red-50 text-red-700">
@@ -216,7 +78,7 @@
                                         <span class="input-group-text"><i class="far fa-envelope"></i></span>
                                         <input type="email" name="email" class="form-control form-control-custom" placeholder="student@utm.my" required>
                                     </div>
-                                    <div class="mt-1"><small class="text-muted" style="font-size: 0.75rem;">Try: <span class="text-primary cursor-pointer">student@utm.my</span></small></div>
+                                    <div class="mt-1"><small class="text-muted auth-inline-hint">Try: <span class="text-primary cursor-pointer">student@utm.my</span></small></div>
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label small fw-bold text-muted mb-1">Password</label>
@@ -229,7 +91,7 @@
                             </form>
                         </div>
 
-                        <div id="register-form" style="display: none;">
+                        <div id="register-form">
                             <form th:action="@{/register}" method="post">
                                 <div class="mb-3">
                                     <label class="form-label small fw-bold text-muted mb-1">Full Name</label>
