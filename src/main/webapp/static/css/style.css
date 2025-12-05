@@ -411,7 +411,19 @@ a { text-decoration: none; color: inherit; }
 .app-shell .scrollable-area {
     flex: 1;
     overflow-y: auto;
-    padding: 0;
+    padding: 2rem;
+}
+
+@media (max-width: 768px) {
+    .app-shell .scrollable-area {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .app-shell .scrollable-area {
+        padding: 1rem;
+    }
 }
 
 /* Top Nav */
@@ -995,4 +1007,337 @@ a { text-decoration: none; color: inherit; }
 .btn-bookmark-modal.is-bookmarked .bookmark-svg-filled {
     color: var(--blue-500);
     fill: var(--blue-500);
+}
+
+/* ========================================
+   PROGRESS PAGE STYLES
+   ======================================== */
+
+/* Page Header */
+.progress-page-title {
+    color: var(--blue-900);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.progress-page-subtitle {
+    color: var(--blue-600);
+    font-size: 1rem;
+}
+
+/* Statistics Cards */
+.progress-stat-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid var(--blue-100);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08);
+    transition: all 0.3s ease;
+}
+
+.progress-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.15);
+}
+
+.progress-icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+}
+
+.progress-icon-blue {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.progress-icon-green {
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.progress-icon-orange {
+    background: linear-gradient(135deg, #f97316, #ea580c);
+}
+
+.progress-icon-purple {
+    background: linear-gradient(135deg, #a855f7, #9333ea);
+}
+
+.progress-badge-green {
+    background-color: #22c55e;
+    color: white;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 6px;
+}
+
+.progress-badge-blue {
+    background-color: #3b82f6;
+    color: white;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 6px;
+}
+
+.progress-badge-orange {
+    background-color: #f97316;
+    color: white;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 6px;
+}
+
+.progress-badge-purple {
+    background-color: #a855f7;
+    color: white;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.65rem;
+    border-radius: 6px;
+}
+
+.progress-stat-label {
+    color: var(--blue-600);
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+}
+
+.progress-stat-value {
+    color: var(--blue-900);
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Chart Cards */
+.progress-chart-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid var(--blue-100);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08);
+}
+
+.progress-chart-title {
+    color: var(--blue-900);
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.progress-legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.progress-legend-value {
+    color: var(--blue-900);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.progress-legend-label {
+    color: var(--blue-600);
+    font-size: 0.75rem;
+    margin: 0;
+}
+
+/* Recent Learning Activity */
+.progress-activity-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid var(--blue-100);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08);
+}
+
+.progress-section-title {
+    color: var(--blue-900);
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.progress-activity-item {
+    padding: 1rem;
+    border-radius: 12px;
+    background: rgba(239, 246, 255, 0.5);
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.progress-activity-item:hover {
+    background: var(--blue-50);
+    border-color: var(--blue-200);
+}
+
+.progress-activity-title {
+    color: var(--blue-900);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.progress-activity-time {
+    color: var(--blue-600);
+    font-size: 0.75rem;
+}
+
+.progress-activity-percent {
+    color: var(--blue-900);
+    font-weight: 600;
+    font-size: 0.875rem;
+    min-width: 3rem;
+    text-align: right;
+}
+
+.progress-bar-custom {
+    height: 8px;
+    border-radius: 4px;
+    background-color: var(--blue-100);
+}
+
+/* Achievements Section */
+.progress-achievements-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid var(--blue-100);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08);
+}
+
+.progress-achievement-item {
+    padding: 1rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.progress-achievement-earned {
+    border: 2px solid #fbbf24;
+    background: #fef3c7;
+}
+
+.progress-achievement-locked {
+    border: 2px solid #e5e7eb;
+    background: #f9fafb;
+    opacity: 0.7;
+}
+
+.progress-achievement-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.progress-achievement-icon-earned {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+}
+
+.progress-achievement-icon-locked {
+    background: #9ca3af;
+}
+
+.progress-achievement-title {
+    color: var(--blue-900);
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.progress-achievement-desc {
+    color: var(--blue-600);
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+.progress-achievement-badge {
+    background-color: #fef3c7;
+    color: #92400e;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+/* Actions Card */
+.progress-actions-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid var(--blue-100);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08);
+}
+
+.progress-actions-title {
+    color: var(--blue-900);
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.progress-actions-desc {
+    color: var(--blue-600);
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+.progress-btn-reset {
+    border: 2px solid var(--blue-500);
+    color: var(--blue-500);
+    font-weight: 600;
+    padding: 0.625rem 1.25rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.progress-btn-reset:hover {
+    background-color: var(--blue-500);
+    color: white;
+}
+
+.progress-btn-stats {
+    background: linear-gradient(135deg, var(--blue-500), var(--green-500));
+    color: white;
+    font-weight: 600;
+    padding: 0.625rem 1.25rem;
+    border-radius: 8px;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.progress-btn-stats:hover {
+    background: linear-gradient(135deg, var(--blue-600), var(--green-600));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .progress-stat-value {
+        font-size: 1.5rem;
+    }
+    
+    .progress-icon-box {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .progress-achievement-item {
+        padding: 0.75rem;
+    }
+    
+    .progress-achievement-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
 }

@@ -1,95 +1,449 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout/main_layout}">
 <head>
-    <title>Track Progress</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Track Progress - NileCare</title>
+    <meta name="description" content="Monitor your learning journey and track your progress with detailed analytics and achievements.">
 </head>
 <body>
     <div layout:fragment="content">
+        <!-- Page Header -->
         <div class="mb-4">
-            <h2 class="fw-bold" style="color: #1e3a8a;">Track Your Progress</h2>
-            <p class="text-muted">Monitor your learning journey and achievements</p>
+            <h1 class="fw-bold progress-page-title">Track Your Progress</h1>
+            <p class="progress-page-subtitle">Monitor your learning journey and achievements</p>
         </div>
 
-        <div class="row g-4 mb-4">
-            <div class="col-md-3">
-                <div class="card card-custom p-3 h-100">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="rounded-3 p-3 text-white" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
-                            <i class="fas fa-bullseye fa-lg"></i>
+        <!-- Loading State -->
+        <div id="progressLoadingState" class="alert alert-info text-center" role="status" aria-live="polite" aria-atomic="true">
+            <i class="fas fa-spinner fa-spin me-2"></i>Loading your progress data...
+        </div>
+
+        <!-- Error State -->
+        <div id="progressErrorState" class="alert alert-danger alert-dismissible fade show d-none" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <span>Unable to load progress data. Please try refreshing the page.</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <!-- Main Content (Hidden by default, shown after data loads) -->
+        <div id="progressContent" class="d-none">
+            <!-- Summary Cards -->
+            <div class="row g-4 mb-4" role="region" aria-label="Progress Summary">
+                <!-- Overall Progress Card -->
+                <div class="col-md-3">
+                    <div class="card progress-stat-card h-100">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div class="progress-icon-box progress-icon-blue" aria-hidden="true">
+                                <i class="fas fa-bullseye"></i>
+                            </div>
+                            <span class="badge progress-badge-green" aria-label="Overall progress increased by 15%">+15%</span>
                         </div>
-                        <span class="badge bg-success-subtle text-success">+15%</span>
+                        <p class="progress-stat-label">Overall Progress</p>
+                        <h2 class="progress-stat-value" id="overallProgress">--</h2>
                     </div>
-                    <div class="text-muted small">Overall Progress</div>
-                    <h3 class="fw-bold mb-0 text-dark">67%</h3>
+                </div>
+
+                <!-- Modules Completed Card -->
+                <div class="col-md-3">
+                    <div class="card progress-stat-card h-100">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div class="progress-icon-box progress-icon-green" aria-hidden="true">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <span class="badge progress-badge-blue" id="modulesRatio" aria-label="Modules completed">4/9</span>
+                        </div>
+                        <p class="progress-stat-label">Modules Completed</p>
+                        <h2 class="progress-stat-value" id="modulesCompleted">--</h2>
+                    </div>
+                </div>
+
+                <!-- Current Streak Card -->
+                <div class="col-md-3">
+                    <div class="card progress-stat-card h-100">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div class="progress-icon-box progress-icon-orange" aria-hidden="true">
+                                <i class="fas fa-fire"></i>
+                            </div>
+                            <span class="badge progress-badge-orange" aria-label="Streak status">Active</span>
+                        </div>
+                        <p class="progress-stat-label">Current Streak</p>
+                        <h2 class="progress-stat-value" id="currentStreak">--</h2>
+                    </div>
+                </div>
+
+                <!-- Total Time Card -->
+                <div class="col-md-3">
+                    <div class="card progress-stat-card h-100">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div class="progress-icon-box progress-icon-purple" aria-hidden="true">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <span class="badge progress-badge-purple" id="totalTimeDisplay" aria-label="Total time spent">5h 25m</span>
+                        </div>
+                        <p class="progress-stat-label">Total Time</p>
+                        <h2 class="progress-stat-value" id="totalTime">--</h2>
+                    </div>
                 </div>
             </div>
-            </div>
 
-        <div class="row g-4">
-            <div class="col-lg-6">
-                <div class="card card-custom p-4 h-100">
-                    <h5 class="fw-bold mb-4 text-dark">Weekly Activity</h5>
-                    <canvas id="weeklyChart"></canvas>
+            <!-- Charts Section -->
+            <div class="row g-4 mb-4" role="region" aria-label="Analytics Charts">
+                <!-- Weekly Activity Chart -->
+                <div class="col-lg-6">
+                    <div class="card progress-chart-card h-100">
+                        <h2 class="progress-chart-title">Weekly Activity</h2>
+                        <div style="position: relative; height: 300px;">
+                            <canvas id="weeklyChart" role="img" aria-label="Bar chart showing minutes learned each day of the week"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module Distribution Chart -->
+                <div class="col-lg-6">
+                    <div class="card progress-chart-card h-100">
+                        <h2 class="progress-chart-title">Module Distribution</h2>
+                        <div class="d-flex justify-content-center align-items-center" style="height: 250px;">
+                            <canvas id="moduleChart" role="img" aria-label="Doughnut chart showing module completion status distribution"></canvas>
+                        </div>
+                        <div class="row g-3 mt-2">
+                            <div class="col-4 text-center">
+                                <div class="d-flex align-items-center justify-content-center gap-2 mb-1">
+                                    <div class="progress-legend-dot" style="background-color: #10b981;" aria-hidden="true"></div>
+                                    <span class="progress-legend-value" id="completedCount">4</span>
+                                </div>
+                                <p class="progress-legend-label">Completed</p>
+                            </div>
+                            <div class="col-4 text-center">
+                                <div class="d-flex align-items-center justify-content-center gap-2 mb-1">
+                                    <div class="progress-legend-dot" style="background-color: #3b82f6;" aria-hidden="true"></div>
+                                    <span class="progress-legend-value" id="inProgressCount">3</span>
+                                </div>
+                                <p class="progress-legend-label">In Progress</p>
+                            </div>
+                            <div class="col-4 text-center">
+                                <div class="d-flex align-items-center justify-content-center gap-2 mb-1">
+                                    <div class="progress-legend-dot" style="background-color: #e5e7eb;" aria-hidden="true"></div>
+                                    <span class="progress-legend-value" id="notStartedCount">2</span>
+                                </div>
+                                <p class="progress-legend-label">Not Started</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="col-lg-6">
-                <div class="card card-custom p-4 h-100">
-                    <h5 class="fw-bold mb-4 text-dark">Recent Learning Activity</h5>
-                    
-                    <div class="d-flex flex-column gap-3">
-                        <div class="p-3 rounded-3 bg-light border-0">
-                            <div class="d-flex justify-content-between mb-2">
-                                <span class="fw-bold text-dark">Stress Management</span>
-                                <span class="small text-muted">2 hours ago</span>
-                            </div>
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="progress flex-grow-1" style="height: 8px;">
-                                    <div class="progress-bar bg-primary" style="width: 75%"></div>
-                                </div>
-                                <span class="fw-bold text-primary small">75%</span>
-                            </div>
-                        </div>
-                        
-                        <div class="p-3 rounded-3 bg-light border-0">
-                            <div class="d-flex justify-content-between mb-2">
-                                <span class="fw-bold text-dark">Mindfulness & Meditation</span>
-                                <span class="small text-muted">Yesterday</span>
-                            </div>
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="progress flex-grow-1" style="height: 8px;">
-                                    <div class="progress-bar bg-warning" style="width: 30%"></div>
-                                </div>
-                                <span class="fw-bold text-warning small">30%</span>
-                            </div>
-                        </div>
+            <!-- Recent Learning Activity -->
+            <div class="card progress-activity-card mb-4" role="region" aria-label="Recent Learning Activity">
+                <h2 class="progress-section-title">Recent Learning Activity</h2>
+                <div class="d-flex flex-column gap-3" id="recentActivityContainer">
+                    <!-- Activity items will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Achievements Section -->
+            <div class="card progress-achievements-card mb-4" role="region" aria-label="Achievements">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="progress-section-title mb-0">Achievements</h2>
+                    <i class="fas fa-trophy text-warning" aria-hidden="true" style="font-size: 1.5rem;"></i>
+                </div>
+                <div class="row g-4" id="achievementsContainer">
+                    <!-- Achievements will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Actions Card -->
+            <div class="card progress-actions-card">
+                <div class="d-flex flex-column flex-md-row gap-3 align-items-center justify-content-between">
+                    <div>
+                        <h3 class="progress-actions-title">Manage Your Progress</h3>
+                        <p class="progress-actions-desc">Reset your progress or view detailed statistics</p>
+                    </div>
+                    <div class="d-flex gap-3">
+                        <button class="btn btn-outline-primary progress-btn-reset" aria-label="Reset your learning progress">
+                            <i class="fas fa-rotate-left me-2"></i>Reset Progress
+                        </button>
+                        <button class="btn progress-btn-stats" aria-label="View detailed statistics">
+                            <i class="fas fa-chart-line me-2"></i>View Detailed Stats
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+</body>
 
-        <script>
-            // Chart.js implementation for Weekly Activity
+<!-- Scripts Fragment -->
+<th:block layout:fragment="scripts">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // ============================================
+        // Progress Page - Modern Frontend Implementation
+        // ============================================
+
+        // Configuration
+        const API_ENDPOINTS = {
+            progress: '/nile-care/api/student/progress',
+            activities: '/nile-care/api/student/activities',
+            achievements: '/nile-care/api/student/achievements'
+        };
+
+        const ACTIVITY_TEMPLATE = `
+            <div class="progress-activity-item">
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="progress-activity-title">{title}</span>
+                    <span class="progress-activity-time">{time}</span>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="progress flex-grow-1 progress-bar-custom">
+                        <div class="progress-bar" style="width: {completion}%; background-color: {color};"></div>
+                    </div>
+                    <span class="progress-activity-percent">{completion}%</span>
+                    {completed}
+                </div>
+            </div>
+        `;
+
+        const ACHIEVEMENT_TEMPLATE = `
+            <div class="col-md-6">
+                <div class="progress-achievement-item {status}">
+                    <div class="d-flex gap-3">
+                        <div class="progress-achievement-icon {icon}">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h4 class="progress-achievement-title">{title}</h4>
+                            <p class="progress-achievement-desc">{description}</p>
+                            {earned}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // DOM Elements
+        const elements = {
+            loadingState: document.getElementById('progressLoadingState'),
+            errorState: document.getElementById('progressErrorState'),
+            mainContent: document.getElementById('progressContent'),
+            overallProgress: document.getElementById('overallProgress'),
+            modulesCompleted: document.getElementById('modulesCompleted'),
+            modulesRatio: document.getElementById('modulesRatio'),
+            currentStreak: document.getElementById('currentStreak'),
+            totalTime: document.getElementById('totalTime'),
+            totalTimeDisplay: document.getElementById('totalTimeDisplay'),
+            recentActivityContainer: document.getElementById('recentActivityContainer'),
+            achievementsContainer: document.getElementById('achievementsContainer')
+        };
+
+        let charts = {};
+
+        // ============================================
+        // Data Fetching
+        // ============================================
+        async function fetchProgressData() {
+            try {
+                elements.loadingState.classList.remove('d-none');
+                elements.errorState.classList.add('d-none');
+
+                // Fetch real data from backend API
+                const response = await fetch(API_ENDPOINTS.progress);
+                
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        window.location.href = '/login';
+                        return;
+                    }
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                renderProgressData(data);
+                initializeCharts(data.weeklyActivity, data.moduleDistribution);
+                renderRecentActivities(data.recentActivities);
+                renderAchievements(data.achievements);
+
+                elements.loadingState.classList.add('d-none');
+                elements.mainContent.classList.remove('d-none');
+            } catch (error) {
+                console.error('Error loading progress:', error);
+                elements.loadingState.classList.add('d-none');
+                elements.errorState.classList.remove('d-none');
+            }
+        }
+
+        // ============================================
+        // Render Functions
+        // ============================================
+        function renderProgressData(data) {
+            elements.overallProgress.textContent = data.overall + '%';
+            elements.modulesCompleted.textContent = data.modulesCompleted;
+            elements.modulesRatio.textContent = `${data.modulesCompleted}/${data.modulesTotal}`;
+            elements.currentStreak.textContent = data.streak + ' days';
+            elements.totalTime.textContent = formatMinutes(data.totalMinutes);
+            
+            document.getElementById('completedCount').textContent = data.moduleDistribution.completed;
+            document.getElementById('inProgressCount').textContent = data.moduleDistribution.inProgress;
+            document.getElementById('notStartedCount').textContent = data.moduleDistribution.notStarted;
+        }
+
+        function renderRecentActivities(activities) {
+            const html = activities.map(activity => {
+                const completed = activity.completed ? '<i class="fas fa-check-circle text-success"></i>' : '';
+                let html = ACTIVITY_TEMPLATE;
+                html = html.replace('{title}', escapeHtml(activity.title));
+                html = html.replace('{time}', escapeHtml(activity.time));
+                html = html.replace(/\{completion\}%/g, activity.completion + '%');
+                html = html.replace(/width: \{completion\}%/, 'width: ' + activity.completion + '%');
+                html = html.replace('{color}', activity.color);
+                html = html.replace('{completed}', completed);
+                return html;
+            }).join('');
+            
+            elements.recentActivityContainer.innerHTML = html;
+        }
+
+        function renderAchievements(achievements) {
+            const html = achievements.map(achievement => {
+                const status = achievement.earned ? 'progress-achievement-earned' : 'progress-achievement-locked';
+                const icon = achievement.earned ? 'progress-achievement-icon-earned' : 'progress-achievement-icon-locked';
+                const earned = achievement.earned ? `<span class="badge progress-achievement-badge">Earned ${achievement.date}</span>` : '';
+                
+                return ACHIEVEMENT_TEMPLATE
+                    .replace('{status}', status)
+                    .replace('{icon}', icon)
+                    .replace('{title}', escapeHtml(achievement.title))
+                    .replace('{description}', escapeHtml(achievement.description))
+                    .replace('{earned}', earned);
+            }).join('');
+            
+            elements.achievementsContainer.innerHTML = html;
+        }
+
+        // ============================================
+        // Chart Initialization
+        // ============================================
+        function initializeCharts(weeklyData, distributionData) {
+            initWeeklyChart(weeklyData);
+            initModuleChart(distributionData);
+        }
+
+        function initWeeklyChart(data) {
             const ctx = document.getElementById('weeklyChart').getContext('2d');
-            new Chart(ctx, {
+            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, '#3b82f6');
+            gradient.addColorStop(1, '#10b981');
+
+            charts.weekly = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    labels: data.map(d => d.day),
                     datasets: [{
                         label: 'Minutes Learned',
-                        data: [45, 30, 60, 40, 55, 20, 35],
-                        backgroundColor: '#3b82f6',
-                        borderRadius: 5
+                        data: data.map(d => d.minutes),
+                        backgroundColor: gradient,
+                        borderRadius: 8,
+                        borderSkipped: false
                     }]
                 },
                 options: {
                     responsive: true,
-                    plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: true } }
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                            titleColor: '#1e3a8a',
+                            bodyColor: '#3b82f6',
+                            borderColor: '#dbeafe',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            padding: 12,
+                            displayColors: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#60a5fa' }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#dbeafe', drawBorder: false },
+                            ticks: { color: '#60a5fa' }
+                        }
+                    }
                 }
             });
-        </script>
-    </div>
-</body>
+        }
+
+        function initModuleChart(data) {
+            const ctx = document.getElementById('moduleChart').getContext('2d');
+
+            charts.module = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Completed', 'In Progress', 'Not Started'],
+                    datasets: [{
+                        data: [data.completed, data.inProgress, data.notStarted],
+                        backgroundColor: ['#10b981', '#3b82f6', '#e5e7eb'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '60%',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                            titleColor: '#1e3a8a',
+                            bodyColor: '#3b82f6',
+                            borderColor: '#dbeafe',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            padding: 12,
+                            displayColors: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // ============================================
+        // Event Listeners
+        // ============================================
+        document.querySelector('.progress-btn-reset').addEventListener('click', function() {
+            if (confirm('Are you sure you want to reset your progress? This action cannot be undone.')) {
+                // TODO: Call API to reset progress
+                alert('Progress reset successfully!');
+            }
+        });
+
+        document.querySelector('.progress-btn-stats').addEventListener('click', function() {
+            // TODO: Navigate to detailed stats page
+            alert('Detailed statistics view coming soon!');
+        });
+
+        // ============================================
+        // Utility Functions
+        // ============================================
+        function formatMinutes(minutes) {
+            const hours = Math.floor(minutes / 60);
+            const mins = minutes % 60;
+            return `${hours}h ${mins}m`;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ============================================
+        // Initialize on Page Load
+        // ============================================
+        document.addEventListener('DOMContentLoaded', fetchProgressData);
+    </script>
+</th:block>
 </html>
