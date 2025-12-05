@@ -1,32 +1,13 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout/main_layout}">
+
 <head>
     <title>Help Requests</title>
-    <style>
-        /* Local styles specific to Help Page to avoid touching global CSS */
-        .status-badge {
-            display: inline-flex; align-items: center; gap: 6px;
-            padding: 6px 12px; border-radius: 50px;
-            font-size: 0.75rem; font-weight: 600;
-            text-transform: capitalize;
-        }
-        /* Status Colors matching your React component */
-        .status-pending { background-color: #fef9c3; color: #a16207; }     /* Yellow-100/700 */
-        .status-progress { background-color: #dbeafe; color: #1d4ed8; }    /* Blue-100/700 */
-        .status-resolved { background-color: #dcfce7; color: #15803d; }    /* Green-100/700 */
-        
-        /* Info Box Styling */
-        .info-box {
-            padding: 1rem; border-radius: 12px; margin-bottom: 1rem;
-        }
-        .info-blue { background-color: #eff6ff; border: 1px solid #dbeafe; }
-        .info-green { background-color: #f0fdf4; border: 1px solid #dcfce7; }
-        .info-purple { background-color: #faf5ff; border: 1px solid #f3e8ff; }
-    </style>
 </head>
+
 <body>
     <div layout:fragment="content">
-        
+
         <div class="mb-4">
             <h2 class="fw-semibold text-blue-900 mb-1">Help Requests</h2>
             <p class="text-blue-600 small">Submit a help request or view your previous requests</p>
@@ -36,67 +17,104 @@
             <div class="col-lg-6">
                 <div class="card card-custom p-4 h-100">
                     <div class="d-flex align-items-center gap-2 mb-4">
-                        <div class="rounded-circle bg-gradient-custom d-flex align-items-center justify-content-center text-white" style="width: 32px; height: 32px;">
+                        <div class="rounded-circle bg-gradient-custom d-flex align-items-center justify-content-center text-white"
+                            style="width: 32px; height: 32px;">
                             <i class="fas fa-question"></i>
                         </div>
                         <h5 class="fw-bold text-blue-900 mb-0">Submit New Request</h5>
                     </div>
 
-                    <form>
-                        <div class="mb-3">
-                            <label class="form-label small fw-bold text-muted">Category</label>
-                            <select class="form-select form-control-lg">
-                                <option>Technical Issue</option>
-                                <option>Content Question</option>
-                                <option>Account Issue</option>
-                                <option>Booking Issue</option>
-                                <option>Other</option>
+                    <form id="helpRequestForm" class="help-form">
+                        <!-- Category -->
+                        <div class="help-form-group">
+                            <label for="category" class="help-label">Category</label>
+                            <select id="category" class="help-select" required>
+                                <option value="">Select a category</option>
+                                <option value="Technical Issue">Technical Issue</option>
+                                <option value="Content Question">Content Question</option>
+                                <option value="Account Issue">Account Issue</option>
+                                <option value="Booking Issue">Booking Issue</option>
+                                <option value="Assessment Help">Assessment Help</option>
+                                <option value="Other">Other</option>
                             </select>
                         </div>
 
-                        <div class="mb-3">
-                            <label class="form-label small fw-bold text-muted">Subject</label>
-                            <input type="text" class="form-control form-control-lg" placeholder="Brief description of your issue">
+                        <!-- Subject -->
+                        <div class="help-form-group">
+                            <label for="subject" class="help-label">Subject</label>
+                            <input type="text" id="subject" class="help-input"
+                                placeholder="Brief description of your issue" required>
                         </div>
 
-                        <div class="mb-4">
-                            <label class="form-label small fw-bold text-muted">Message</label>
-                            <textarea class="form-control form-control-lg" rows="5" placeholder="Please provide details..."></textarea>
+                        <!-- Message -->
+                        <div class="help-form-group">
+                            <label for="message" class="help-label">Message</label>
+                            <textarea id="message" class="help-textarea"
+                                placeholder="Please provide details about your request..." rows="6" required></textarea>
                         </div>
 
-                        <button type="submit" class="btn-gradient">
-                            <i class="fas fa-paper-plane me-2"></i> Submit Request
+                        <button type="submit" class="help-submit-btn" id="submitBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="me-2">
+                                <path
+                                    d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z">
+                                </path>
+                                <path d="m21.854 2.147-10.94 10.939"></path>
+                            </svg>
+                            Submit Request
                         </button>
                     </form>
                 </div>
             </div>
 
             <div class="col-lg-6">
-                <div class="card card-custom p-4 mb-4">
-                    <h5 class="fw-bold text-blue-900 mb-3">Quick Help</h5>
-                    
-                    <div class="info-box info-blue">
-                        <h6 class="fw-bold text-blue-900 mb-2">Frequently Asked Questions</h6>
-                        <ul class="list-unstyled small text-blue-600 mb-3">
-                            <li class="mb-2"><i class="fas fa-circle me-2" style="font-size: 4px; vertical-align: middle;"></i>How do I reset my password?</li>
-                            <li class="mb-2"><i class="fas fa-circle me-2" style="font-size: 4px; vertical-align: middle;"></i>How can I bookmark a module?</li>
-                            <li><i class="fas fa-circle me-2" style="font-size: 4px; vertical-align: middle;"></i>Missed counseling session policy?</li>
+                <div class="help-card">
+                    <h3 class="help-card-title">Quick Help</h3>
+
+                    <!-- FAQ Card -->
+                    <div class="help-info-card faq-card">
+                        <h4 class="help-info-title">Frequently Asked Questions</h4>
+                        <ul class="help-faq-list">
+                            <li class="help-faq-item">
+                                <span class="help-faq-bullet">•</span>
+                                How do I reset my password?
+                            </li>
+                            <li class="help-faq-item">
+                                <span class="help-faq-bullet">•</span>
+                                How can I bookmark a learning module?
+                            </li>
+                            <li class="help-faq-item">
+                                <span class="help-faq-bullet">•</span>
+                                What should I do if I miss a counseling session?
+                            </li>
+                            <li class="help-faq-item">
+                                <span class="help-faq-bullet">•</span>
+                                How do I view my assessment results?
+                            </li>
                         </ul>
-                        <button class="btn btn-sm btn-outline-primary w-100" style="border-radius: 8px;">View All FAQs</button>
+                        <button class="help-secondary-btn mt-3 w-100">View All FAQs</button>
                     </div>
 
-                    <div class="info-box info-green">
-                        <h6 class="fw-bold text-blue-900 mb-2">Emergency Support</h6>
-                        <p class="small text-blue-600 mb-2">If you're experiencing a mental health emergency:</p>
-                        <div class="bg-white p-2 rounded border border-light mb-1">
-                            <strong class="d-block text-blue-900 small">Crisis Hotline</strong>
-                            <span class="text-muted small">1-800-273-8255</span>
+                    <!-- Emergency Card -->
+                    <div class="help-info-card emergency-card">
+                        <h4 class="help-info-title">Emergency Support</h4>
+                        <p class="help-info-text">If you're experiencing a mental health emergency, please contact:</p>
+                        <div class="help-emergency-item">
+                            <strong class="help-emergency-label">Crisis Hotline</strong>
+                            <span class="help-emergency-number">1-800-273-8255</span>
+                        </div>
+                        <div class="help-emergency-item">
+                            <strong class="help-emergency-label">Text Support</strong>
+                            <span class="help-emergency-number">Text "HELLO" to 741741</span>
                         </div>
                     </div>
 
-                    <div class="info-box info-purple mb-0">
-                        <h6 class="fw-bold text-blue-900 mb-1">Response Time</h6>
-                        <p class="small text-blue-600 mb-0">Our team typically responds within 24-48 hours.</p>
+                    <!-- Response Time Card -->
+                    <div class="help-info-card response-card">
+                        <h4 class="help-info-title">Response Time</h4>
+                        <p class="help-info-text">Our support team typically responds within 24-48 hours. For urgent
+                            matters, please use the chat feature or contact emergency services.</p>
                     </div>
                 </div>
             </div>
@@ -106,52 +124,267 @@
             <div class="col-12">
                 <div class="card card-custom p-4">
                     <h5 class="fw-bold text-blue-900 mb-4">Your Help Requests</h5>
-                    
-                    <div class="p-3 rounded-3 border mb-3 bg-white hover-shadow transition">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div>
-                                <div class="d-flex align-items-center gap-2 mb-1">
-                                    <h6 class="fw-bold text-blue-900 mb-0">Unable to access Module 3</h6>
-                                    <span class="badge bg-light text-muted border">Technical Issue</span>
-                                </div>
-                                <p class="small text-muted mb-2">I keep getting an error when trying to open Module 3...</p>
-                                
-                                <div class="p-2 rounded bg-green-50 border border-green-100 d-inline-block">
-                                    <div class="small text-success fw-bold"><i class="fas fa-reply me-1"></i> Response:</div>
-                                    <div class="small text-dark">This issue has been fixed. Please try logging out and back in.</div>
-                                </div>
-                            </div>
-                            <div class="text-end">
-                                <span class="status-badge status-resolved mb-1">
-                                    <i class="fas fa-check-circle"></i> Resolved
-                                </span>
-                                <div class="small text-muted">Nov 05, 2024</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="p-3 rounded-3 border mb-0 bg-white">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div>
-                                <div class="d-flex align-items-center gap-2 mb-1">
-                                    <h6 class="fw-bold text-blue-900 mb-0">Question about mindfulness</h6>
-                                    <span class="badge bg-light text-muted border">Content Question</span>
-                                </div>
-                                <p class="small text-muted mb-0">I would like more information about the breathing exercises...</p>
-                            </div>
-                            <div class="text-end">
-                                <span class="status-badge status-progress mb-1">
-                                    <i class="fas fa-spinner fa-spin"></i> In Progress
-                                </span>
-                                <div class="small text-muted">Nov 08, 2024</div>
-                            </div>
-                        </div>
-                    </div>
-
+                    <div id="helpRequestsList"></div>
                 </div>
             </div>
         </div>
 
     </div>
 </body>
+
+<th:block layout:fragment="scripts">
+    <script src="/nile-care/static/js/toast-notifications.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Load help requests on page load
+            loadHelpRequests();
+
+            // Handle form submission
+            document.getElementById('helpRequestForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                submitHelpRequest();
+            });
+        });
+
+        function submitHelpRequest() {
+            console.log('submitHelpRequest() called');
+            const category = document.getElementById('category').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (!category || !subject || !message) {
+                console.log('Form validation failed');
+                showAlert('Please fill in all fields', 'danger');
+                return;
+            }
+
+            console.log('Form validated, submitting...');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Submitting...';
+
+            fetch('/nile-care/api/help-requests', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    category: category,
+                    subject: subject,
+                    message: message
+                })
+            })
+                .then(response => {
+                    console.log('API response received, status:', response.status);
+                    if (response.status === 401) {
+                        window.location.href = '/nile-care/login';
+                        return null;
+                    }
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then(text => {
+                    if (text === null) return; // Redirected to login
+
+                    console.log('Response text:', text);
+                    try {
+                        const data = JSON.parse(text);
+                        console.log('Parsed data:', data);
+                        if (data.success) {
+                            console.log('Success! Showing toast and resetting form');
+                            showAlert('Help request submitted successfully!', 'success');
+                            console.log('Form element:', document.getElementById('helpRequestForm'));
+                            document.getElementById('helpRequestForm').reset();
+                            console.log('Form reset called, loading requests...');
+                            loadHelpRequests(); // Reload the list
+                        } else {
+                            console.log('API returned success=false:', data.message);
+                            showAlert(data.message || 'Failed to submit help request', 'danger');
+                        }
+                    } catch (e) {
+                        console.error('JSON parse error:', e);
+                        console.error('Response text:', text);
+                        showAlert('Server error: Invalid response format', 'danger');
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                    showAlert('An error occurred while submitting your request: ' + error.message, 'danger');
+                })
+                .finally(() => {
+                    console.log('submitHelpRequest finally block');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path><path d="m21.854 2.147-10.94 10.939"></path></svg>Submit Request';
+                });
+        }
+
+        function loadHelpRequests() {
+            console.log('loadHelpRequests() called');
+            fetch('/nile-care/api/help-requests')
+                .then(response => {
+                    console.log('loadHelpRequests response status:', response.status);
+                    if (response.status === 401) {
+                        window.location.href = '/nile-care/login';
+                        return null;
+                    }
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data === null) return; // Redirected to login
+
+                    console.log('loadHelpRequests data:', data);
+                    if (data.success) {
+                        console.log('renderHelpRequests called with:', data.data);
+                        renderHelpRequests(data.data);
+                    } else {
+                        console.log('API returned success=false');
+                        showAlert(data.message || 'Failed to load help requests', 'danger');
+                    }
+                })
+                .catch(error => {
+                    console.error('loadHelpRequests error:', error);
+                    showAlert('An error occurred while loading help requests. Please try again.', 'danger');
+                });
+        }
+
+        function renderHelpRequests(requests) {
+            console.log('renderHelpRequests called with:', requests);
+            const container = document.getElementById('helpRequestsList');
+
+            if (!requests || requests.length === 0) {
+                console.log('No requests to render');
+                container.innerHTML = '<p class="text-muted text-center py-4">No help requests yet. Submit your first request above.</p>';
+                return;
+            }
+
+            console.log('Rendering', requests.length, 'requests');
+            container.innerHTML = requests.map(request => {
+                const createdDate = new Date(request.createdAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+
+                const statusInfo = getStatusInfo(request.status);
+                
+                let responseHtml = '';
+                if (request.response) {
+                    responseHtml = `
+                        <div class="mt-3 p-3 rounded-3 bg-success bg-opacity-10 border border-success border-opacity-25">
+                            <p class="text-xs text-success fw-bold mb-1">Response:</p>
+                            <p class="text-sm text-success">${escapeHtml(request.response)}</p>
+                        </div>
+                    `;
+                }
+
+                return `
+                    <div class="p-4 rounded-3 border border-primary border-opacity-25 hover-shadow transition-shadow mb-3 bg-white">
+                        <div class="d-flex align-items-start justify-content-between">
+                            <div class="flex-grow-1">
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <h5 class="text-dark fw-normal mb-0">${escapeHtml(request.subject)}</h5>
+                                    <span class="badge bg-light text-muted border border-secondary small">
+                                        ${escapeHtml(request.category)}
+                                    </span>
+                                </div>
+                                <p class="text-primary small mb-2">${escapeHtml(request.message)}</p>
+                                ${responseHtml}
+                            </div>
+                            <div class="text-end ms-3">
+                                <span class="badge small mb-2 d-inline-flex align-items-center gap-1" style="${statusInfo.style}">
+                                    ${statusInfo.svg}
+                                    ${statusInfo.label}
+                                </span>
+                                <div class="text-primary small">${createdDate}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            console.log('renderHelpRequests complete');
+        }
+
+        function getStatusInfo(status) {
+            switch (status.toUpperCase()) {
+                case 'RESOLVED':
+                    return {
+                        label: 'Resolved',
+                        style: 'background-color: #dcfce7; color: #166534; border: none;',
+                        svg: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path></svg>'
+                    };
+                case 'IN_PROGRESS':
+                    return {
+                        label: 'In-Progress',
+                        style: 'background-color: #dbeafe; color: #1e40af; border: none;',
+                        svg: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" x2="12" y1="8" y2="12"></line><line x1="12" x2="12.01" y1="16" y2="16"></line></svg>'
+                    };
+                case 'PENDING':
+                    return {
+                        label: 'Pending',
+                        style: 'background-color: #fef3c7; color: #92400e; border: none;',
+                        svg: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v6l4 2"></path><circle cx="12" cy="12" r="10"></circle></svg>'
+                    };
+                default:
+                    return {
+                        label: 'Unknown',
+                        style: 'background-color: #e5e7eb; color: #374151; border: none;',
+                        svg: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>'
+                    };
+            }
+        }
+
+        function showAlert(message, type) {
+            console.log('showAlert called with:', message, type);
+            console.log('ToastNotifications available:', typeof ToastNotifications);
+            
+            if (type === 'success') {
+                // Use toast for success messages
+                if (typeof ToastNotifications !== 'undefined' && ToastNotifications.showSuccessToast) {
+                    console.log('Calling ToastNotifications.showSuccessToast');
+                    ToastNotifications.showSuccessToast(message);
+                } else {
+                    console.error('ToastNotifications.showSuccessToast not available');
+                    alert(message); // Fallback
+                }
+            } else {
+                // Use persistent alert for error/danger messages
+                if (typeof ToastNotifications !== 'undefined' && ToastNotifications.showErrorAlert) {
+                    console.log('Calling ToastNotifications.showErrorAlert');
+                    ToastNotifications.showErrorAlert(message, type);
+                } else {
+                    console.error('ToastNotifications.showErrorAlert not available');
+                    alert(message); // Fallback
+                }
+            }
+        }
+
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        // Test functions for notifications
+        function testSuccessToast() {
+            console.log('Testing success toast...');
+            ToastNotifications.showSuccessToast('This is a test success message that will auto-dismiss in 7 seconds!');
+        }
+
+        function testErrorAlert() {
+            console.log('Testing error alert...');
+            ToastNotifications.showErrorAlert('This is a test error message that requires manual dismissal by clicking the X button.', 'danger');
+        }
+    </script>
+</th:block>
+
 </html>
