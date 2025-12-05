@@ -27,6 +27,14 @@ public class AuthInterceptor implements HandlerInterceptor {
         User user = (User) session.getAttribute("currentUser"); // We will save this on login
 
         if (user == null) {
+            // For API requests, return 401 Unauthorized instead of redirect
+            if (uri.contains("/api/")) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"success\": false, \"message\": \"User not authenticated\"}");
+                return false;
+            }
+            
             response.sendRedirect(request.getContextPath() + "/login");
             return false;
         }
