@@ -184,10 +184,8 @@
         
         const filledSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#3b82f6" stroke="#3b82f6" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>';
         
-        // Toast container for stacking notifications
-        const toastContainer = document.createElement('div');
-        toastContainer.id = 'bookmarkToastContainer';
-        document.body.appendChild(toastContainer);
+        // Toast container for stacking notifications (created lazily)
+        let toastContainer = null;
         
         const MAX_TOASTS = 3;
         const toasts = [];
@@ -203,6 +201,12 @@
             toastMessage.textContent = message;
             
             toast.appendChild(toastMessage);
+            // create container lazily so it doesn't block UI when no notifications
+            if (!toastContainer) {
+              toastContainer = document.createElement('div');
+              toastContainer.id = 'bookmarkToastContainer';
+              document.body.appendChild(toastContainer);
+            }
             toastContainer.appendChild(toast);
             
             // Add to tracking array with metadata
@@ -238,18 +242,24 @@
             // Add removing class for slide-out animation
             element.classList.add('removing');
             
-            // Remove from DOM after animation completes
-            setTimeout(() => {
-                element.remove();
-                // Remove from tracking array
-                const index = toasts.indexOf(toastObj);
-                if (index > -1) toasts.splice(index, 1);
-                
-                // Re-index remaining toasts
-                toasts.forEach((obj, idx) => {
-                    obj.element.setAttribute('data-index', String(idx));
-                });
-            }, 300); // Match animation duration
+          // Remove from DOM after animation completes
+          setTimeout(() => {
+            element.remove();
+            // Remove from tracking array
+            const index = toasts.indexOf(toastObj);
+            if (index > -1) toasts.splice(index, 1);
+
+            // Re-index remaining toasts
+            toasts.forEach((obj, idx) => {
+              obj.element.setAttribute('data-index', String(idx));
+            });
+
+            // If no more toasts, remove container so it doesn't block UI
+            if (toasts.length === 0 && toastContainer) {
+              toastContainer.remove();
+              toastContainer = null;
+            }
+          }, 300); // Match animation duration
         }
         
         function init() {
@@ -412,338 +422,3 @@
   </th:block>
 </body>
 </html>
-
-<!-- import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
-import { Button } from '../ui/button';
-import { Badge } from '../ui/badge';
-import { Progress } from '../ui/progress';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '../ui/dialog';
-import { BookOpen, Clock, Bookmark, CheckCircle, PlayCircle, FileText, Video, Headphones } from 'lucide-react';
-import { ImageWithFallback } from '../figma/ImageWithFallback';
-import { toast } from 'sonner@2.0.3';
-
-interface Module {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  duration: string;
-  progress: number;
-  isBookmarked: boolean;
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
-  resources: { type: string; count: number }[];
-  image: string;
-}
-
-export function LearningModules() {
-  const [selectedModule, setSelectedModule] = useState<Module | null>(null);
-  const [modules, setModules] = useState<Module[]>([
-    {
-      id: '1',
-      title: 'Stress Management Fundamentals',
-      description: 'Learn effective techniques to identify, manage, and reduce stress in your daily life. This module covers breathing exercises, time management, and cognitive strategies.',
-      category: 'Stress & Anxiety',
-      duration: '45 min',
-      progress: 75,
-      isBookmarked: true,
-      difficulty: 'beginner',
-      resources: [
-        { type: 'Videos', count: 5 },
-        { type: 'Articles', count: 8 },
-        { type: 'Exercises', count: 12 },
-      ],
-      image: 'https://images.unsplash.com/photo-1557929878-b358f3bdbdd7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtZWRpdGF0aW9uJTIwY2FsbSUyMG5hdHVyZXxlbnwxfHx8fDE3NjI3MzgyOTR8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
-    },
-    {
-      id: '2',
-      title: 'Mindfulness & Meditation',
-      description: 'Discover the power of mindfulness and meditation to improve mental clarity, reduce anxiety, and enhance overall wellbeing.',
-      category: 'Mindfulness',
-      duration: '60 min',
-      progress: 30,
-      isBookmarked: false,
-      difficulty: 'beginner',
-      resources: [
-        { type: 'Videos', count: 7 },
-        { type: 'Audio', count: 10 },
-        { type: 'Exercises', count: 15 },
-      ],
-      image: 'https://images.unsplash.com/photo-1608493830924-ec843d9c98c6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtZW50YWwlMjBoZWFsdGglMjB3ZWxsYmVpbmd8ZW58MXx8fHwxNzYyNzM4Mjk0fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
-    },
-    {
-      id: '3',
-      title: 'Sleep Hygiene & Rest',
-      description: 'Understand the importance of quality sleep and learn practical strategies to improve your sleep patterns and overcome insomnia.',
-      category: 'Sleep & Rest',
-      duration: '40 min',
-      progress: 0,
-      isBookmarked: false,
-      difficulty: 'beginner',
-      resources: [
-        { type: 'Videos', count: 4 },
-        { type: 'Articles', count: 6 },
-        { type: 'Exercises', count: 8 },
-      ],
-      image: 'https://images.unsplash.com/photo-1759922378123-a1f4f1e39bae?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsZWFybmluZyUyMGVkdWNhdGlvbnxlbnwxfHx8fDE3NjI2NjExMzl8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
-    },
-    {
-      id: '4',
-      title: 'Emotional Regulation Skills',
-      description: 'Master techniques to understand and manage your emotions effectively, building resilience and emotional intelligence.',
-      category: 'Emotional Health',
-      duration: '50 min',
-      progress: 100,
-      isBookmarked: true,
-      difficulty: 'intermediate',
-      resources: [
-        { type: 'Videos', count: 6 },
-        { type: 'Articles', count: 10 },
-        { type: 'Exercises', count: 14 },
-      ],
-      image: 'https://images.unsplash.com/photo-1592947945242-69312358628b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0aGVyYXB5JTIwY291bnNlbGluZ3xlbnwxfHx8fDE3NjI2MTUyNDN8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
-    },
-    {
-      id: '5',
-      title: 'Building Healthy Relationships',
-      description: 'Learn communication skills and boundary-setting techniques to foster healthy, supportive relationships.',
-      category: 'Relationships',
-      duration: '55 min',
-      progress: 45,
-      isBookmarked: false,
-      difficulty: 'intermediate',
-      resources: [
-        { type: 'Videos', count: 5 },
-        { type: 'Articles', count: 9 },
-        { type: 'Exercises', count: 11 },
-      ],
-      image: 'https://images.unsplash.com/photo-1608493830924-ec843d9c98c6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtZW50YWwlMjBoZWFsdGglMjB3ZWxsYmVpbmd8ZW58MXx8fHwxNzYyNzM4Mjk0fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
-    },
-    {
-      id: '6',
-      title: 'Coping with Depression',
-      description: 'Understand depression and learn evidence-based strategies to manage symptoms and improve mental health.',
-      category: 'Mental Health',
-      duration: '65 min',
-      progress: 0,
-      isBookmarked: false,
-      difficulty: 'advanced',
-      resources: [
-        { type: 'Videos', count: 8 },
-        { type: 'Articles', count: 12 },
-        { type: 'Exercises', count: 16 },
-      ],
-      image: 'https://images.unsplash.com/photo-1557929878-b358f3bdbdd7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtZWRpdGF0aW9uJTIwY2FsbSUyMG5hdHVyZXxlbnwxfHx8fDE3NjI3MzgyOTR8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
-    },
-  ]);
-
-  const toggleBookmark = (moduleId: string) => {
-    setModules(modules.map(m => 
-      m.id === moduleId ? { ...m, isBookmarked: !m.isBookmarked } : m
-    ));
-    toast.success('Bookmark updated!');
-  };
-
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'beginner': return 'bg-green-100 text-green-700';
-      case 'intermediate': return 'bg-blue-100 text-blue-700';
-      case 'advanced': return 'bg-purple-100 text-purple-700';
-      default: return 'bg-gray-100 text-gray-700';
-    }
-  };
-
-  return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-blue-900 mb-2">Learning Modules</h1>
-        <p className="text-blue-600">Explore our comprehensive mental health learning resources</p>
-      </div>
-
-      <div className="flex gap-3 flex-wrap">
-        <Button variant="outline" className="border-blue-300 text-blue-700">
-          All Modules
-        </Button>
-        <Button variant="ghost" className="text-blue-600">
-          In Progress
-        </Button>
-        <Button variant="ghost" className="text-blue-600">
-          Bookmarked
-        </Button>
-        <Button variant="ghost" className="text-blue-600">
-          Completed
-        </Button>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {modules.map((module) => (
-          <Card 
-            key={module.id} 
-            className="border-blue-100 shadow-md hover:shadow-xl transition-all cursor-pointer overflow-hidden group"
-            onClick={() => setSelectedModule(module)}
-          >
-            <div className="relative h-48 overflow-hidden">
-              <ImageWithFallback
-                src={module.image}
-                alt={module.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-              <div className="absolute top-3 right-3 flex gap-2">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleBookmark(module.id);
-                  }}
-                  className="p-2 rounded-full bg-white/90 backdrop-blur-sm hover:bg-white transition-colors"
-                >
-                  <Bookmark className={`w-5 h-5 ${module.isBookmarked ? 'fill-blue-500 text-blue-500' : 'text-blue-600'}`} />
-                </button>
-                {module.progress === 100 && (
-                  <div className="p-2 rounded-full bg-green-500">
-                    <CheckCircle className="w-5 h-5 text-white" />
-                  </div>
-                )}
-              </div>
-            </div>
-            
-            <CardHeader>
-              <div className="flex gap-2 mb-2">
-                <Badge variant="secondary" className="text-xs">{module.category}</Badge>
-                <Badge variant="secondary" className={`text-xs capitalize ${getDifficultyColor(module.difficulty)}`}>
-                  {module.difficulty}
-                </Badge>
-              </div>
-              <CardTitle className="text-blue-900 line-clamp-2">{module.title}</CardTitle>
-              <CardDescription className="line-clamp-2">{module.description}</CardDescription>
-            </CardHeader>
-            
-            <CardContent className="space-y-4">
-              <div className="flex items-center gap-2 text-sm text-blue-600">
-                <Clock className="w-4 h-4" />
-                <span>{module.duration}</span>
-              </div>
-              
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-blue-600">Progress</span>
-                  <span className="text-blue-900">{module.progress}%</span>
-                </div>
-                <Progress value={module.progress} className="h-2" />
-              </div>
-
-              <Button className="w-full bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600">
-                {module.progress === 0 ? (
-                  <>
-                    <PlayCircle className="w-4 h-4 mr-2" />
-                    Start Module
-                  </>
-                ) : module.progress === 100 ? (
-                  <>
-                    <CheckCircle className="w-4 h-4 mr-2" />
-                    Review
-                  </>
-                ) : (
-                  <>
-                    <PlayCircle className="w-4 h-4 mr-2" />
-                    Continue
-                  </>
-                )}
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      <Dialog open={!!selectedModule} onOpenChange={() => setSelectedModule(null)}>
-        <DialogContent className="max-w-2xl">
-          {selectedModule && (
-            <>
-              <DialogHeader>
-                <DialogTitle className="text-blue-900">{selectedModule.title}</DialogTitle>
-                <DialogDescription>{selectedModule.category}</DialogDescription>
-              </DialogHeader>
-              
-              <div className="space-y-6">
-                <ImageWithFallback
-                  src={selectedModule.image}
-                  alt={selectedModule.title}
-                  className="w-full h-64 object-cover rounded-xl"
-                />
-                
-                <div className="flex gap-3 flex-wrap">
-                  <Badge className="bg-blue-100 text-blue-700">
-                    <Clock className="w-3 h-3 mr-1" />
-                    {selectedModule.duration}
-                  </Badge>
-                  <Badge className={`capitalize ${getDifficultyColor(selectedModule.difficulty)}`}>
-                    {selectedModule.difficulty}
-                  </Badge>
-                  <Badge className="bg-green-100 text-green-700">
-                    {selectedModule.progress}% Complete
-                  </Badge>
-                </div>
-
-                <div>
-                  <h3 className="text-blue-900 mb-2">About This Module</h3>
-                  <p className="text-blue-600">{selectedModule.description}</p>
-                </div>
-
-                <div>
-                  <h3 className="text-blue-900 mb-3">Learning Resources</h3>
-                  <div className="grid grid-cols-3 gap-4">
-                    {selectedModule.resources.map((resource, index) => {
-                      const icons = {
-                        'Videos': Video,
-                        'Articles': FileText,
-                        'Audio': Headphones,
-                        'Exercises': BookOpen,
-                      };
-                      const Icon = icons[resource.type as keyof typeof icons] || FileText;
-                      
-                      return (
-                        <div key={index} className="p-4 rounded-xl bg-blue-50 text-center">
-                          <Icon className="w-6 h-6 text-blue-600 mx-auto mb-2" />
-                          <p className="text-sm text-blue-900">{resource.count}</p>
-                          <p className="text-xs text-blue-600">{resource.type}</p>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                <div className="flex gap-3">
-                  <Button 
-                    className="flex-1 bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600"
-                    onClick={() => {
-                      toast.success('Starting module...');
-                      setSelectedModule(null);
-                    }}
-                  >
-                    <PlayCircle className="w-4 h-4 mr-2" />
-                    {selectedModule.progress === 0 ? 'Start Learning' : 'Continue Learning'}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleBookmark(selectedModule.id);
-                    }}
-                  >
-                    <Bookmark className={`w-4 h-4 mr-2 ${selectedModule.isBookmarked ? 'fill-blue-500' : ''}`} />
-                    {selectedModule.isBookmarked ? 'Bookmarked' : 'Bookmark'}
-                  </Button>
-                </div>
-              </div>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
-    </div>
-  );
-} -->
