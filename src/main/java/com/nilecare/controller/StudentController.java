@@ -22,7 +22,12 @@ public class StudentController {
 
     // 2. Track Progress
     @GetMapping("/progress")
-    public String trackProgress() {
+    public String trackProgress(Model model, javax.servlet.http.HttpSession session) {
+        // Pass user to model for frontend access if needed
+        Object currentUser = session.getAttribute("currentUser");
+        if (currentUser != null) {
+            model.addAttribute("currentUser", currentUser);
+        }
         return "student/progress";
     }
 
