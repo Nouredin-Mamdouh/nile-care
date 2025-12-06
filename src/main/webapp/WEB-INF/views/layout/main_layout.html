@@ -1,124 +1,431 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="en">
+
 <head>
-    <title>MindCare</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NileCare - Learning & Wellness</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/static/css/style.css}">
-
 </head>
-<body class="app-shell">
-<div class="wrapper">
-    
-    <aside class="sidebar">
-        <div class="logo-container">
-            <div class="d-flex align-items-center gap-3">
-                <div class="logo-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path></svg>
-                </div>
-                <div>
-                    <h5 class="mb-0 sidebar-brand-title">NileCare</h5>
-                    <small class="sidebar-brand-subtitle">Learning & Wellness</small>
-                </div>
-            </div>
-        </div>
 
-        <nav class="sidebar-menu">
-            <div th:if="${session.currentUser != null and session.currentUser.roles[0].name.name() == 'ROLE_STUDENT'}">
-                <div class="menu-section-title">Student</div>
-                <a th:href="@{/learning}" class="nav-link-custom" th:classappend="${#httpServletRequest.requestURI.contains('/learning') ? 'active' : ''}">
-                    <i class="fas fa-book-open"></i> Learning Modules
-                </a>
-                <a th:href="@{/progress}" class="nav-link-custom" th:classappend="${#httpServletRequest.requestURI.contains('/progress') ? 'active' : ''}">
-                    <i class="fas fa-chart-line"></i> Track Progress
-                </a>
-                <a th:href="@{/support/request}" class="nav-link-custom" th:classappend="${#httpServletRequest.requestURI.contains('/support') ? 'active' : ''}">
-                    <i class="fas fa-question-circle"></i> Help Requests
-                </a>
-                <a th:href="@{/counseling}" class="nav-link-custom" th:classappend="${#httpServletRequest.requestURI.contains('/counseling') ? 'active' : ''}">
-                    <i class="far fa-calendar-alt"></i> Counseling
-                </a>
-                <a th:href="@{/assessment}" class="nav-link-custom" th:classappend="${#httpServletRequest.requestURI.contains('/assessment') ? 'active' : ''}">
-                    <i class="fas fa-clipboard-list"></i> Assessments
-                </a>
-                <a th:href="@{/chat}" class="nav-link-custom" th:classappend="${#httpServletRequest.requestURI.contains('/chat') ? 'active' : ''}">
-                    <i class="far fa-comments"></i> Chatbot
-                </a>
-                <a th:href="@{/feedback}" class="nav-link-custom" th:classappend="${#httpServletRequest.requestURI.contains('/feedback') ? 'active' : ''}">
-                    <i class="far fa-comment-alt"></i> Feedback
-                </a>
-            </div>
-
-            <div th:if="${session.currentUser != null and session.currentUser.roles[0].name.name() == 'ROLE_ADMIN'}">
-                <div class="menu-section-title">Admin</div>
-                <a th:href="@{/admin/dashboard}" class="nav-link-custom" th:classappend="${#httpServletRequest.requestURI.contains('dashboard') ? 'active' : ''}">
-                    <i class="fas fa-th-large"></i> Dashboard
-                </a>
-                <a th:href="@{/admin/users}" class="nav-link-custom" th:classappend="${#httpServletRequest.requestURI.contains('users') ? 'active' : ''}">
-                    <i class="fas fa-users"></i> Manage Users
-                </a>
-                <a th:href="@{/admin/roles}" class="nav-link-custom" th:classappend="${#httpServletRequest.requestURI.contains('roles') ? 'active' : ''}">
-                    <i class="fas fa-shield-alt"></i> Set Roles
-                </a>
-                <a th:href="@{/admin/reports}" class="nav-link-custom" th:classappend="${#httpServletRequest.requestURI.contains('reports') ? 'active' : ''}">
-                    <i class="fas fa-file-alt"></i> Reports
-                </a>
-            </div>
-        </nav>
-        <div class="sidebar-footer">
-            <a th:href="@{/logout}" class="sidebar-logout">
-                <i class="fas fa-sign-out-alt"></i>
-                Logout
-            </a>
-        </div>
-    </aside>
-
-    <div class="main-content">
-        <header class="top-nav">
-            <div class="flex-grow-1 d-flex justify-content-start">
-                <div class="search-container">
-                    <i class="fas fa-search search-icon"></i>
-                    <input type="text" class="search-input" placeholder="Search modules, resources, help...">
-                </div>
-            </div>
-
-            <div class="d-flex align-items-center gap-3">
-                <button class="notification-btn" aria-label="Notifications">
-                    <i class="far fa-bell fa-lg"></i>
-                    <span class="badge-notification">3</span>
-                </button>
-
-                <div class="dropdown" th:if="${session.currentUser != null}">
-                    <div class="user-chip" data-bs-toggle="dropdown">
-                        <div class="avatar-circle">
-                            <span th:text="${session.currentUser.fullName.substring(0,1)}">U</span>
+<body class="app-shell" role="application">
+    <div class="wrapper">
+        <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+            <div class="sidebar-header">
+                <a th:href="@{/learning}" class="logo-link" role="img"
+                    aria-label="NileCare - Learning & Wellness Platform">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="logo-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="white" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" aria-hidden="true">
+                                <path
+                                    d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719">
+                                </path>
+                            </svg>
                         </div>
-                        <div class="d-none d-md-block text-start ps-1">
-                            <div class="user-chip-name" th:text="${session.currentUser.fullName}">User</div>
-                            <div class="user-chip-role" th:text="${session.currentUser.roles[0].name}">ROLE</div>
+                        <div>
+                            <h1 class="sidebar-brand-title">NileCare</h1>
+                            <p class="sidebar-brand-subtitle">Learning & Wellness</p>
                         </div>
                     </div>
-                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-topnav p-2 mt-2">
-                         <li><h6 class="dropdown-header text-muted text-uppercase small fw-bold">My Account</h6></li>
-                         <li><hr class="dropdown-divider bg-light my-1"></li>
-                         <li><a class="dropdown-item rounded-3 py-2 text-secondary" href="#">Profile Settings</a></li>
-                         <li><a class="dropdown-item rounded-3 py-2 text-secondary" href="#">Preferences</a></li>
-                         <li><hr class="dropdown-divider bg-light my-1"></li>
-                         <li><a class="dropdown-item rounded-3 py-2 text-danger fw-medium" th:href="@{/logout}"><i class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
-                    </ul>
+                </a>
+            </div>
+
+            <nav class="sidebar-menu">
+                <!-- Student Menu -->
+                <div
+                    th:if="${session.currentUser != null and session.currentUser.roles[0].name.name() == 'ROLE_STUDENT'}">
+                    <div class="menu-section-title">Student</div>
+                    <a th:href="@{/learning}" class="nav-link-custom"
+                        th:classappend="${#httpServletRequest.requestURI.contains('/learning') ? 'active' : ''}"
+                        role="menuitem">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-book-open w-5 h-5" aria-hidden="true">
+                            <path d="M12 7v14"></path>
+                            <path
+                                d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z">
+                            </path>
+                        </svg>
+                        <span>Learning Modules</span>
+                    </a>
+                    <a th:href="@{/progress}" class="nav-link-custom"
+                        th:classappend="${#httpServletRequest.requestURI.contains('/progress') ? 'active' : ''}"
+                        role="menuitem">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-trending-up w-5 h-5" aria-hidden="true">
+                            <path d="M16 7h6v6"></path>
+                            <path d="m22 7-8.5 8.5-5-5L2 17"></path>
+                        </svg>
+                        <span>Track Progress</span>
+                    </a>
+                    <a th:href="@{/support/request}" class="nav-link-custom"
+                        th:classappend="${#httpServletRequest.requestURI.contains('/support') ? 'active' : ''}"
+                        role="menuitem">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-circle-question-mark w-5 h-5" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                            <path d="M12 17h.01"></path>
+                        </svg>
+                        <span>Help Requests</span>
+                    </a>
+                    <a th:href="@{/counseling}" class="nav-link-custom"
+                        th:classappend="${#httpServletRequest.requestURI.contains('/counseling') ? 'active' : ''}"
+                        role="menuitem">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-calendar w-5 h-5" aria-hidden="true">
+                            <path d="M8 2v4"></path>
+                            <path d="M16 2v4"></path>
+                            <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+                            <path d="M3 10h18"></path>
+                        </svg>
+                        <span>Counseling</span>
+                    </a>
+                    <a th:href="@{/assessment}" class="nav-link-custom"
+                        th:classappend="${#httpServletRequest.requestURI.contains('/assessment') ? 'active' : ''}"
+                        role="menuitem">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-clipboard-list w-5 h-5" aria-hidden="true">
+                            <rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect>
+                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                            <path d="M12 11h4"></path>
+                            <path d="M12 16h4"></path>
+                            <path d="M8 11h.01"></path>
+                            <path d="M8 16h.01"></path>
+                        </svg>
+                        <span>Assessments</span>
+                    </a>
+                    <a th:href="@{/chat}" class="nav-link-custom"
+                        th:classappend="${#httpServletRequest.requestURI.contains('/chat') ? 'active' : ''}"
+                        role="menuitem">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-send w-5 h-5" aria-hidden="true">
+                            <path d="M22 2L11 13"></path>
+                            <path d="M22 2L15 22L11 13L2 9L22 2z"></path>
+                        </svg>
+                        <span>Chatbot</span>
+                    </a>
+                    <a th:href="@{/feedback}" class="nav-link-custom"
+                        th:classappend="${#httpServletRequest.requestURI.contains('/feedback') ? 'active' : ''}"
+                        role="menuitem">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-message-square w-5 h-5" aria-hidden="true">
+                            <path
+                                d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z">
+                            </path>
+                        </svg>
+                        <span>Feedback</span>
+                    </a>
                 </div>
 
-                <div th:if="${session.currentUser == null}">
-                    <a th:href="@{/login}" class="btn btn-sm btn-primary rounded-pill px-3 bg-gradient-custom">Login</a>
+                <!-- Admin Menu -->
+                <div
+                    th:if="${session.currentUser != null and session.currentUser.roles[0].name.name() == 'ROLE_ADMIN'}">
+                    <div class="menu-section-title">Admin</div>
+                    <a th:href="@{/admin/dashboard}" class="nav-link-custom"
+                        th:classappend="${#httpServletRequest.requestURI.contains('dashboard') ? 'active' : ''}"
+                        role="menuitem">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-layout-dashboard w-5 h-5" aria-hidden="true">
+                            <rect width="7" height="9" x="3" y="3" rx="1"></rect>
+                            <rect width="7" height="5" x="14" y="3" rx="1"></rect>
+                            <rect width="7" height="9" x="14" y="12" rx="1"></rect>
+                            <rect width="7" height="5" x="3" y="16" rx="1"></rect>
+                        </svg>
+                        <span>Dashboard</span>
+                    </a>
+                    <a th:href="@{/admin/users}" class="nav-link-custom"
+                        th:classappend="${#httpServletRequest.requestURI.contains('users') ? 'active' : ''}"
+                        role="menuitem">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-users w-5 h-5" aria-hidden="true">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                            <path d="M16 3.128a4 4 0 0 1 0 7.744"></path>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                        </svg>
+                        <span>Manage Users</span>
+                    </a>
+                    <a th:href="@{/admin/roles}" class="nav-link-custom"
+                        th:classappend="${#httpServletRequest.requestURI.contains('roles') ? 'active' : ''}"
+                        role="menuitem">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-shield w-5 h-5" aria-hidden="true">
+                            <path
+                                d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z">
+                            </path>
+                        </svg>
+                        <span>Set Roles</span>
+                    </a>
+                    <a th:href="@{/admin/reports}" class="nav-link-custom"
+                        th:classappend="${#httpServletRequest.requestURI.contains('reports') ? 'active' : ''}"
+                        role="menuitem">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-file-text w-5 h-5" aria-hidden="true">
+                            <path
+                                d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z">
+                            </path>
+                            <path d="M14 2v5a1 1 0 0 0 1 1h5"></path>
+                            <path d="M10 9H8"></path>
+                            <path d="M16 13H8"></path>
+                            <path d="M16 17H8"></path>
+                        </svg>
+                        <span>Reports</span>
+                    </a>
                 </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a th:href="@{/logout}" class="sidebar-logout" role="menuitem">
+                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                    <span>Logout</span>
+                </a>
             </div>
-        </header>
-        <main class="scrollable-area" layout:fragment="content"></main>
+        </aside>
+
+        <div class="main-content">
+            <header class="top-nav" role="banner">
+                <!-- Mobile Hamburger Menu -->
+                <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation menu" 
+                    aria-expanded="false" aria-controls="sidebar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        aria-hidden="true">
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+
+                <div class="search-container">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="search-icon" aria-hidden="true">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    <input type="text" class="search-input" placeholder="Search modules, resources, help..."
+                        aria-label="Search platform content">
+                </div>
+
+                <div class="nav-actions">
+                    <div class="dropdown">
+                        <button class="notification-btn" data-bs-toggle="dropdown" aria-expanded="false"
+                            aria-label="Notifications" title="You have 3 new notifications">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-bell w-5 h-5 text-blue-600"
+                                aria-hidden="true">
+                                <path d="M10.268 21a2 2 0 0 0 3.464 0"></path>
+                                <path
+                                    d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326">
+                                </path>
+                            </svg>
+                            <span class="badge-notification" aria-label="3 notifications">3</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end notification-dropdown">
+                            <li>
+                                <h6 class="dropdown-header">Notifications</h6>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item notification-item" href="#">
+                                    <div class="notification-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <path d="M12 7v14"></path>
+                                            <path
+                                                d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                    <div class="notification-content">
+                                        <div class="notification-title">New Learning Module</div>
+                                        <div class="notification-time">2 minutes ago</div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item notification-item" href="#">
+                                    <div class="notification-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <path
+                                                d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                    <div class="notification-content">
+                                        <div class="notification-title">Counselor Response</div>
+                                        <div class="notification-time">1 hour ago</div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item notification-item" href="#">
+                                    <div class="notification-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <path d="M16 7h6v6"></path>
+                                            <path d="m22 7-8.5 8.5-5-5L2 17"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="notification-content">
+                                        <div class="notification-title">Progress Update Available</div>
+                                        <div class="notification-time">3 hours ago</div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-center notification-clear" href="#" id="clearNotificationsBtn">
+                                    Clear Notifications
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="dropdown" th:if="${session.currentUser != null}">
+                        <button class="user-menu-btn" data-bs-toggle="dropdown" aria-expanded="false"
+                            aria-label="User menu">
+                            <div class="avatar-circle">
+                                <span th:text="${session.currentUser.fullName.substring(0,1)}">U</span>
+                            </div>
+                            <div class="user-info d-none d-md-block">
+                                <div class="user-name" th:text="${session.currentUser.fullName}">User</div>
+                                <div class="user-role" th:text="${session.currentUser.roles[0].name}">ROLE</div>
+                            </div>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <h6 class="dropdown-header">My Account</h6>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Profile Settings</a></li>
+                            <li><a class="dropdown-item" href="#">Preferences</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item dropdown-item-danger" th:href="@{/logout}">
+                                    <i class="fas fa-sign-out-alt me-2" aria-hidden="true"></i> Logout
+                                </a></li>
+                        </ul>
+                    </div>
+
+                    <div th:if="${session.currentUser == null}">
+                        <a th:href="@{/login}" class="btn btn-sm btn-login rounded-lg">Login</a>
+                    </div>
+                </div>
+            </header>
+            <main class="scrollable-area" layout:fragment="content"></main>
+        </div>
     </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<th:block layout:fragment="scripts"></th:block>
+
+    <!-- Close Button for Mobile Sidebar -->
+    <button class="sidebar-close" id="sidebarClose" aria-label="Close navigation menu" title="Close menu"></button>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/static/js/toast-notifications.js}"></script>
+    <script>
+        // Mobile Sidebar Toggle
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebarClose = document.getElementById('sidebarClose');
+            const sidebar = document.getElementById('sidebar');
+
+            // Toggle sidebar on hamburger click
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    const isOpen = sidebar.classList.contains('show');
+                    
+                    if (isOpen) {
+                        sidebar.classList.remove('show');
+                        document.body.classList.remove('sidebar-open');
+                        this.setAttribute('aria-expanded', 'false');
+                    } else {
+                        sidebar.classList.add('show');
+                        document.body.classList.add('sidebar-open');
+                        this.setAttribute('aria-expanded', 'true');
+                    }
+                });
+            }
+
+            // Close sidebar when clicking overlay
+            if (sidebarClose) {
+                sidebarClose.addEventListener('click', function () {
+                    sidebar.classList.remove('show');
+                    document.body.classList.remove('sidebar-open');
+                    if (sidebarToggle) {
+                        sidebarToggle.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            }
+
+            // Close sidebar when clicking on a nav link on mobile
+            const navLinks = document.querySelectorAll('.nav-link-custom');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function () {
+                    if (window.innerWidth < 768) {
+                        sidebar.classList.remove('show');
+                        document.body.classList.remove('sidebar-open');
+                        if (sidebarToggle) {
+                            sidebarToggle.setAttribute('aria-expanded', 'false');
+                        }
+                    }
+                });
+            });
+
+            // Clear Notifications Handler
+            const clearNotificationsBtn = document.getElementById('clearNotificationsBtn');
+            if (clearNotificationsBtn) {
+                clearNotificationsBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    console.log('Clear notifications clicked');
+                    
+                    // Show success toast
+                    if (typeof ToastNotifications !== 'undefined' && ToastNotifications.showSuccessToast) {
+                        console.log('Showing toast notification');
+                        ToastNotifications.showSuccessToast('Notifications cleared successfully!');
+                    } else {
+                        console.warn('ToastNotifications not available');
+                        // Fallback: use alert if toast not available
+                        alert('Notifications cleared successfully!');
+                    }
+                    
+                    // Remove the notification badge
+                    const badgeNotification = document.querySelector('.badge-notification');
+                    if (badgeNotification) {
+                        badgeNotification.style.display = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+    <th:block layout:fragment="scripts"></th:block>
 </body>
+
 </html>
