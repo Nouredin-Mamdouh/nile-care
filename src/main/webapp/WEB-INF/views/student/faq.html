@@ -17,9 +17,9 @@
         <!-- Search Bar -->
         <div class="mb-4">
             <div class="position-relative" style="max-width: 600px;">
-                <i class="fas fa-search position-absolute" style="left: 16px; top: 50%; transform: translateY(-50%); color: #60a5fa;"></i>
+                <i class="fas fa-search position-absolute" style="left: 16px; top: 50%; transform: translateY(-50%); color: #60a5fa;" aria-hidden="true"></i>
                 <input type="text" id="searchInput" class="form-control ps-5 faq-search-input"
-                    placeholder="Search for help...">
+                    placeholder="Search for help..." aria-label="Search FAQ articles">
             </div>
         </div>
 
@@ -31,8 +31,8 @@
                     <div class="card-body p-3 p-lg-4">
                         <!-- Mobile: Collapsible Categories -->
                         <div class="d-lg-none mb-3">
-                            <button class="btn btn-outline-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#categoryCollapse" aria-expanded="false">
-                                <i class="fas fa-filter me-2"></i>Filter by Category
+                            <button class="btn btn-outline-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#categoryCollapse" aria-expanded="false" aria-controls="categoryCollapse" aria-label="Toggle category filter menu">
+                                <i class="fas fa-filter me-2" aria-hidden="true"></i>Filter by Category
                             </button>
                         </div>
                         
@@ -40,64 +40,64 @@
                         
                         <nav class="collapse d-lg-block" id="categoryCollapse">
                             <div class="d-flex flex-column gap-2" id="categoryNav">
-                            <button class="category-btn category-active" data-category="all">
+                            <button class="category-btn category-active" data-category="all" aria-label="View all FAQs, 16 articles">
                                 <div class="d-flex align-items-center justify-content-between w-100">
                                     <div class="d-flex align-items-center gap-2">
-                                        <i class="fas fa-circle-question text-blue-600"></i>
+                                        <i class="fas fa-circle-question text-blue-600" aria-hidden="true"></i>
                                         <span>All FAQs</span>
                                     </div>
                                     <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="all">16</span>
                                 </div>
                             </button>
-                            <button class="category-btn" data-category="getting-started">
+                            <button class="category-btn" data-category="getting-started" aria-label="View getting started articles, 2 items">
                                 <div class="d-flex align-items-center justify-content-between w-100">
                                     <div class="d-flex align-items-center gap-2">
-                                        <i class="fas fa-book text-blue-600"></i>
+                                        <i class="fas fa-book text-blue-600" aria-hidden="true"></i>
                                         <span>Getting Started</span>
                                     </div>
                                     <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="getting-started">2</span>
                                 </div>
                             </button>
-                            <button class="category-btn" data-category="learning">
+                            <button class="category-btn" data-category="learning" aria-label="View learning modules articles, 3 items">
                                 <div class="d-flex align-items-center justify-content-between w-100">
                                     <div class="d-flex align-items-center gap-2">
-                                        <i class="fas fa-book-open text-blue-600"></i>
+                                        <i class="fas fa-book-open text-blue-600" aria-hidden="true"></i>
                                         <span>Learning Modules</span>
                                     </div>
                                     <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="learning">3</span>
                                 </div>
                             </button>
-                            <button class="category-btn" data-category="progress">
+                            <button class="category-btn" data-category="progress" aria-label="View progress articles, 2 items">
                                 <div class="d-flex align-items-center justify-content-between w-100">
                                     <div class="d-flex align-items-center gap-2">
-                                        <i class="fas fa-arrow-trend-up text-blue-600"></i>
+                                        <i class="fas fa-arrow-trend-up text-blue-600" aria-hidden="true"></i>
                                         <span>Progress</span>
                                     </div>
                                     <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="progress">2</span>
                                 </div>
                             </button>
-                            <button class="category-btn" data-category="appointments">
+                            <button class="category-btn" data-category="appointments" aria-label="View appointments articles, 3 items">
                                 <div class="d-flex align-items-center justify-content-between w-100">
                                     <div class="d-flex align-items-center gap-2">
-                                        <i class="fas fa-calendar text-blue-600"></i>
+                                        <i class="fas fa-calendar text-blue-600" aria-hidden="true"></i>
                                         <span>Appointments</span>
                                     </div>
                                     <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="appointments">3</span>
                                 </div>
                             </button>
-                            <button class="category-btn" data-category="account">
+                            <button class="category-btn" data-category="account" aria-label="View account articles, 2 items">
                                 <div class="d-flex align-items-center justify-content-between w-100">
                                     <div class="d-flex align-items-center gap-2">
-                                        <i class="fas fa-user text-blue-600"></i>
+                                        <i class="fas fa-user text-blue-600" aria-hidden="true"></i>
                                         <span>Account</span>
                                     </div>
                                     <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="account">2</span>
                                 </div>
                             </button>
-                            <button class="category-btn" data-category="technical">
+                            <button class="category-btn" data-category="technical" aria-label="View technical articles, 2 items">
                                 <div class="d-flex align-items-center justify-content-between w-100">
                                     <div class="d-flex align-items-center gap-2">
-                                        <i class="fas fa-sliders text-blue-600"></i>
+                                        <i class="fas fa-sliders text-blue-600" aria-hidden="true"></i>
                                         <span>Technical</span>
                                     </div>
                                     <span class="badge bg-blue-100 text-blue-700 rounded-pill" data-count="technical">2</span>
