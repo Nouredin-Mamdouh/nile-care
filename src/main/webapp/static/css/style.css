@@ -835,7 +835,7 @@ a { text-decoration: none; color: inherit; }
     background: transparent;
 }
 .btn-primary-gradient {
-    background: linear-gradient(135deg, #3b82f6, #22c55e) !important;
+    background: var(--gradient-primary) !important;
     color: white !important;
     border: none !important;
     border-radius: 8px;
@@ -3635,7 +3635,7 @@ a { text-decoration: none; color: inherit; }
 }
 
 .category-btn.category-active {
-    background: linear-gradient(135deg, #2563eb 0%, #22c55e 100%);
+    background: var(--gradient-primary);
     color: white;
 }
 
@@ -3698,5 +3698,272 @@ a { text-decoration: none; color: inherit; }
     .faq-button {
         font-size: 0.9rem;
         padding: 0.75rem;
+    }
+}
+
+/* Analytics Page Styles */
+.analytics-select {
+    min-width: 180px;
+    border-radius: 12px;
+    border-color: #bfdbfe;
+    color: #1e3a8a;
+}
+
+.analytics-select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.analytics-metric-btn {
+    border-radius: 20px;
+    border-color: #bfdbfe;
+    color: #2563eb;
+    transition: all 0.3s ease;
+}
+
+.analytics-metric-btn:hover {
+    background-color: #f0f9ff;
+}
+
+.analytics-metric-btn.active {
+    background: var(--gradient-primary);
+    color: white;
+    border-color: transparent;
+}
+
+.analytics-btn-export,
+.analytics-btn-share {
+    border-radius: 8px;
+    border: 2px solid #3b82f6;
+    color: #3b82f6;
+    font-weight: 500;
+    padding: 0.625rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.analytics-btn-export:hover {
+    background-color: #f0f9ff;
+}
+
+.analytics-btn-share {
+    background: var(--gradient-primary);
+    color: white;
+    border-color: transparent;
+}
+
+.analytics-btn-share:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.analytics-btn-reset {
+    background: transparent;
+    border: none;
+    color: #3b82f6;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.analytics-btn-reset:hover {
+    background-color: #f0f9ff;
+}
+
+.analytics-module-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.analytics-module-item {
+    padding: 1rem 0;
+    border-bottom: 1px solid #dbeafe;
+}
+
+.analytics-module-item:last-child {
+    border-bottom: none;
+}
+
+.analytics-badge-item {
+    padding: 1.5rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.analytics-badge-earned {
+    cursor: pointer;
+}
+
+.analytics-badge-earned:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(249, 115, 22, 0.2);
+}
+
+.analytics-badge-locked {
+    background-color: #f3f4f6;
+    padding: 1.5rem;
+    border-radius: 12px;
+    opacity: 0.6;
+}
+
+.analytics-table {
+    border-collapse: collapse;
+}
+
+.analytics-table thead tr {
+    background-color: #f0f9ff;
+    border-bottom: 2px solid #dbeafe;
+}
+
+.analytics-table tbody tr {
+    border-bottom: 1px solid #dbeafe;
+    transition: background-color 0.2s ease;
+}
+
+.analytics-table tbody tr:hover {
+    background-color: #f0f9ff;
+}
+
+.analytics-table td {
+    padding: 1rem 0.75rem;
+}
+
+/* Analytics Responsive Adjustments */
+@media (max-width: 1199.98px) {
+    .analytics-select {
+        min-width: 150px;
+    }
+    
+    .analytics-btn-export,
+    .analytics-btn-share {
+        padding: 0.5rem 0.875rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .analytics-select {
+        min-width: 100%;
+    }
+    
+    .analytics-metric-btn {
+        flex: 1;
+    }
+    
+    .analytics-table {
+        font-size: 0.9rem;
+    }
+    
+    .analytics-table td {
+        padding: 0.75rem 0.5rem;
+    }
+}
+
+/* Badge earned gradient styling */
+.analytics-badge-gold {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+}
+
+/* Statistics value large heading */
+.analytics-stat-value {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--blue-900);
+}
+
+.analytics-stat-value.text-green-900 {
+    color: var(--green-600);
+}
+
+/* Large progress bar */
+.analytics-progress-bar-lg {
+    height: 8px;
+    background-color: var(--blue-100);
+}
+
+/* Progress bar styling */
+.analytics-progress-bar {
+    height: 6px;
+    background-color: var(--blue-100);
+}
+
+.analytics-progress-success {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+}
+
+/* Progress width utility classes */
+.analytics-progress-w0 {
+    width: 0%;
+    background-color: var(--blue-100);
+}
+
+.analytics-progress-w15 {
+    width: 15%;
+    background: var(--gradient-primary);
+}
+
+.analytics-progress-w30 {
+    width: 30%;
+    background: var(--gradient-primary);
+}
+
+.analytics-progress-w42 {
+    width: 42%;
+    background: var(--gradient-primary);
+}
+
+.analytics-progress-w45 {
+    width: 45%;
+    background: var(--gradient-primary);
+}
+
+.analytics-progress-w60 {
+    width: 60%;
+    background: var(--gradient-primary);
+}
+
+.analytics-progress-w70 {
+    width: 70%;
+    background: var(--gradient-primary);
+}
+
+.analytics-progress-w85 {
+    width: 85%;
+    background: var(--gradient-primary);
+}
+
+.analytics-progress-w87 {
+    width: 87%;
+    background: var(--gradient-primary);
+}
+
+.analytics-progress-w100 {
+    width: 100%;
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+}
+
+.text-success {
+    color: var(--green-500) !important;
+}
+
+@media (max-width: 575.98px) {
+    .analytics-btn-export,
+    .analytics-btn-share {
+        width: 100%;
+        padding: 0.625rem 1rem;
+        font-size: 0.85rem;
+    }
+    
+    .analytics-table {
+        font-size: 0.8rem;
+    }
+
+    .analytics-table td {
+        padding: 0.5rem 0.25rem;
+    }
+
+    h2[style*="font-size: 3rem"] {
+        font-size: 2rem !important;
     }
 }

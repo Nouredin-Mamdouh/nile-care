@@ -72,7 +72,18 @@ public class StudentController {
         return "student/faq";
     }
 
-    // 9. Module Details
+    // 9. Analytics
+    @GetMapping("/analytics")
+    public String analytics(Model model, javax.servlet.http.HttpSession session) {
+        // Pass user to model for frontend access if needed
+        Object currentUser = session.getAttribute("currentUser");
+        if (currentUser != null) {
+            model.addAttribute("currentUser", currentUser);
+        }
+        return "student/analytics";
+    }
+
+    // 10. Module Details
     @GetMapping("/modules/{id}")
     public String moduleDetails(@PathVariable Long id, Model model) {
         // Fetch the specific module from DB
@@ -83,7 +94,7 @@ public class StudentController {
         return "student/module_details";
     }
     
-    // 10. Lesson View
+    // 11. Lesson View
     @GetMapping("/lesson/{id}")
     public String lessonView(@PathVariable Long id, Model model) {
         // Fetch the specific lesson from DB

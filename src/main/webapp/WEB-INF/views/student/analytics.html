@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/main_layout}">
+
+<head>
+    <title>Progress Analytics - NileCare</title>
+    <meta name="description"
+        content="View detailed analytics of your learning progress with comprehensive charts and statistics.">
+</head>
+
+<body>
+    <div layout:fragment="content">
+
+        <!-- Page Header -->
+        <div class="mb-4 d-flex flex-column flex-md-row justify-content-md-between align-items-start gap-3">
+            <div>
+                <h2 class="fw-semibold text-blue-900 mb-1">Progress Analytics</h2>
+                <p class="text-blue-600 small mb-0">Track your learning journey and achievements</p>
+            </div>
+            <div class="d-flex gap-2 flex-wrap justify-content-start justify-content-md-end w-100 w-md-auto">
+                <button class="btn btn-outline-primary analytics-btn-export" aria-label="Export progress report as PDF">
+                    <i class="fas fa-download me-2" aria-hidden="true"></i><span class="d-none d-sm-inline">Export </span>PDF
+                </button>
+                <button class="btn btn-outline-primary analytics-btn-export" aria-label="Export data as CSV">
+                    <i class="fas fa-download me-2" aria-hidden="true"></i><span class="d-none d-sm-inline">Export </span>CSV
+                </button>
+                <button class="btn analytics-btn-share" aria-label="Share your progress">
+                    <i class="fas fa-share-alt me-2" aria-hidden="true"></i><span class="d-none d-sm-inline">Share </span><span class="d-inline d-sm-none">Share</span><span class="d-none d-sm-inline">Progress</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Filters Card -->
+        <div class="card card-custom analytics-filter-card mb-4">
+            <div class="card-body p-3 p-lg-4">
+                <div class="d-flex flex-column flex-lg-row gap-3 gap-lg-4 align-items-start align-items-lg-center">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fas fa-filter text-blue-600"></i>
+                        <span class="fw-semibold text-blue-900">Filters:</span>
+                    </div>
+
+                    <!-- Date Range Filter -->
+                    <div>
+                        <label for="dateRangeFilter" class="visually-hidden">Date range filter</label>
+                        <select id="dateRangeFilter" class="form-select form-select-sm analytics-select" aria-label="Filter by date range">
+                            <option value="week">This Week</option>
+                            <option value="month" selected>This Month</option>
+                            <option value="all">All Time</option>
+                        </select>
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div>
+                        <label for="categoryFilter" class="visually-hidden">Category filter</label>
+                        <select id="categoryFilter" class="form-select form-select-sm analytics-select" aria-label="Filter by category">
+                            <option value="all" selected>All Categories</option>
+                            <option value="stress">Stress Management</option>
+                            <option value="mindfulness">Mindfulness</option>
+                            <option value="anxiety">Anxiety Relief</option>
+                            <option value="sleep">Sleep Health</option>
+                        </select>
+                    </div>
+
+                    <!-- Metric Toggle -->
+                    <div class="d-flex gap-2" role="group" aria-label="Metric display toggle">
+                        <button class="btn btn-sm btn-outline-primary analytics-metric-btn analytics-metric-btn-rounded"
+                            data-metric="hours" aria-label="Show data in hours">Hours</button>
+                        <button class="btn btn-sm btn-outline-primary analytics-metric-btn analytics-metric-btn-rounded"
+                            data-metric="percentage" aria-label="Show data in percentages">Percentage</button>
+                    </div>
+
+                    <!-- Reset Button -->
+                    <button class="btn btn-sm btn-ghost analytics-btn-reset ms-lg-auto" aria-label="Reset all filters">
+                        <i class="fas fa-redo me-1"></i>Reset Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overall Summary Cards -->
+        <div class="row g-3 g-sm-4 mb-4" role="region" aria-label="Analytics Summary">
+            <!-- Overall Progress Card -->
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="card card-custom progress-stat-card h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="progress-icon-box progress-icon-blue" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up text-white" aria-hidden="true"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg>
+                        </div>
+                        <span class="badge progress-badge-green">+8%</span>
+                    </div>
+                    <p class="progress-stat-label">Overall Progress</p>
+                    <h3 class="progress-stat-value" id="analyticsOverallProgress">42%</h3>
+                    <div class="progress analytics-progress-bar mt-2">
+                        <div class="progress-bar analytics-progress-fill analytics-progress-w42"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modules Completed Card -->
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="card card-custom progress-stat-card h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="progress-icon-box progress-icon-green" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-award text-white" aria-hidden="true"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path><circle cx="12" cy="8" r="6"></circle></svg>
+                        </div>
+                        <span class="badge progress-badge-blue">5/12</span>
+                    </div>
+                    <p class="progress-stat-label">Modules Completed</p>
+                    <h3 class="progress-stat-value">5</h3>
+                    <p class="text-blue-600 small mt-2">3 in progress</p>
+                </div>
+            </div>
+
+            <!-- Total Learning Time Card -->
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="card card-custom progress-stat-card h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="progress-icon-box progress-icon-purple" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock text-white" aria-hidden="true"><path d="M12 6v6l4 2"></path><circle cx="12" cy="12" r="10"></circle></svg>
+                        </div>
+                        <span class="badge progress-badge-purple">30 min</span>
+                    </div>
+                    <p class="progress-stat-label">Total Learning Time</p>
+                    <h3 class="progress-stat-value">24h</h3>
+                </div>
+            </div>
+
+            <!-- Current Streak Card -->
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="card card-custom progress-stat-card h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="progress-icon-box progress-icon-orange" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar text-white" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+                        </div>
+                        <span class="badge progress-badge-orange">Active</span>
+                    </div>
+                    <p class="progress-stat-label">Current Streak</p>
+                    <h3 class="progress-stat-value">12</h3>
+                    <p class="text-blue-600 small mt-2">Personal best: 15 days</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row 1 -->
+        <div class="row g-3 g-sm-4 mb-4" role="region" aria-label="Analytics Charts">
+            <!-- Completion Trends Chart -->
+            <div class="col-12 col-lg-6">
+                <div class="card card-custom progress-chart-card h-100">
+                    <div class="mb-3">
+                        <h4 class="fw-semibold text-blue-900 mb-1">Completion Trends</h4>
+                        <p class="text-blue-600 small mb-0">Your progress over time</p>
+                    </div>
+                    <div class="analytics-chart-container">
+                        <canvas id="completionTrendsChart" role="img"
+                            aria-label="Line chart showing completion trends over months"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Time Analysis Chart -->
+            <div class="col-12 col-lg-6">
+                <div class="card card-custom progress-chart-card h-100">
+                    <div class="mb-3">
+                        <h4 class="fw-semibold text-blue-900 mb-1">Time Analysis by Category</h4>
+                        <p class="text-blue-600 small mb-0">Distribution of your learning time</p>
+                    </div>
+                    <div class="analytics-chart-container">
+                        <canvas id="timeAnalysisChart" role="img"
+                            aria-label="Bar chart showing time spent per category"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Module Breakdown -->
+        <div class="card card-custom analytics-filter-card mb-4">
+            <div class="card-body p-3 p-lg-4">
+                <div class="mb-3">
+                    <h4 class="fw-semibold text-blue-900 mb-1">Module Breakdown</h4>
+                    <p class="text-blue-600 small mb-0">Progress across all learning modules</p>
+                </div>
+                <div class="analytics-module-list">
+                    <div class="analytics-module-item">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-blue-900 fw-500">Understanding Stress</span>
+                            <span class="text-blue-600 fw-500">100%</span>
+                        </div>
+                        <div class="progress analytics-progress-bar">
+                            <div
+                                class="progress-bar analytics-progress-fill analytics-progress-success analytics-progress-w100">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="analytics-module-item">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-blue-900 fw-500">Anxiety Management</span>
+                            <span class="text-blue-600 fw-500">85%</span>
+                        </div>
+                        <div class="progress analytics-progress-bar">
+                            <div class="progress-bar analytics-progress-fill analytics-progress-w85"></div>
+                        </div>
+                    </div>
+                    <div class="analytics-module-item">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-blue-900 fw-500">Sleep Hygiene</span>
+                            <span class="text-blue-600 fw-500">70%</span>
+                        </div>
+                        <div class="progress analytics-progress-bar">
+                            <div class="progress-bar analytics-progress-fill analytics-progress-w70"></div>
+                        </div>
+                    </div>
+                    <div class="analytics-module-item">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-blue-900 fw-500">Mindfulness Basics</span>
+                            <span class="text-blue-600 fw-500">60%</span>
+                        </div>
+                        <div class="progress analytics-progress-bar">
+                            <div class="progress-bar analytics-progress-fill analytics-progress-w60"></div>
+                        </div>
+                    </div>
+                    <div class="analytics-module-item">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-blue-900 fw-500">Emotional Regulation</span>
+                            <span class="text-blue-600 fw-500">45%</span>
+                        </div>
+                        <div class="progress analytics-progress-bar">
+                            <div class="progress-bar analytics-progress-fill analytics-progress-w45"></div>
+                        </div>
+                    </div>
+                    <div class="analytics-module-item">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-blue-900 fw-500">Building Resilience</span>
+                            <span class="text-blue-600 fw-500">30%</span>
+                        </div>
+                        <div class="progress analytics-progress-bar">
+                            <div class="progress-bar analytics-progress-fill analytics-progress-w30"></div>
+                        </div>
+                    </div>
+                    <div class="analytics-module-item">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-blue-900 fw-500">Work-Life Balance</span>
+                            <span class="text-blue-600 fw-500">15%</span>
+                        </div>
+                        <div class="progress analytics-progress-bar">
+                            <div class="progress-bar analytics-progress-fill analytics-progress-w15"></div>
+                        </div>
+                    </div>
+                    <div class="analytics-module-item">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="text-blue-900 fw-500">Positive Psychology</span>
+                            <span class="text-blue-600 fw-500">0%</span>
+                        </div>
+                        <div class="progress analytics-progress-bar">
+                            <div class="progress-bar analytics-progress-fill analytics-progress-w0"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievements & Badges -->
+        <div class="card card-custom analytics-filter-card mb-4">
+            <div class="card-body p-3 p-lg-4">
+                <div class="mb-4">
+                    <h4 class="fw-semibold text-blue-900 mb-1">Achievements & Badges</h4>
+                    <p class="text-blue-600 small mb-0">Your earned achievements and locked goals</p>
+                </div>
+                <div class="row g-3 g-sm-4">
+                    <!-- Badge 1 - Earned -->
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="analytics-badge-item analytics-badge-earned analytics-badge-gold">
+                            <div class="text-center">
+                                <i class="fas fa-award fs-3 mb-2 text-white" aria-hidden="true"></i>
+                                <p class="fw-semibold text-white mb-1">First Steps</p>
+                                <p class="small text-white">Complete your first module</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Badge 2 - Earned -->
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="analytics-badge-item analytics-badge-earned analytics-badge-gold">
+                            <div class="text-center">
+                                <i class="fas fa-fire fs-3 mb-2 text-white" aria-hidden="true"></i>
+                                <p class="fw-semibold text-white mb-1">Week Warrior</p>
+                                <p class="small text-white">7-day learning streak</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Badge 3 - Earned -->
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="analytics-badge-item analytics-badge-earned analytics-badge-gold">
+                            <div class="text-center">
+                                <i class="fas fa-star fs-3 mb-2 text-white" aria-hidden="true"></i>
+                                <p class="fw-semibold text-white mb-1">Quiz Master</p>
+                                <p class="small text-white">Score 100% on 5 quizzes</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Badge 4 - Earned -->
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="analytics-badge-item analytics-badge-earned analytics-badge-gold">
+                            <div class="text-center">
+                                <i class="fas fa-book fs-3 mb-2 text-white" aria-hidden="true"></i>
+                                <p class="fw-semibold text-white mb-1">Dedicated Learner</p>
+                                <p class="small text-white">Complete 10 modules</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Badge 5 - Locked -->
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="analytics-badge-item analytics-badge-locked">
+                            <div class="text-center">
+                                <i class="fas fa-lock fs-3 mb-2 text-gray-400" aria-hidden="true"></i>
+                                <p class="fw-semibold text-gray-500 mb-1">Early Bird</p>
+                                <p class="small text-gray-400">Study before 8 AM</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Badge 6 - Locked -->
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="analytics-badge-item analytics-badge-locked">
+                            <div class="text-center">
+                                <i class="fas fa-moon fs-3 mb-2 text-gray-400" aria-hidden="true"></i>
+                                <p class="fw-semibold text-gray-500 mb-1">Night Owl</p>
+                                <p class="small text-gray-400">Study after 10 PM</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Badge 7 - Locked -->
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="analytics-badge-item analytics-badge-locked">
+                            <div class="text-center">
+                                <i class="fas fa-calendar-check fs-3 mb-2 text-gray-400" aria-hidden="true"></i>
+                                <p class="fw-semibold text-gray-500 mb-1">Perfect Month</p>
+                                <p class="small text-gray-400">30-day streak</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Badge 8 - Locked -->
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="analytics-badge-item analytics-badge-locked">
+                            <div class="text-center">
+                                <i class="fas fa-trophy fs-3 mb-2 text-gray-400" aria-hidden="true"></i>
+                                <p class="fw-semibold text-gray-500 mb-1">Course Champion</p>
+                                <p class="small text-gray-400">Complete all modules</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weekly Breakdown Table -->
+        <div class="card card-custom analytics-filter-card mb-4">
+            <div class="card-body p-3 p-lg-4">
+                <div class="mb-3">
+                    <h4 class="fw-semibold text-blue-900 mb-1">Weekly Breakdown</h4>
+                    <p class="text-blue-600 small mb-0">Detailed activity for this week</p>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover analytics-table">
+                        <thead>
+                            <tr>
+                                <th class="text-blue-900 fw-semibold">Day</th>
+                                <th class="text-blue-900 fw-semibold">Time Spent</th>
+                                <th class="text-blue-900 fw-semibold">Modules Accessed</th>
+                                <th class="text-blue-900 fw-semibold">Quizzes</th>
+                                <th class="text-blue-900 fw-semibold">Avg Duration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-blue-900">Monday</td>
+                                <td class="text-blue-700">2h 15m</td>
+                                <td class="text-blue-700">3</td>
+                                <td class="text-blue-700">2</td>
+                                <td class="text-blue-700">45m</td>
+                            </tr>
+                            <tr>
+                                <td class="text-blue-900">Tuesday</td>
+                                <td class="text-blue-700">1h 30m</td>
+                                <td class="text-blue-700">2</td>
+                                <td class="text-blue-700">1</td>
+                                <td class="text-blue-700">45m</td>
+                            </tr>
+                            <tr>
+                                <td class="text-blue-900">Wednesday</td>
+                                <td class="text-blue-700">3h 00m</td>
+                                <td class="text-blue-700">4</td>
+                                <td class="text-blue-700">3</td>
+                                <td class="text-blue-700">45m</td>
+                            </tr>
+                            <tr>
+                                <td class="text-blue-900">Thursday</td>
+                                <td class="text-blue-700">1h 45m</td>
+                                <td class="text-blue-700">2</td>
+                                <td class="text-blue-700">1</td>
+                                <td class="text-blue-700">52m</td>
+                            </tr>
+                            <tr>
+                                <td class="text-blue-900">Friday</td>
+                                <td class="text-blue-700">2h 30m</td>
+                                <td class="text-blue-700">3</td>
+                                <td class="text-blue-700">2</td>
+                                <td class="text-blue-700">50m</td>
+                            </tr>
+                            <tr>
+                                <td class="text-blue-900">Saturday</td>
+                                <td class="text-blue-700">4h 15m</td>
+                                <td class="text-blue-700">5</td>
+                                <td class="text-blue-700">4</td>
+                                <td class="text-blue-700">51m</td>
+                            </tr>
+                            <tr>
+                                <td class="text-blue-900">Sunday</td>
+                                <td class="text-blue-700">3h 30m</td>
+                                <td class="text-blue-700">4</td>
+                                <td class="text-blue-700">2</td>
+                                <td class="text-blue-700">52m</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Summary -->
+        <div class="card card-custom analytics-filter-card">
+            <div class="card-body p-3 p-lg-4">
+                <div class="mb-3">
+                    <h4 class="fw-semibold text-blue-900 mb-1">Performance Summary</h4>
+                    <p class="text-blue-600 small mb-0">Quiz scores and knowledge retention</p>
+                </div>
+                <div class="row g-4">
+                    <div class="col-12 col-md-6">
+                        <p class="text-blue-600 mb-3">Average Quiz Score</p>
+                        <h2 class="analytics-stat-value">87%</h2>
+                        <div class="progress analytics-progress-bar-lg">
+                            <div class="progress-bar analytics-progress-fill analytics-progress-w87"></div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <p class="text-blue-600 mb-3">Knowledge Retention Trend</p>
+                        <h2 class="analytics-stat-value text-green-900">
+                            <i class="fas fa-arrow-trend-up me-2 text-success"></i>+5%
+                        </h2>
+                        <p class="text-green-600 fw-500">Improving over time</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+<th:block layout:fragment="scripts">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script th:inline="javascript">
+        // ============================================
+        // Analytics Page - Data & Charts
+        // ============================================
+
+        const contextPath = /*[[@{/}]]*/ '';
+        let currentMetric = 'hours';
+
+        // Chart data
+        const completionTrendsData = {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            data: [15, 25, 32, 42, 48, 58]
+        };
+
+        const timeAnalysisData = [
+            { category: 'Stress Management', hours: 12, percentage: 30 },
+            { category: 'Mindfulness', hours: 8, percentage: 20 },
+            { category: 'Anxiety Relief', hours: 10, percentage: 25 },
+            { category: 'Sleep Health', hours: 6, percentage: 15 },
+            { category: 'Self-Care', hours: 4, percentage: 10 }
+        ];
+
+        let charts = {};
+
+        // ============================================
+        // Initialize Charts
+        // ============================================
+        function initCompletionTrendsChart() {
+            const ctx = document.getElementById('completionTrendsChart').getContext('2d');
+            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, 'rgba(37, 99, 235, 0.2)');
+            gradient.addColorStop(1, 'rgba(34, 197, 94, 0.2)');
+
+            charts.completionTrends = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: completionTrendsData.labels,
+                    datasets: [{
+                        label: 'Completion %',
+                        data: completionTrendsData.data,
+                        borderColor: 'url(#grad)',
+                        backgroundColor: gradient,
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#2563eb',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                            titleColor: '#1e3a8a',
+                            bodyColor: '#3b82f6',
+                            borderColor: '#dbeafe',
+                            borderWidth: 1,
+                            cornerRadius: 12,
+                            padding: 12,
+                            displayColors: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: { color: '#dbeafe', drawBorder: false },
+                            ticks: { color: '#60a5fa', callback: function (v) { return v + '%'; } }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#60a5fa' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function initTimeAnalysisChart() {
+            const ctx = document.getElementById('timeAnalysisChart').getContext('2d');
+            const dataKey = currentMetric === 'hours' ? 'hours' : 'percentage';
+
+            charts.timeAnalysis = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: timeAnalysisData.map(d => d.category),
+                    datasets: [{
+                        label: currentMetric === 'hours' ? 'Hours' : 'Percentage',
+                        data: timeAnalysisData.map(d => d[dataKey]),
+                        backgroundColor: [
+                            'rgba(37, 99, 235, 0.8)',
+                            'rgba(34, 197, 94, 0.8)',
+                            'rgba(249, 115, 22, 0.8)',
+                            'rgba(168, 85, 247, 0.8)',
+                            'rgba(59, 130, 246, 0.8)'
+                        ],
+                        borderRadius: 8,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                            titleColor: '#1e3a8a',
+                            bodyColor: '#3b82f6',
+                            borderColor: '#dbeafe',
+                            borderWidth: 1,
+                            cornerRadius: 12,
+                            padding: 12,
+                            displayColors: false,
+                            callbacks: {
+                                label: function (context) {
+                                    return currentMetric === 'hours' ? context.parsed.x + 'h' : context.parsed.x + '%';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: '#dbeafe', drawBorder: false },
+                            ticks: { color: '#60a5fa' }
+                        },
+                        y: {
+                            grid: { display: false },
+                            ticks: { color: '#60a5fa' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // ============================================
+        // Event Listeners
+        // ============================================
+        document.querySelectorAll('.analytics-metric-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                document.querySelectorAll('.analytics-metric-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentMetric = this.dataset.metric;
+
+                if (charts.timeAnalysis) {
+                    charts.timeAnalysis.destroy();
+                }
+                initTimeAnalysisChart();
+            });
+        });
+
+        document.querySelector('.analytics-btn-export:nth-of-type(1)').addEventListener('click', function () {
+            ToastNotifications.showSuccessToast('Exporting progress report as PDF...');
+        });
+
+        document.querySelector('.analytics-btn-export:nth-of-type(2)').addEventListener('click', function () {
+            ToastNotifications.showSuccessToast('Exporting data as CSV...');
+        });
+
+        document.querySelector('.analytics-btn-share').addEventListener('click', function () {
+            ToastNotifications.showSuccessToast('Share link copied to clipboard');
+        });
+
+        document.querySelector('.analytics-btn-reset').addEventListener('click', function () {
+            document.getElementById('dateRangeFilter').value = 'month';
+            document.getElementById('categoryFilter').value = 'all';
+            document.querySelectorAll('.analytics-metric-btn').forEach(b => b.classList.remove('active'));
+            ToastNotifications.showSuccessToast('Filters reset');
+        });
+
+        // ============================================
+        // Initialize on Page Load
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function () {
+            initCompletionTrendsChart();
+            initTimeAnalysisChart();
+
+            if (typeof ToastNotifications !== 'undefined') {
+                ToastNotifications.showSuccessToast('Analytics page loaded successfully');
+            }
+        });
+    </script>
+    <script th:src="@{/static/js/toast-notifications.js}"></script>
+</th:block>
+
+</html>
