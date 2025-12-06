@@ -59,10 +59,8 @@
                                          th:style="'width: ' + (${module.title.contains('Fundamentals') ? '75%' : (module.title.contains('Emotional') ? '100%' : '0%')})"></div>
                                 </div>
 
-                                <button type="button"
-                                        class="btn-module bg-gradient-custom shadow-sm"
-                                        data-bs-toggle="modal"
-                                        th:attr="data-bs-target='#moduleModal-' + ${iterStat.index}">
+                                <a th:href="@{/modules/{id}(id=${module.id})}"
+                                   class="btn-module bg-gradient-custom shadow-sm text-decoration-none">
                                     <span th:if="${!module.title.contains('Fundamentals') and !module.title.contains('Emotional')}" class="d-flex align-items-center gap-2">
                                         <i class="fas fa-play-circle"></i> Start Module
                                     </span>
@@ -72,7 +70,7 @@
                                     <span th:if="${module.title.contains('Emotional')}" class="d-flex align-items-center gap-2">
                                         <i class="fas fa-check-circle"></i> Review
                                     </span>
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -151,7 +149,7 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer module-modal-footer">
-                                    <button type="button" class="btn btn-primary-gradient flex-grow-1" data-bs-dismiss="modal">
+                                    <a th:href="@{/modules/{id}(id=${module.id})}" class="btn btn-primary-gradient flex-grow-1 text-decoration-none" data-bs-dismiss="modal">
                                         <span th:if="${!module.title.contains('Fundamentals') and !module.title.contains('Emotional')}" class="d-inline-flex align-items-center gap-2">
                                             <i class="fas fa-play-circle"></i> Start Module
                                         </span>
@@ -161,7 +159,7 @@
                                         <span th:if="${module.title.contains('Emotional')}" class="d-inline-flex align-items-center gap-2">
                                             <i class="fas fa-check-circle"></i> Review Module
                                         </span>
-                                    </button>
+                                    </a>
                                     <button type="button" class="btn btn-bookmark-modal d-flex align-items-center gap-2" th:attr="data-module-index=${iterStat.index}" aria-pressed="false">
                                       <span class="module-bookmark-icon" aria-hidden="true"></span>
                                       <span class="module-bookmark-text">Bookmark</span>

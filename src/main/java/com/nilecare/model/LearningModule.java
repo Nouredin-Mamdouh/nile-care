@@ -26,4 +26,9 @@ public class LearningModule {
 
     @Column(name = "difficulty_level")
     private String difficultyLevel;
+
+    // Convenience getter for Thymeleaf template usage
+    public Long getId() {
+        return this.moduleId;
+    }
 }

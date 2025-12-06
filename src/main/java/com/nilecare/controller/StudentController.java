@@ -1,16 +1,21 @@
 package com.nilecare.controller;
 
 import com.nilecare.repository.LearningModuleRepository;
+import com.nilecare.repository.LessonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class StudentController {
 
     @Autowired
     private LearningModuleRepository learningModuleRepository;
+    
+    @Autowired
+    private LessonRepository lessonRepository;
 
     // 1. Learning Library (The page you got 404 on)
     @GetMapping("/learning")
@@ -59,5 +64,29 @@ public class StudentController {
     @GetMapping("/support/request")
     public String helpRequest() {
         return "student/help_request";
+    }
+
+    // 8. Module Details
+    @GetMapping("/modules/{id}")
+    public String moduleDetails(@PathVariable Long id, Model model) {
+        // Fetch the specific module from DB
+        com.nilecare.model.LearningModule module = learningModuleRepository.findById(id).orElse(null);
+        if (module != null) {
+            model.addAttribute("module", module);
+        }
+        return "student/module_details";
+    }
+    
+    // 9. Lesson View
+    @GetMapping("/lesson/{id}")
+    public String lessonView(@PathVariable Long id, Model model) {
+        // Fetch the specific lesson from DB
+        com.nilecare.model.Lesson lesson = lessonRepository.findByLessonId(id);
+        if (lesson != null) {
+            model.addAttribute("lesson", lesson);
+            // Also fetch all lessons from the same module for sidebar navigation
+            model.addAttribute("moduleLessons", lessonRepository.findByModuleIdOrderByLessonOrder(lesson.getModuleId()));
+        }
+        return "student/lesson_view";
     }
 }
