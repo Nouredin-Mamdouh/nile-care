@@ -641,6 +641,308 @@
             </div>
         </div>
 
+    
+        <!-- User Role Assignments Section -->
+        <div class="card card-custom border-0 mt-4">
+            <div class="card-header bg-white border-0 pt-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="text-blue-900 fw-bold mb-1">User Role Assignments</h5>
+                        <p class="text-blue-600 small mb-0">Manage individual user permissions and roles</p>
+                    </div>
+                    <button class="btn btn-gradient-primary">
+                        <i class="fas fa-user-plus me-2"></i>Add User
+                    </button>
+                </div>
+            </div>
+
+            <div class="card-body p-4">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr class="text-blue-600 small">
+                                <th class="border-0 pb-3">User</th>
+                                <th class="border-0 pb-3">Email</th>
+                                <th class="border-0 pb-3">Role</th>
+                                <th class="border-0 pb-3">Permissions</th>
+                                <th class="border-0 pb-3">Status</th>
+                                <th class="border-0 pb-3 text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- User 1 - Admin -->
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded-circle bg-gradient-purple d-flex align-items-center justify-content-center text-white fw-bold"
+                                            style="width: 40px; height: 40px;">
+                                            JD
+                                        </div>
+                                        <div>
+                                            <p class="fw-semibold text-blue-900 mb-0">John Doe</p>
+                                            <p class="text-muted small mb-0">System Administrator</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-blue-600">john.doe@nilecare.com</td>
+                                <td>
+                                    <span class="badge badge-blue px-3 py-2">
+                                        <i class="fas fa-shield-alt me-1"></i>Admin
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-wrap gap-1">
+                                        <span class="badge bg-success small">All Permissions</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-check-circle me-1"></i>Active
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <button class="btn btn-sm btn-outline-custom me-1">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <!-- User 2 - Admin -->
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded-circle bg-gradient-purple d-flex align-items-center justify-content-center text-white fw-bold"
+                                            style="width: 40px; height: 40px;">
+                                            SM
+                                        </div>
+                                        <div>
+                                            <p class="fw-semibold text-blue-900 mb-0">Sarah Miller</p>
+                                            <p class="text-muted small mb-0">Platform Manager</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-blue-600">sarah.m@nilecare.com</td>
+                                <td>
+                                    <span class="badge badge-blue px-3 py-2">
+                                        <i class="fas fa-shield-alt me-1"></i>Admin
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-wrap gap-1">
+                                        <span class="badge bg-primary small">Manage Users</span>
+                                        <span class="badge bg-primary small">View Reports</span>
+                                        <span class="badge bg-primary small">+3 more</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-check-circle me-1"></i>Active
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <button class="btn btn-sm btn-outline-custom me-1">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <!-- User 3 - Counselor -->
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded-circle bg-gradient-green d-flex align-items-center justify-content-center text-white fw-bold"
+                                            style="width: 40px; height: 40px;">
+                                            DR
+                                        </div>
+                                        <div>
+                                            <p class="fw-semibold text-blue-900 mb-0">Dr. Rachel Green</p>
+                                            <p class="text-muted small mb-0">Licensed Psychologist</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-blue-600">dr.green@nilecare.com</td>
+                                <td>
+                                    <span class="badge badge-green px-3 py-2">
+                                        <i class="fas fa-user-md me-1"></i>Counselor
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-wrap gap-1">
+                                        <span class="badge bg-success small">View Appointments</span>
+                                        <span class="badge bg-success small">Manage Schedule</span>
+                                        <span class="badge bg-success small">+2 more</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-check-circle me-1"></i>Active
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <button class="btn btn-sm btn-outline-custom me-1">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <!-- User 4 - Counselor -->
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded-circle bg-gradient-green d-flex align-items-center justify-content-center text-white fw-bold"
+                                            style="width: 40px; height: 40px;">
+                                            MC
+                                        </div>
+                                        <div>
+                                            <p class="fw-semibold text-blue-900 mb-0">Dr. Michael Chen</p>
+                                            <p class="text-muted small mb-0">Mental Health Counselor</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-blue-600">m.chen@nilecare.com</td>
+                                <td>
+                                    <span class="badge badge-green px-3 py-2">
+                                        <i class="fas fa-user-md me-1"></i>Counselor
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-wrap gap-1">
+                                        <span class="badge bg-success small">View Appointments</span>
+                                        <span class="badge bg-success small">View Assessments</span>
+                                        <span class="badge bg-success small">+2 more</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-warning text-dark">
+                                        <i class="fas fa-clock me-1"></i>Pending
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <button class="btn btn-sm btn-outline-custom me-1">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <!-- User 5 - Student -->
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded-circle bg-gradient-blue d-flex align-items-center justify-content-center text-white fw-bold"
+                                            style="width: 40px; height: 40px;">
+                                            EJ
+                                        </div>
+                                        <div>
+                                            <p class="fw-semibold text-blue-900 mb-0">Emily Johnson</p>
+                                            <p class="text-muted small mb-0">Student</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-blue-600">emily.j@student.edu</td>
+                                <td>
+                                    <span class="badge bg-info text-white px-3 py-2">
+                                        <i class="fas fa-user-graduate me-1"></i>Student
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-wrap gap-1">
+                                        <span class="badge bg-secondary small">Learning Modules</span>
+                                        <span class="badge bg-secondary small">Book Counseling</span>
+                                        <span class="badge bg-secondary small">+3 more</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-check-circle me-1"></i>Active
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <button class="btn btn-sm btn-outline-custom me-1">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+
+                            <!-- User 6 - Student -->
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded-circle bg-gradient-blue d-flex align-items-center justify-content-center text-white fw-bold"
+                                            style="width: 40px; height: 40px;">
+                                            AB
+                                        </div>
+                                        <div>
+                                            <p class="fw-semibold text-blue-900 mb-0">Alex Brown</p>
+                                            <p class="text-muted small mb-0">Student</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-blue-600">alex.b@student.edu</td>
+                                <td>
+                                    <span class="badge bg-info text-white px-3 py-2">
+                                        <i class="fas fa-user-graduate me-1"></i>Student
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-wrap gap-1">
+                                        <span class="badge bg-secondary small">Take Assessments</span>
+                                        <span class="badge bg-secondary small">Use Chatbot</span>
+                                        <span class="badge bg-secondary small">+3 more</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-check-circle me-1"></i>Active
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <button class="btn btn-sm btn-outline-custom me-1">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                    <p class="text-muted small mb-0">Showing 6 of 1,248 users</p>
+                    <nav>
+                        <ul class="pagination pagination-sm mb-0">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#">Previous</a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
     </div>
 </body>
 
