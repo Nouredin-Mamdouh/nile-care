@@ -1633,17 +1633,19 @@ body.sidebar-open .sidebar-close {
 }
 
 .progress-btn-reset {
-    border: 2px solid var(--blue-500);
-    color: var(--blue-500);
+    border: 2px solid var(--blue-500) !important;
+    color: var(--blue-500) !important;
     font-weight: 600;
     padding: 0.625rem 1.25rem;
     border-radius: 8px;
     transition: all 0.3s ease;
+    background-color: transparent !important;
 }
 
 .progress-btn-reset:hover {
-    background-color: var(--blue-500);
-    color: white;
+    background-color: var(--blue-500) !important;
+    color: white !important;
+    border-color: var(--blue-500) !important;
 }
 
 .progress-btn-stats {
@@ -4164,6 +4166,7 @@ body.sidebar-open .sidebar-close {
 
 .analytics-metric-btn:hover {
     background-color: #f0f9ff;
+    color: var(--text-primary);
 }
 
 .analytics-metric-btn.active {
@@ -4184,6 +4187,7 @@ body.sidebar-open .sidebar-close {
 
 .analytics-btn-export:hover {
     background-color: #f0f9ff;
+    color: var(--text-primary);
 }
 
 .analytics-btn-share {
