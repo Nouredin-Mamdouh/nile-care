@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/main_layout}" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - NileCare</title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+            <div class="profile-header-card">
+                <div class="profile-header-content">
+                    <div class="profile-avatar">
+                        <div class="avatar-initials">SJ</div>
+                    </div>
+                    <div class="profile-header-info">
+                        <h1 class="profile-name" id="profileName">Sarah Johnson</h1>
+                        <div class="profile-badges">
+                            <span class="badge badge-primary">Student</span>
+                            <span class="badge badge-success">Active</span>
+                        </div>
+                        <p class="profile-member-since">Member since January 2024</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs Navigation -->
+            <div class="profile-tabs">
+                <div class="tabs-list">
+                    <button class="tab-trigger active" data-tab="profile">Profile Info</button>
+                    <button class="tab-trigger" data-tab="settings">Account Settings</button>
+                    <button class="tab-trigger" data-tab="privacy">Privacy</button>
+                </div>
+
+                <!-- Tab 1: Profile Info -->
+                <div id="profile" class="tab-content active">
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <div>
+                                <h2 class="card-title">Profile Information</h2>
+                                <p class="card-description">Your personal details and contact information</p>
+                            </div>
+                            <button class="btn btn-primary" id="editProfileBtn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                                Edit
+                            </button>
+                        </div>
+                        <div class="card-content">
+                            <div class="profile-grid">
+                                <div class="profile-info-item">
+                                    <label class="info-label">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                            </path>
+                                            <polyline points="22,6 12,13 2,6"></polyline>
+                                        </svg>
+                                        Email
+                                    </label>
+                                    <p class="info-value">sarah.johnson@example.com</p>
+                                </div>
+
+                                <div class="profile-info-item">
+                                    <label class="info-label">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                            </path>
+                                        </svg>
+                                        Phone Number
+                                    </label>
+                                    <p class="info-value" id="profilePhone">+1 (555) 123-4567</p>
+                                </div>
+
+                                <div class="profile-info-item">
+                                    <label class="info-label">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="12" cy="7" r="4"></circle>
+                                        </svg>
+                                        Full Name
+                                    </label>
+                                    <p class="info-value" id="profileFullName">Sarah Johnson</p>
+                                </div>
+
+                                <div class="profile-info-item">
+                                    <label class="info-label">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                        </svg>
+                                        Role
+                                    </label>
+                                    <p class="info-value">Student</p>
+                                </div>
+
+                                <div class="profile-info-item">
+                                    <label class="info-label">User ID</label>
+                                    <p class="info-value info-mono">USR-2024-001234</p>
+                                </div>
+
+                                <div class="profile-info-item">
+                                    <label class="info-label">Account Status</label>
+                                    <p class="info-value status-active">
+                                        <span class="status-dot"></span>
+                                        Active
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Account Settings -->
+                <div id="settings" class="tab-content">
+                    <div class="settings-grid">
+                        <!-- Password Section -->
+                        <div class="profile-card">
+                            <div class="card-header">
+                                <div>
+                                    <h2 class="card-title">Change Password</h2>
+                                    <p class="card-description">Update your password to keep your account secure</p>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="form-group">
+                                    <label for="currentPassword" class="form-label">Current Password</label>
+                                    <input type="password" id="currentPassword" class="form-input" placeholder="••••••••">
+                                </div>
+                                <div class="form-group">
+                                    <label for="newPassword" class="form-label">New Password</label>
+                                    <input type="password" id="newPassword" class="form-input" placeholder="••••••••">
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                                    <input type="password" id="confirmPassword" class="form-input" placeholder="••••••••">
+                                </div>
+                                <button class="btn btn-primary" id="changePasswordBtn">Update Password</button>
+                            </div>
+                        </div>
+
+                        <!-- Email Preferences -->
+                        <div class="profile-card">
+                            <div class="card-header">
+                                <div>
+                                    <h2 class="card-title">Email Preferences</h2>
+                                    <p class="card-description">Manage how you receive notifications</p>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="settings-item">
+                                    <div>
+                                        <label class="form-label">Email Notifications</label>
+                                        <p class="form-hint">Receive updates via email</p>
+                                    </div>
+                                    <div class="toggle-switch-wrapper">
+                                        <input type="checkbox" id="notificationsEnabled" class="toggle-switch" checked>
+                                        <label for="notificationsEnabled" class="toggle-label"></label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="digestFrequency" class="form-label">Digest Frequency</label>
+                                    <select id="digestFrequency" class="form-select">
+                                        <option value="daily">Daily</option>
+                                        <option value="weekly" selected>Weekly</option>
+                                        <option value="monthly">Monthly</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Active Sessions -->
+                        <div class="profile-card full-width">
+                            <div class="card-header">
+                                <div>
+                                    <h2 class="card-title">Active Sessions</h2>
+                                    <p class="card-description">Manage devices currently signed in</p>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="sessions-list" id="sessionsList">
+                                    <!-- Sessions will be generated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Privacy -->
+                <div id="privacy" class="tab-content">
+                    <div class="settings-grid">
+                        <!-- Data Collection -->
+                        <div class="profile-card">
+                            <div class="card-header">
+                                <div>
+                                    <h2 class="card-title">Data Collection</h2>
+                                    <p class="card-description">Control how your data is used</p>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div class="settings-item">
+                                    <div>
+                                        <label class="form-label">Personalized Recommendations</label>
+                                        <p class="form-hint">Allow personalized content suggestions</p>
+                                    </div>
+                                    <div class="toggle-switch-wrapper">
+                                        <input type="checkbox" id="personalizedRecs" class="toggle-switch" checked>
+                                        <label for="personalizedRecs" class="toggle-label"></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Data Management -->
+                        <div class="profile-card">
+                            <div class="card-header">
+                                <div>
+                                    <h2 class="card-title">Data Management</h2>
+                                    <p class="card-description">Download or delete your account data</p>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <button class="btn btn-secondary" id="downloadDataBtn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                        <polyline points="7 10 12 15 17 10"></polyline>
+                                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                                    </svg>
+                                    Download Account Data
+                                </button>
+                                <button class="btn btn-danger" id="deleteAccountBtn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path
+                                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                        </path>
+                                        <line x1="10" y1="11" x2="10" y2="17"></line>
+                                        <line x1="14" y1="11" x2="14" y2="17"></line>
+                                    </svg>
+                                    Delete Account
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Profile Modal -->
+            <div id="editProfileModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title">Edit Profile</h2>
+                    </div>
+                    <div class="modal-body">
+                        <p class="modal-description">Update your name and phone number</p>
+                        <div class="form-group">
+                            <label for="editName" class="form-label">Full Name</label>
+                            <input type="text" id="editName" class="form-input" value="Sarah Johnson">
+                        </div>
+                        <div class="form-group">
+                            <label for="editPhone" class="form-label">Phone Number</label>
+                            <input type="tel" id="editPhone" class="form-input" value="+1 (555) 123-4567">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" id="saveProfileBtn">Save Changes</button>
+                        <button class="btn btn-secondary" id="cancelEditBtn">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Overlay for Modal -->
+            <div id="modalOverlay" class="modal-overlay"></div>
+
+            <!-- Delete Account Confirmation Modal -->
+            <div id="deleteAccountModal" class="modal">
+                <div class="modal-content modal-danger">
+                    <div class="modal-header">
+                        <h2 class="modal-title">Are you absolutely sure?</h2>
+                    </div>
+                    <div class="modal-body">
+                        <p class="modal-description">
+                            This action cannot be undone. This will permanently delete your account
+                            and remove your data from our servers. You will have 30 days to cancel
+                            this request.
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" id="cancelDeleteBtn">Cancel</button>
+                        <button class="btn btn-danger" id="confirmDeleteBtn">Delete Account</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <!-- Scripts -->
+    <th:block layout:fragment="scripts">
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Delay initialization to ensure DOM is fully ready
+                setTimeout(function() {
+                // State
+                const state = {
+                    name: 'Sarah Johnson',
+                    phone: '+1 (555) 123-4567',
+                    notificationsEnabled: true,
+                    digestFrequency: 'weekly',
+                    dataCollection: true,
+                    personalizedRecs: true
+                };
+
+                // Session data
+                const activeSessions = [
+                    { id: 1, device: 'Desktop - Chrome', location: 'New York, USA', lastActive: '2 minutes ago', icon: 'monitor' },
+                    { id: 2, device: 'iPhone 13', location: 'New York, USA', lastActive: '1 hour ago', icon: 'smartphone' },
+                    { id: 3, device: 'iPad Pro', location: 'Boston, USA', lastActive: '2 days ago', icon: 'tablet' }
+                ];
+
+                // DOM Elements - defer getting them until needed
+                let tabs = null;
+                let tabContents = null;
+                let editProfileBtn = null;
+                let editProfileModal = null;
+                let modalOverlay = null;
+                let saveProfileBtn = null;
+                let cancelEditBtn = null;
+                let changePasswordBtn = null;
+                let downloadDataBtn = null;
+                let deleteAccountBtn = null;
+                let deleteAccountModal = null;
+                let confirmDeleteBtn = null;
+                let cancelDeleteBtn = null;
+                let sessionsList = null;
+
+                // Function to initialize DOM elements
+                function initDOM() {
+                    tabs = document.querySelectorAll('.tab-trigger');
+                    tabContents = document.querySelectorAll('.tab-content');
+                    editProfileBtn = document.getElementById('editProfileBtn');
+                    editProfileModal = document.getElementById('editProfileModal');
+                    modalOverlay = document.getElementById('modalOverlay');
+                    saveProfileBtn = document.getElementById('saveProfileBtn');
+                    cancelEditBtn = document.getElementById('cancelEditBtn');
+                    changePasswordBtn = document.getElementById('changePasswordBtn');
+                    downloadDataBtn = document.getElementById('downloadDataBtn');
+                    deleteAccountBtn = document.getElementById('deleteAccountBtn');
+                    deleteAccountModal = document.getElementById('deleteAccountModal');
+                    confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+                    cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+                    sessionsList = document.getElementById('sessionsList');
+                    
+                    console.log('DOM initialized:');
+                    console.log('editProfileBtn:', editProfileBtn);
+                    console.log('editProfileModal:', editProfileModal);
+                    console.log('deleteAccountBtn:', deleteAccountBtn);
+                    console.log('deleteAccountModal:', deleteAccountModal);
+                }
+
+                initDOM();
+
+                // Tab switching
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', function () {
+                        const tabName = this.dataset.tab;
+                        
+                        tabs.forEach(t => t.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        tabContents.forEach(content => content.classList.remove('active'));
+                        document.getElementById(tabName).classList.add('active');
+                    });
+                });
+
+                // Edit Profile Modal
+                if (editProfileBtn) {
+                    editProfileBtn.addEventListener('click', function () {
+                        const editName = document.getElementById('editName');
+                        const editPhone = document.getElementById('editPhone');
+                        if (editName && editPhone) {
+                            editName.value = state.name;
+                            editPhone.value = state.phone;
+                        }
+                        openModal(editProfileModal);
+                    });
+                }
+
+                if (saveProfileBtn) {
+                    saveProfileBtn.addEventListener('click', function () {
+                        const editName = document.getElementById('editName');
+                        const editPhone = document.getElementById('editPhone');
+                        if (!editName || !editPhone) return;
+                        
+                        const newName = editName.value;
+                        const newPhone = editPhone.value;
+
+                        if (!newName || !newPhone) {
+                            if (typeof ToastNotifications !== 'undefined') {
+                                ToastNotifications.showErrorAlert('Please fill in all fields');
+                            } else {
+                                alert('Please fill in all fields');
+                            }
+                            return;
+                        }
+
+                        state.name = newName;
+                        state.phone = newPhone;
+
+                        document.getElementById('profileName').textContent = newName;
+                        document.getElementById('profileFullName').textContent = newName;
+                        document.getElementById('profilePhone').textContent = newPhone;
+
+                        closeModal(editProfileModal);
+
+                        if (typeof ToastNotifications !== 'undefined') {
+                            ToastNotifications.showSuccessToast('Profile updated successfully');
+                        } else {
+                            alert('Profile updated successfully');
+                        }
+                    });
+                }
+
+                if (cancelEditBtn) {
+                    cancelEditBtn.addEventListener('click', function () {
+                        closeModal(editProfileModal);
+                    });
+                }
+
+                // Change Password
+                if (changePasswordBtn) {
+                    changePasswordBtn.addEventListener('click', function () {
+                        const currentPassword = document.getElementById('currentPassword');
+                        const newPassword = document.getElementById('newPassword');
+                        const confirmPassword = document.getElementById('confirmPassword');
+                        
+                        if (!currentPassword || !newPassword || !confirmPassword) return;
+
+                        const currentPass = currentPassword.value;
+                        const newPass = newPassword.value;
+                        const confirmPass = confirmPassword.value;
+
+                        if (!currentPass || !newPass || !confirmPass) {
+                            if (typeof ToastNotifications !== 'undefined') {
+                                ToastNotifications.showToast('Please fill in all password fields', 'warning');
+                            } else {
+                                alert('Please fill in all password fields');
+                            }
+                            return;
+                        }
+
+                        if (newPass !== confirmPass) {
+                            if (typeof ToastNotifications !== 'undefined') {
+                                ToastNotifications.showToast('New passwords do not match', 'warning');
+                            } else {
+                                alert('New passwords do not match');
+                            }
+                            return;
+                        }
+
+                        currentPassword.value = '';
+                        newPassword.value = '';
+                        confirmPassword.value = '';
+
+                        if (typeof ToastNotifications !== 'undefined') {
+                            ToastNotifications.showSuccessToast('Password updated successfully');
+                        } else {
+                            alert('Password updated successfully');
+                        }
+                    });
+                }
+
+                // Download Data
+                if (downloadDataBtn) {
+                    downloadDataBtn.addEventListener('click', function () {
+                        if (typeof ToastNotifications !== 'undefined') {
+                            ToastNotifications.showSuccessToast('Account data download started. You will receive an email shortly.');
+                        } else {
+                            alert('Account data download started. You will receive an email shortly.');
+                        }
+                    });
+                }
+
+                // Delete Account
+                if (deleteAccountBtn) {
+                    deleteAccountBtn.addEventListener('click', function () {
+                        openModal(deleteAccountModal);
+                    });
+                }
+
+                if (confirmDeleteBtn) {
+                    confirmDeleteBtn.addEventListener('click', function () {
+                        closeModal(deleteAccountModal);
+                        if (typeof ToastNotifications !== 'undefined') {
+                            ToastNotifications.showToast('Account deletion requested. This action will be processed in 30 days.', 'warning');
+                        } else {
+                            alert('Account deletion requested. This action will be processed in 30 days.');
+                        }
+                    });
+                }
+
+                if (cancelDeleteBtn) {
+                    cancelDeleteBtn.addEventListener('click', function () {
+                        closeModal(deleteAccountModal);
+                    });
+                }
+
+                // Logout Session
+                function logoutSession(sessionId) {
+                    if (typeof ToastNotifications !== 'undefined') {
+                        ToastNotifications.showSuccessToast('Session ended successfully');
+                    } else {
+                        alert('Session ended successfully');
+                    }
+                }
+
+                // Render Sessions
+                function renderSessions() {
+                    if (!sessionsList) return;
+                    sessionsList.innerHTML = activeSessions.map(session => `
+                        <div class="session-item">
+                            <div class="session-icon">${getDeviceIcon(session.icon)}</div>
+                            <div class="session-info">
+                                <p class="session-device">${session.device}</p>
+                                <p class="session-details">${session.location} • ${session.lastActive}</p>
+                            </div>
+                            <button class="btn btn-secondary btn-sm" onclick="window.logoutSession(${session.id})">
+                                Logout
+                            </button>
+                        </div>
+                    `).join('');
+                }
+
+                window.logoutSession = logoutSession;
+
+                function getDeviceIcon(type) {
+                    const icons = {
+                        monitor: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>',
+                        smartphone: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>',
+                        tablet: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>'
+                    };
+                    return icons[type] || icons.monitor;
+                }
+
+                renderSessions();
+
+                // Modal Functions
+                function openModal(modal) {
+                    console.log('openModal called with:', modal);
+                    if (modal) {
+                        console.log('Modal element found, adding active class');
+                        modal.classList.add('active');
+                    } else {
+                        console.log('Modal element is null!');
+                    }
+                    if (modalOverlay) {
+                        console.log('Overlay element found, adding active class');
+                        modalOverlay.classList.add('active');
+                    } else {
+                        console.log('Overlay element is null!');
+                    }
+                    document.body.style.overflow = 'hidden';
+                }
+
+                function closeModal(modal) {
+                    if (modal) {
+                        modal.classList.remove('active');
+                    }
+                    if (modalOverlay) {
+                        modalOverlay.classList.remove('active');
+                    }
+                    document.body.style.overflow = '';
+                }
+
+                // Close modals on overlay click
+                if (modalOverlay) {
+                    modalOverlay.addEventListener('click', function () {
+                        document.querySelectorAll('.modal.active').forEach(modal => closeModal(modal));
+                    });
+                }
+
+                // Close modals on close button click
+                document.querySelectorAll('.modal-close').forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        closeModal(this.closest('.modal'));
+                    });
+                });
+                }, 100); // End setTimeout
+            });
+        </script>
+    </th:block>
+</body>
+
+</html>
