@@ -25,7 +25,7 @@
         </div>
 
         <!-- Main Content (Hidden by default, shown after data loads) -->
-        <div id="progressContent" class="d-none">
+        <div id="progressContent">
             <!-- Summary Cards -->
             <div class="row g-3 g-sm-4 mb-4" role="region" aria-label="Progress Summary">
                 <!-- Overall Progress Card -->
@@ -169,6 +169,28 @@
                 </div>
             </div>
         </div>
+
+        <!-- Reset Progress Modal -->
+        <div id="resetProgressModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Reset Progress</h2>
+                </div>
+                <div class="modal-body">
+                    <p class="modal-description">
+                        <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                        Are you sure you want to reset your learning progress? This action cannot be undone.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" id="cancelResetBtn">Cancel</button>
+                    <button class="btn btn-danger" id="confirmResetBtn">Reset Progress</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Overlay -->
+        <div id="modalOverlay" class="modal-overlay"></div>
     </div>
 </body>
 
@@ -237,6 +259,7 @@
         };
 
         let charts = {};
+        let modalOverlay = document.getElementById('modalOverlay');
 
         // ============================================
         // Data Fetching
@@ -265,13 +288,14 @@
                 renderAchievements(data.achievements);
 
                 elements.loadingState.classList.add('d-none');
-                elements.mainContent.classList.remove('d-none');
                 ToastNotifications.showSuccessToast('Progress data loaded successfully');
             } catch (error) {
                 console.error('Error loading progress:', error);
                 elements.loadingState.classList.add('d-none');
                 elements.errorState.classList.remove('d-none');
-                ToastNotifications.showErrorAlert('Unable to load progress data. Please try refreshing the page.', 'danger');
+                if (typeof ToastNotifications !== 'undefined') {
+                    ToastNotifications.showErrorAlert('Unable to load progress data. Please try refreshing the page.', 'danger');
+                }
             }
         }
 
@@ -420,74 +444,94 @@
         // ============================================
         // Reset Progress Modal
         // ============================================
-        function showResetConfirmationModal() {
-            // Create modal HTML
-            const modalHTML = `
-                <div class="modal fade" id="resetProgressModal" tabindex="-1">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header border-bottom">
-                                <h5 class="modal-title fw-semibold text-blue-900">Reset Progress</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p class="mb-0 text-blue-700">
-                                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
-                                    Are you sure you want to reset your learning progress? This action cannot be undone.
-                                </p>
-                            </div>
-                            <div class="modal-footer border-top">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-danger" id="confirmResetBtn">Reset Progress</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            // Check if modal already exists
-            let modal = document.getElementById('resetProgressModal');
+        function openResetModal(modal) {
             if (modal) {
-                modal.remove();
+                modal.classList.add('active');
             }
-            
-            // Add modal to page
-            document.body.insertAdjacentHTML('beforeend', modalHTML);
-            modal = new bootstrap.Modal(document.getElementById('resetProgressModal'));
-            
-            // Handle confirm reset
-            document.getElementById('confirmResetBtn').addEventListener('click', async function() {
-                try {
-                    const response = await fetch(contextPath + 'api/student/progress/reset', {
-                        method: 'POST'
-                    });
-                    
-                    if (response.ok) {
-                        modal.hide();
-                        ToastNotifications.showSuccessToast('Progress reset successfully! Your learning journey starts fresh.');
-                        setTimeout(() => location.reload(), 1500);
-                    } else {
-                        ToastNotifications.showErrorAlert('Failed to reset progress. Please try again.');
-                    }
-                } catch (error) {
-                    console.error('Error resetting progress:', error);
-                    ToastNotifications.showErrorAlert('Error resetting progress. Please try again.');
-                }
-            });
-            
-            modal.show();
+            if (modalOverlay) {
+                modalOverlay.classList.add('active');
+            }
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeResetModal(modal) {
+            if (modal) {
+                modal.classList.remove('active');
+            }
+            if (modalOverlay) {
+                modalOverlay.classList.remove('active');
+            }
+            document.body.style.overflow = '';
         }
 
         // ============================================
         // Event Listeners
         // ============================================
-        document.querySelector('.progress-btn-reset').addEventListener('click', function() {
-            showResetConfirmationModal();
-        });
+        function attachEventListeners() {
+            const resetBtn = document.querySelector('.progress-btn-reset');
+            const statsBtn = document.querySelector('.progress-btn-stats');
+            const resetProgressModal = document.getElementById('resetProgressModal');
+            const cancelResetBtn = document.getElementById('cancelResetBtn');
+            const confirmResetBtn = document.getElementById('confirmResetBtn');
+            
+            if (resetBtn) {
+                resetBtn.addEventListener('click', function() {
+                    console.log('Reset button clicked');
+                    openResetModal(resetProgressModal);
+                });
+            } else {
+                console.warn('Reset button not found');
+            }
+            
+            if (statsBtn) {
+                statsBtn.addEventListener('click', function() {
+                    window.location.href = contextPath + 'analytics';
+                });
+            } else {
+                console.warn('Stats button not found');
+            }
 
-        document.querySelector('.progress-btn-stats').addEventListener('click', function() {
-            window.location.href = contextPath + 'analytics';
-        });
+            // Modal controls
+            if (cancelResetBtn) {
+                cancelResetBtn.addEventListener('click', function() {
+                    closeResetModal(resetProgressModal);
+                });
+            }
+
+            if (confirmResetBtn) {
+                confirmResetBtn.addEventListener('click', async function() {
+                    try {
+                        const response = await fetch(contextPath + 'api/student/progress/reset', {
+                            method: 'POST'
+                        });
+                        
+                        if (response.ok) {
+                            closeResetModal(resetProgressModal);
+                            if (typeof ToastNotifications !== 'undefined') {
+                                ToastNotifications.showSuccessToast('Progress reset successfully! Your learning journey starts fresh.');
+                            }
+                            setTimeout(() => location.reload(), 1500);
+                        } else {
+                            if (typeof ToastNotifications !== 'undefined') {
+                                ToastNotifications.showErrorAlert('Failed to reset progress. Please try again.');
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Error resetting progress:', error);
+                        if (typeof ToastNotifications !== 'undefined') {
+                            ToastNotifications.showErrorAlert('Error resetting progress. Please try again.');
+                        }
+                    }
+                });
+            }
+
+            // Close modal on overlay click
+            if (modalOverlay) {
+                modalOverlay.addEventListener('click', function() {
+                    closeResetModal(resetProgressModal);
+                });
+            }
+        }
 
         // ============================================
         // Utility Functions
@@ -508,6 +552,9 @@
         // Initialize on Page Load
         // ============================================
         document.addEventListener('DOMContentLoaded', function() {
+            // Attach event listeners first
+            attachEventListeners();
+            
             // Load toast notifications first
             if (typeof ToastNotifications !== 'undefined') {
                 fetchProgressData();
@@ -517,6 +564,6 @@
             }
         });
     </script>
-    <script src="/nile-care/static/js/toast-notifications.js"></script>
 </th:block>
 </html>
+
