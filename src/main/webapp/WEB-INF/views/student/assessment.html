@@ -1,62 +1,611 @@
+<!--
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/card';
+import { Button } from '../ui/button';
+import { Progress } from '../ui/progress';
+import { Badge } from '../ui/badge';
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { Label } from '../ui/label';
+import { ClipboardList, CheckCircle, ArrowRight, ArrowLeft, TrendingDown, TrendingUp, Minus } from 'lucide-react';
+import { toast } from 'sonner@2.0.3';
+
+interface Question {
+  id: number;
+  text: string;
+  options: { value: number; label: string }[];
+}
+
+interface Assessment {
+  id: string;
+  title: string;
+  description: string;
+  questions: Question[];
+  type: 'PHQ-9' | 'DASS-21' | 'GAD-7';
+}
+
+interface AssessmentResult {
+  id: string;
+  title: string;
+  score: number;
+  maxScore: number;
+  severity: 'minimal' | 'mild' | 'moderate' | 'severe';
+  date: string;
+  recommendations: string[];
+}
+
+export function SelfAssessment() {
+  const [selectedAssessment, setSelectedAssessment] = useState<Assessment | null>(null);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answers, setAnswers] = useState<Record<number, number>>({});
+  const [showResults, setShowResults] = useState(false);
+  const [currentResult, setCurrentResult] = useState<AssessmentResult | null>(null);
+
+  const assessments: Assessment[] = [
+    {
+      id: 'phq9',
+      title: 'PHQ-9 Depression Assessment',
+      description: 'A 9-question screening tool for depression',
+      type: 'PHQ-9',
+      questions: [
+        {
+          id: 1,
+          text: 'Little interest or pleasure in doing things',
+          options: [
+            { value: 0, label: 'Not at all' },
+            { value: 1, label: 'Several days' },
+            { value: 2, label: 'More than half the days' },
+            { value: 3, label: 'Nearly every day' },
+          ],
+        },
+        {
+          id: 2,
+          text: 'Feeling down, depressed, or hopeless',
+          options: [
+            { value: 0, label: 'Not at all' },
+            { value: 1, label: 'Several days' },
+            { value: 2, label: 'More than half the days' },
+            { value: 3, label: 'Nearly every day' },
+          ],
+        },
+        {
+          id: 3,
+          text: 'Trouble falling or staying asleep, or sleeping too much',
+          options: [
+            { value: 0, label: 'Not at all' },
+            { value: 1, label: 'Several days' },
+            { value: 2, label: 'More than half the days' },
+            { value: 3, label: 'Nearly every day' },
+          ],
+        },
+        {
+          id: 4,
+          text: 'Feeling tired or having little energy',
+          options: [
+            { value: 0, label: 'Not at all' },
+            { value: 1, label: 'Several days' },
+            { value: 2, label: 'More than half the days' },
+            { value: 3, label: 'Nearly every day' },
+          ],
+        },
+        {
+          id: 5,
+          text: 'Poor appetite or overeating',
+          options: [
+            { value: 0, label: 'Not at all' },
+            { value: 1, label: 'Several days' },
+            { value: 2, label: 'More than half the days' },
+            { value: 3, label: 'Nearly every day' },
+          ],
+        },
+      ],
+    },
+    {
+      id: 'gad7',
+      title: 'GAD-7 Anxiety Assessment',
+      description: 'A 7-question screening tool for generalized anxiety disorder',
+      type: 'GAD-7',
+      questions: [
+        {
+          id: 1,
+          text: 'Feeling nervous, anxious, or on edge',
+          options: [
+            { value: 0, label: 'Not at all' },
+            { value: 1, label: 'Several days' },
+            { value: 2, label: 'More than half the days' },
+            { value: 3, label: 'Nearly every day' },
+          ],
+        },
+        {
+          id: 2,
+          text: 'Not being able to stop or control worrying',
+          options: [
+            { value: 0, label: 'Not at all' },
+            { value: 1, label: 'Several days' },
+            { value: 2, label: 'More than half the days' },
+            { value: 3, label: 'Nearly every day' },
+          ],
+        },
+        {
+          id: 3,
+          text: 'Worrying too much about different things',
+          options: [
+            { value: 0, label: 'Not at all' },
+            { value: 1, label: 'Several days' },
+            { value: 2, label: 'More than half the days' },
+            { value: 3, label: 'Nearly every day' },
+          ],
+        },
+        {
+          id: 4,
+          text: 'Trouble relaxing',
+          options: [
+            { value: 0, label: 'Not at all' },
+            { value: 1, label: 'Several days' },
+            { value: 2, label: 'More than half the days' },
+            { value: 3, label: 'Nearly every day' },
+          ],
+        },
+      ],
+    },
+  ];
+
+  const [pastResults, setPastResults] = useState<AssessmentResult[]>([
+    {
+      id: '1',
+      title: 'PHQ-9 Depression Assessment',
+      score: 8,
+      maxScore: 27,
+      severity: 'mild',
+      date: '2024-11-01',
+      recommendations: [
+        'Consider talking to a counselor',
+        'Practice stress management techniques',
+        'Maintain a regular sleep schedule',
+      ],
+    },
+  ]);
+
+  const startAssessment = (assessment: Assessment) => {
+    setSelectedAssessment(assessment);
+    setCurrentQuestion(0);
+    setAnswers({});
+    setShowResults(false);
+  };
+
+  const handleAnswer = (questionId: number, value: number) => {
+    setAnswers({ ...answers, [questionId]: value });
+  };
+
+  const handleNext = () => {
+    if (!selectedAssessment) return;
+    
+    if (currentQuestion < selectedAssessment.questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+    } else {
+      submitAssessment();
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion(currentQuestion - 1);
+    }
+  };
+
+  const submitAssessment = () => {
+    if (!selectedAssessment) return;
+
+    const totalScore = Object.values(answers).reduce((sum, val) => sum + val, 0);
+    const maxScore = selectedAssessment.questions.length * 3;
+    
+    let severity: 'minimal' | 'mild' | 'moderate' | 'severe';
+    const percentage = (totalScore / maxScore) * 100;
+    
+    if (percentage < 25) severity = 'minimal';
+    else if (percentage < 50) severity = 'mild';
+    else if (percentage < 75) severity = 'moderate';
+    else severity = 'severe';
+
+    const result: AssessmentResult = {
+      id: Date.now().toString(),
+      title: selectedAssessment.title,
+      score: totalScore,
+      maxScore,
+      severity,
+      date: new Date().toISOString().split('T')[0],
+      recommendations: [
+        'Continue monitoring your mental health',
+        'Consider booking a counseling session',
+        'Practice the recommended coping strategies',
+      ],
+    };
+
+    setPastResults([result, ...pastResults]);
+    setCurrentResult(result);
+    setShowResults(true);
+    toast.success('Assessment completed!');
+  };
+
+  const getSeverityColor = (severity: string) => {
+    switch (severity) {
+      case 'minimal': return 'bg-green-100 text-green-700';
+      case 'mild': return 'bg-blue-100 text-blue-700';
+      case 'moderate': return 'bg-yellow-100 text-yellow-700';
+      case 'severe': return 'bg-red-100 text-red-700';
+      default: return 'bg-gray-100 text-gray-700';
+    }
+  };
+
+  const getSeverityIcon = (severity: string) => {
+    switch (severity) {
+      case 'minimal': return <TrendingDown className="w-4 h-4" />;
+      case 'mild': return <Minus className="w-4 h-4" />;
+      case 'moderate': return <TrendingUp className="w-4 h-4" />;
+      case 'severe': return <TrendingUp className="w-4 h-4" />;
+      default: return <Minus className="w-4 h-4" />;
+    }
+  };
+
+  if (selectedAssessment && !showResults) {
+    const question = selectedAssessment.questions[currentQuestion];
+    const progress = ((currentQuestion + 1) / selectedAssessment.questions.length) * 100;
+
+    return (
+      <div className="max-w-3xl mx-auto space-y-6">
+        <div>
+          <h1 className="text-blue-900 mb-2">{selectedAssessment.title}</h1>
+          <p className="text-blue-600">Question {currentQuestion + 1} of {selectedAssessment.questions.length}</p>
+        </div>
+
+        <Card className="border-blue-100 shadow-md">
+          <CardHeader>
+            <Progress value={progress} className="mb-4" />
+            <CardTitle className="text-blue-900">{question.text}</CardTitle>
+            <CardDescription>Over the last 2 weeks, how often have you been bothered by this?</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <RadioGroup
+              value={answers[question.id]?.toString() || ''}
+              onValueChange={(value) => handleAnswer(question.id, parseInt(value))}
+            >
+              {question.options.map((option) => (
+                <div
+                  key={option.value}
+                  className="flex items-center space-x-3 p-4 rounded-xl border border-blue-100 hover:bg-blue-50 transition-colors"
+                >
+                  <RadioGroupItem value={option.value.toString()} id={`q${question.id}-${option.value}`} />
+                  <Label htmlFor={`q${question.id}-${option.value}`} className="flex-1 cursor-pointer">
+                    {option.label}
+                  </Label>
+                </div>
+              ))}
+            </RadioGroup>
+
+            <div className="flex gap-3 pt-4">
+              <Button
+                variant="outline"
+                onClick={handlePrevious}
+                disabled={currentQuestion === 0}
+                className="flex-1"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Previous
+              </Button>
+              <Button
+                onClick={handleNext}
+                disabled={answers[question.id] === undefined}
+                className="flex-1 bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600"
+              >
+                {currentQuestion === selectedAssessment.questions.length - 1 ? 'Submit' : 'Next'}
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (showResults && currentResult) {
+    return (
+      <div className="max-w-3xl mx-auto space-y-6">
+        <div>
+          <h1 className="text-blue-900 mb-2">Assessment Results</h1>
+          <p className="text-blue-600">Your results have been saved</p>
+        </div>
+
+        <Card className="border-blue-100 shadow-md">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-blue-900">{currentResult.title}</CardTitle>
+              <CheckCircle className="w-8 h-8 text-green-500" />
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="text-center p-8 rounded-xl bg-gradient-to-br from-blue-50 to-green-50">
+              <div className="text-6xl font-bold text-blue-900 mb-2">
+                {currentResult.score}/{currentResult.maxScore}
+              </div>
+              <Badge className={`${getSeverityColor(currentResult.severity)} capitalize text-lg px-4 py-2`}>
+                {getSeverityIcon(currentResult.severity)}
+                <span className="ml-2">{currentResult.severity}</span>
+              </Badge>
+            </div>
+
+            <div>
+              <h3 className="text-blue-900 mb-3">Recommendations</h3>
+              <div className="space-y-2">
+                {currentResult.recommendations.map((rec, index) => (
+                  <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-blue-50">
+                    <CheckCircle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                    <p className="text-blue-900">{rec}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setSelectedAssessment(null);
+                  setShowResults(false);
+                }}
+                className="flex-1"
+              >
+                Back to Assessments
+              </Button>
+              <Button className="flex-1 bg-gradient-to-r from-blue-500 to-green-500">
+                Book Counseling
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-blue-900 mb-2">Self-Assessment Tools</h1>
+        <p className="text-blue-600">Take validated mental health assessments to understand your wellbeing</p>
+      </div>
+
+      {/* Available Assessments */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {assessments.map((assessment) => (
+          <Card key={assessment.id} className="border-blue-100 shadow-md hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <div className="flex items-start gap-3">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-green-500 flex items-center justify-center flex-shrink-0">
+                  <ClipboardList className="w-6 h-6 text-white" />
+                </div>
+                <div className="flex-1">
+                  <CardTitle className="text-blue-900 mb-1">{assessment.title}</CardTitle>
+                  <CardDescription>{assessment.description}</CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 text-sm text-blue-600">
+                  <span>{assessment.questions.length} questions</span>
+                  <span>•</span>
+                  <span>~5 minutes</span>
+                </div>
+                <Button
+                  onClick={() => startAssessment(assessment)}
+                  className="w-full bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600"
+                >
+                  Start Assessment
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Past Results */}
+      <Card className="border-blue-100 shadow-md">
+        <CardHeader>
+          <CardTitle className="text-blue-900">Your Assessment History</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {pastResults.length === 0 ? (
+              <p className="text-center text-blue-600 py-8">No assessments completed yet</p>
+            ) : (
+              pastResults.map((result) => (
+                <div
+                  key={result.id}
+                  className="p-4 rounded-xl border border-blue-100 hover:bg-blue-50/50 transition-colors"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-blue-900">{result.title}</h3>
+                    <span className="text-sm text-blue-600">{result.date}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm text-blue-600">Score: {result.score}/{result.maxScore}</span>
+                        <Badge className={`${getSeverityColor(result.severity)} capitalize`}>
+                          {getSeverityIcon(result.severity)}
+                          <span className="ml-1">{result.severity}</span>
+                        </Badge>
+                      </div>
+                      <Progress value={(result.score / result.maxScore) * 100} className="h-2" />
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+-->
 <!DOCTYPE html>
 <html layout:decorate="~{layout/main_layout}">
-<head><title>Self Assessment</title></head>
+
+<head>
+    <title>Self Assessment</title>
+</head>
+
 <body>
     <div layout:fragment="content">
-        <div class="mb-4">
-            <h2 class="fw-bold" style="color: #1e3a8a;">Self-Assessment Tools</h2>
-            <p class="text-muted">Validated screening tools for mental wellbeing</p>
-        </div>
+        <!-- Assessment Selection View -->
+        <div id="assessment-selection-view">
+            <div class="mb-4">
+                <h1 class="fw-bold mb-2" style="color: #1e3a8a;">Self-Assessment Tools</h1>
+                <p style="color: #2563eb;">Take validated mental health assessments to understand your wellbeing</p>
+            </div>
 
-        <div class="row g-4">
-            <div class="col-md-6">
-                <div class="card card-custom p-4 h-100">
-                    <div class="d-flex gap-3 mb-3">
-                        <div class="rounded-3 p-3 text-white" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
-                            <i class="fas fa-clipboard-list fa-lg"></i>
+            <!-- Available Assessments -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-6">
+                    <div class="card card-custom p-4 h-100 hover-shadow">
+                        <div class="d-flex gap-3 mb-3">
+                            <div class="rounded-3 p-3 text-white d-flex align-items-center justify-content-center"
+                                style="background: linear-gradient(135deg, #3b82f6, #22c55e); width: 48px; height: 48px;">
+                                <i class="fas fa-clipboard-list fa-lg"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h5 class="fw-bold mb-1" style="color: #1e3a8a;">PHQ-9 Depression Assessment</h5>
+                                <p class="text-muted small mb-0">A 9-question screening tool for depression</p>
+                            </div>
                         </div>
-                        <div>
-                            <h5 class="fw-bold text-dark mb-1">PHQ-9 Depression</h5>
-                            <p class="text-muted small mb-0">9 Questions • ~5 mins</p>
+                        <div class="d-flex align-items-center gap-2 text-muted small mb-3">
+                            <span>5 questions</span>
+                            <span>•</span>
+                            <span>~5 minutes</span>
                         </div>
+                        <button class="btn w-100 text-white fw-semibold"
+                            style="background: linear-gradient(to right, #3b82f6, #22c55e);"
+                            onclick="startAssessment('phq9')">
+                            Start Assessment
+                        </button>
                     </div>
-                    <p class="text-muted small">Standard screening tool for depression severity.</p>
-                    <a th:href="@{/assessment/start/phq9}" class="btn btn-primary-custom w-100 mt-auto">Start Assessment</a>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card card-custom p-4 h-100 hover-shadow">
+                        <div class="d-flex gap-3 mb-3">
+                            <div class="rounded-3 p-3 text-white d-flex align-items-center justify-content-center"
+                                style="background: linear-gradient(135deg, #3b82f6, #22c55e); width: 48px; height: 48px;">
+                                <i class="fas fa-clipboard-list fa-lg"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h5 class="fw-bold mb-1" style="color: #1e3a8a;">GAD-7 Anxiety Assessment</h5>
+                                <p class="text-muted small mb-0">A 7-question screening tool for generalized anxiety
+                                    disorder</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 text-muted small mb-3">
+                            <span>4 questions</span>
+                            <span>•</span>
+                            <span>~5 minutes</span>
+                        </div>
+                        <button class="btn w-100 text-white fw-semibold"
+                            style="background: linear-gradient(to right, #3b82f6, #22c55e);"
+                            onclick="startAssessment('gad7')">
+                            Start Assessment
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <div class="col-md-6">
-                <div class="card card-custom p-4 h-100">
-                    <div class="d-flex gap-3 mb-3">
-                        <div class="rounded-3 p-3 text-white" style="background: linear-gradient(135deg, #10b981, #059669);">
-                            <i class="fas fa-heartbeat fa-lg"></i>
-                        </div>
-                        <div>
-                            <h5 class="fw-bold text-dark mb-1">GAD-7 Anxiety</h5>
-                            <p class="text-muted small mb-0">7 Questions • ~3 mins</p>
-                        </div>
-                    </div>
-                    <p class="text-muted small">Screening for Generalized Anxiety Disorder.</p>
-                    <a href="#" class="btn btn-primary-custom w-100 mt-auto">Start Assessment</a>
+            <!-- Assessment History -->
+            <div class="card card-custom p-4">
+                <h5 class="fw-bold mb-3" style="color: #1e3a8a;">Your Assessment History</h5>
+                <div id="assessment-history">
+                    <!-- History items will be rendered here -->
                 </div>
             </div>
         </div>
 
-        <div class="card card-custom mt-5 p-4">
-            <h5 class="fw-bold text-dark mb-3">Your History</h5>
-            <div class="p-3 border rounded-3 bg-light d-flex justify-content-between align-items-center">
-                <div>
-                    <h6 class="fw-bold text-dark mb-1">PHQ-9 Assessment</h6>
-                    <small class="text-muted">Nov 01, 2024</small>
-                </div>
-                <div class="text-end">
-                    <span class="badge bg-warning text-dark mb-1">Mild Severity</span>
-                    <div class="progress" style="width: 100px; height: 6px;">
-                        <div class="progress-bar bg-warning" style="width: 30%"></div>
+        <!-- Question View (Hidden by default) -->
+        <div id="assessment-question-view" style="display: none;">
+            <div class="mb-4">
+                <h1 class="fw-bold mb-2" style="color: #1e3a8a;" id="assessment-title"></h1>
+                <p style="color: #2563eb;" id="question-counter"></p>
+            </div>
+
+            <div class="card card-custom p-4" style="border-color: #dbeafe; max-width: 800px; margin: 0 auto;">
+                <div class="mb-4">
+                    <div class="progress" style="height: 8px; background-color: #e0e7ff;">
+                        <div id="progress-bar" class="progress-bar"
+                            style="background: linear-gradient(to right, #3b82f6, #22c55e); width: 0%;"></div>
                     </div>
+                </div>
+
+                <h5 class="fw-bold mb-2" style="color: #1e3a8a;" id="question-text"></h5>
+                <p class="text-muted small mb-4">Over the last 2 weeks, how often have you been bothered by this?</p>
+
+                <div id="question-options" class="mb-4">
+                    <!-- Radio options will be rendered here -->
+                </div>
+
+                <div class="d-flex gap-3">
+                    <button id="btn-previous" class="btn btn-outline-secondary flex-grow-1"
+                        onclick="previousQuestion()">
+                        <i class="fas fa-arrow-left me-2"></i>Previous
+                    </button>
+                    <button id="btn-next" class="btn text-white flex-grow-1"
+                        style="background: linear-gradient(to right, #3b82f6, #22c55e);" onclick="nextQuestion()"
+                        disabled>
+                        <span id="next-btn-text">Next</span>
+                        <i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results View (Hidden by default) -->
+        <div id="assessment-results-view" style="display: none;">
+            <div class="mb-4">
+                <h1 class="fw-bold mb-2" style="color: #1e3a8a;">Assessment Results</h1>
+                <p style="color: #2563eb;">Your results have been saved</p>
+            </div>
+
+            <div class="card card-custom p-4" style="border-color: #dbeafe; max-width: 800px; margin: 0 auto;">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h5 class="fw-bold mb-0" style="color: #1e3a8a;" id="result-title"></h5>
+                    <i class="fas fa-check-circle fa-2x text-success"></i>
+                </div>
+
+                <div class="text-center p-5 rounded-3 mb-4"
+                    style="background: linear-gradient(135deg, #eff6ff, #f0fdf4);">
+                    <div class="display-3 fw-bold mb-2" style="color: #1e3a8a;" id="result-score"></div>
+                    <span id="result-severity-badge" class="badge px-4 py-2 fs-6"></span>
+                </div>
+
+                <div class="mb-4">
+                    <h6 class="fw-bold mb-3" style="color: #1e3a8a;">Recommendations</h6>
+                    <div id="result-recommendations">
+                        <!-- Recommendations will be rendered here -->
+                    </div>
+                </div>
+
+                <div class="d-flex gap-3">
+                    <button class="btn btn-outline-secondary flex-grow-1" onclick="backToAssessments()">
+                        Back to Assessments
+                    </button>
+                    <button class="btn text-white flex-grow-1"
+                        style="background: linear-gradient(to right, #3b82f6, #22c55e);">
+                        Book Counseling
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+
+    <th:block layout:fragment="scripts">
+        <script th:src="@{/static/js/assessment.js}"></script>
+    </th:block>
 </body>
+
 </html>

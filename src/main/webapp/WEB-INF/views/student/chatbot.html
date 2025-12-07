@@ -1,58 +1,387 @@
-<!DOCTYPE html>
-<html layout:decorate="~{layout/main_layout}">
-<head><title>AI Assistant</title></head>
-<body>
-    <div layout:fragment="content" class="h-100 d-flex flex-column" style="max-height: 80vh;">
-        
-        <div class="mb-3">
-            <h2 class="fw-bold" style="color: #1e3a8a;">AI Chatbot Assistant</h2>
-            <p class="text-muted">Get instant help and guidance</p>
-        </div>
+<!--
+import { useState, useRef, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Badge } from '../ui/badge';
+import { MessageCircle, Send, Bot, User, Lightbulb, BookOpen, Heart } from 'lucide-react';
+import { Avatar, AvatarFallback } from '../ui/avatar';
 
-        <div class="card card-custom flex-grow-1 overflow-hidden d-flex flex-column">
-            <div class="card-header bg-white border-bottom p-3">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="rounded-3 p-2 text-white" style="background: linear-gradient(135deg, #3b82f6, #22c55e);">
-                        <i class="fas fa-robot fa-lg"></i>
-                    </div>
-                    <div>
-                        <h6 class="mb-0 fw-bold text-dark">MindCare Assistant</h6>
-                        <small class="text-success"><i class="fas fa-circle fa-xs me-1"></i> Online</small>
-                    </div>
+interface Message {
+  id: string;
+  text: string;
+  sender: 'user' | 'bot';
+  timestamp: Date;
+  suggestions?: string[];
+}
+
+export function Chatbot() {
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: '1',
+      text: "Hello! I'm your MindCare AI assistant. I'm here to help you with mental health resources, learning modules, and general support. How can I assist you today?",
+      sender: 'bot',
+      timestamp: new Date(),
+      suggestions: [
+        'Help with stress management',
+        'Find learning modules',
+        'Book a counseling session',
+        'Tell me about self-assessments',
+      ],
+    },
+  ]);
+  const [inputMessage, setInputMessage] = useState('');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const predefinedResponses: Record<string, string> = {
+    'stress': "I understand you're dealing with stress. We have excellent resources to help! I recommend starting with our 'Stress Management Fundamentals' module. It covers breathing exercises, time management, and cognitive strategies. Would you like me to guide you there?",
+    'anxiety': "Anxiety can be challenging. Our 'Mindfulness & Meditation' module has proven techniques to help manage anxiety. We also offer the GAD-7 assessment to help you understand your anxiety levels better. What would you like to explore first?",
+    'sleep': "Sleep is crucial for mental health! Check out our 'Sleep Hygiene & Rest' module for practical strategies to improve your sleep patterns. It includes tips on creating a sleep-friendly environment and establishing healthy routines.",
+    'module': "We offer several learning modules covering topics like stress management, mindfulness, emotional regulation, sleep hygiene, and building healthy relationships. Each module includes videos, articles, and practical exercises. Which topic interests you most?",
+    'counseling': "Booking a counseling session is easy! Navigate to the 'Counseling' section from the sidebar. You can view our professional counselors' profiles, check their availability, and book a session that fits your schedule. Would you like me to explain more about our counselors?",
+    'assessment': "We offer validated self-assessment tools including PHQ-9 for depression and GAD-7 for anxiety. These tools can help you understand your current mental health status. The assessments are private, and results come with personalized recommendations. Would you like to take one?",
+    'help': "I can help you with:\n• Finding and navigating learning modules\n• Understanding self-assessments\n• Booking counseling appointments\n• Getting mental health tips and resources\n• Answering questions about the platform\n\nWhat would you like to know more about?",
+  };
+
+  const getBotResponse = (userMessage: string): { text: string; suggestions?: string[] } => {
+    const lowerMessage = userMessage.toLowerCase();
+
+    for (const [key, response] of Object.entries(predefinedResponses)) {
+      if (lowerMessage.includes(key)) {
+        return {
+          text: response,
+          suggestions: key === 'help' ? undefined : ['Tell me more', 'What else can you help with?', 'Book counseling'],
+        };
+      }
+    }
+
+    return {
+      text: "I'm here to help! You can ask me about learning modules, counseling sessions, self-assessments, or general mental health support. What would you like to know?",
+      suggestions: ['Show me modules', 'How to book counseling', 'Mental health tips', 'Take an assessment'],
+    };
+  };
+
+  const handleSend = () => {
+    if (!inputMessage.trim()) return;
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      text: inputMessage,
+      sender: 'user',
+      timestamp: new Date(),
+    };
+
+    setMessages([...messages, userMessage]);
+    setInputMessage('');
+
+    // Simulate bot response
+    setTimeout(() => {
+      const { text, suggestions } = getBotResponse(inputMessage);
+      const botMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text,
+        sender: 'bot',
+        timestamp: new Date(),
+        suggestions,
+      };
+      setMessages((prev) => [...prev, botMessage]);
+    }, 1000);
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setInputMessage(suggestion);
+  };
+
+  return (
+    <div className="h-[calc(100vh-12rem)] flex flex-col">
+      <div className="mb-6">
+        <h1 className="text-blue-900 mb-2">AI Chatbot Assistant</h1>
+        <p className="text-blue-600">Get instant help and guidance for your mental health journey</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 flex-1 min-h-0">
+        {/* Chat Area */}
+        <Card className="lg:col-span-3 border-blue-100 shadow-md flex flex-col">
+          <CardHeader className="border-b border-blue-100">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-green-500 flex items-center justify-center">
+                <Bot className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <CardTitle className="text-blue-900">MindCare Assistant</CardTitle>
+                <div className="flex items-center gap-2 mt-1">
+                  <div className="w-2 h-2 rounded-full bg-green-500" />
+                  <span className="text-xs text-blue-600">Online</span>
                 </div>
+              </div>
+            </div>
+          </CardHeader>
+          
+          <CardContent className="flex-1 p-6 overflow-y-auto" style={{ maxHeight: 'calc(100% - 180px)' }}>
+            <div className="space-y-4">
+              {messages.map((message) => (
+                <div key={message.id} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`flex gap-3 max-w-[80%] ${message.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                    <Avatar className="w-8 h-8 flex-shrink-0">
+                      <AvatarFallback className={message.sender === 'user' ? 'bg-blue-500' : 'bg-gradient-to-br from-blue-500 to-green-500'}>
+                        {message.sender === 'user' ? <User className="w-4 h-4 text-white" /> : <Bot className="w-4 h-4 text-white" />}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="space-y-2">
+                      <div
+                        className={`p-4 rounded-2xl ${
+                          message.sender === 'user'
+                            ? 'bg-gradient-to-r from-blue-500 to-green-500 text-white'
+                            : 'bg-blue-50 text-blue-900'
+                        }`}
+                      >
+                        <p className="whitespace-pre-line">{message.text}</p>
+                      </div>
+                      {message.suggestions && message.suggestions.length > 0 && (
+                        <div className="flex flex-wrap gap-2">
+                          {message.suggestions.map((suggestion, index) => (
+                            <Button
+                              key={index}
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleSuggestionClick(suggestion)}
+                              className="text-xs border-blue-300 text-blue-700 hover:bg-blue-50"
+                            >
+                              {suggestion}
+                            </Button>
+                          ))}
+                        </div>
+                      )}
+                      <p className="text-xs text-blue-500 px-2">
+                        {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              <div ref={messagesEndRef} />
+            </div>
+          </CardContent>
+
+          <div className="p-4 border-t border-blue-100">
+            <div className="flex gap-3">
+              <Input
+                placeholder="Type your message..."
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+                className="flex-1"
+              />
+              <Button
+                onClick={handleSend}
+                className="bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600"
+              >
+                <Send className="w-4 h-4" />
+              </Button>
+            </div>
+          </div>
+        </Card>
+
+        {/* Quick Actions Sidebar */}
+        <Card className="border-blue-100 shadow-md">
+          <CardHeader>
+            <CardTitle className="text-blue-900">Quick Actions</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <Button
+              variant="outline"
+              className="w-full justify-start"
+              onClick={() => handleSuggestionClick('Show me stress management resources')}
+            >
+              <Heart className="w-4 h-4 mr-2 text-red-500" />
+              Stress Help
+            </Button>
+            <Button
+              variant="outline"
+              className="w-full justify-start"
+              onClick={() => handleSuggestionClick('What learning modules are available?')}
+            >
+              <BookOpen className="w-4 h-4 mr-2 text-blue-500" />
+              Find Modules
+            </Button>
+            <Button
+              variant="outline"
+              className="w-full justify-start"
+              onClick={() => handleSuggestionClick('How do I book a counseling session?')}
+            >
+              <MessageCircle className="w-4 h-4 mr-2 text-green-500" />
+              Book Counseling
+            </Button>
+            <Button
+              variant="outline"
+              className="w-full justify-start"
+              onClick={() => handleSuggestionClick('Tell me about self-assessments')}
+            >
+              <Lightbulb className="w-4 h-4 mr-2 text-yellow-500" />
+              Assessments
+            </Button>
+
+            <div className="pt-4 border-t border-blue-100">
+              <h3 className="text-sm text-blue-900 mb-3">Common Topics</h3>
+              <div className="flex flex-wrap gap-2">
+                <Badge 
+                  variant="secondary" 
+                  className="cursor-pointer hover:bg-blue-100"
+                  onClick={() => handleSuggestionClick('anxiety')}
+                >
+                  Anxiety
+                </Badge>
+                <Badge 
+                  variant="secondary"
+                  className="cursor-pointer hover:bg-blue-100"
+                  onClick={() => handleSuggestionClick('stress')}
+                >
+                  Stress
+                </Badge>
+                <Badge 
+                  variant="secondary"
+                  className="cursor-pointer hover:bg-blue-100"
+                  onClick={() => handleSuggestionClick('sleep')}
+                >
+                  Sleep
+                </Badge>
+                <Badge 
+                  variant="secondary"
+                  className="cursor-pointer hover:bg-blue-100"
+                  onClick={() => handleSuggestionClick('mindfulness')}
+                >
+                  Mindfulness
+                </Badge>
+              </div>
             </div>
 
-            <div class="card-body bg-light overflow-auto p-4 d-flex flex-column gap-3" id="chatContainer">
-                <div class="d-flex gap-3">
-                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center flex-shrink-0" style="width: 35px; height: 35px;">
-                        <i class="fas fa-robot small"></i>
+            <div className="pt-4 border-t border-blue-100">
+              <div className="p-3 rounded-lg bg-blue-50 text-xs text-blue-600">
+                <p className="mb-2">💡 <span className="font-medium">Tip:</span></p>
+                <p>This chatbot provides general guidance. For personalized support, please book a session with our counselors.</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}
+
+-->
+<!DOCTYPE html>
+<html layout:decorate="~{layout/main_layout}">
+
+<head>
+    <title>AI Assistant</title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <div class="mb-4">
+            <h1 class="fw-bold mb-2" style="color: #1e3a8a;">AI Chatbot Assistant</h1>
+            <p style="color: #2563eb;">Get instant help and guidance for your mental health journey</p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Main Chat Area -->
+            <div class="col-lg-9">
+                <div class="card card-custom d-flex flex-column" style="height: calc(100vh - 250px);">
+                    <!-- Chat Header -->
+                    <div class="card-header bg-white border-bottom p-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="rounded-3 p-2 text-white d-flex align-items-center justify-content-center"
+                                style="background: linear-gradient(135deg, #3b82f6, #22c55e); width: 40px; height: 40px;">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0 fw-bold" style="color: #1e3a8a;">MindCare Assistant</h6>
+                                <small class="text-success">
+                                    <i class="fas fa-circle fa-xs me-1"></i>Online
+                                </small>
+                            </div>
+                        </div>
                     </div>
-                    <div class="bg-white p-3 rounded-3 shadow-sm" style="max-width: 80%;">
-                        <p class="mb-2 text-dark">Hello! I'm your MindCare AI. How can I help you today?</p>
-                        <div class="d-flex flex-wrap gap-2">
-                            <button class="btn btn-sm btn-outline-primary rounded-pill">Stress Management</button>
-                            <button class="btn btn-sm btn-outline-primary rounded-pill">Book Counseling</button>
+
+                    <!-- Messages Container -->
+                    <div class="card-body flex-grow-1 overflow-auto p-4" id="chat-messages"
+                        style="background-color: #f8fafc;">
+                        <!-- Messages will be rendered here by JavaScript -->
+                    </div>
+
+                    <!-- Input Area -->
+                    <div class="card-footer bg-white p-3 border-top">
+                        <div class="d-flex gap-2">
+                            <input type="text" id="message-input" class="form-control"
+                                placeholder="Type your message..."
+                                style="background-color: #f8fafc; border-color: #e2e8f0;">
+                            <button class="btn text-white px-4"
+                                style="background: linear-gradient(to right, #3b82f6, #22c55e);"
+                                onclick="sendMessage()">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="d-flex gap-3 flex-row-reverse">
-                    <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center flex-shrink-0" style="width: 35px; height: 35px;">
-                        <i class="fas fa-user small"></i>
+            <!-- Quick Actions Sidebar -->
+            <div class="col-lg-3">
+                <div class="card card-custom p-3">
+                    <h6 class="fw-bold mb-3" style="color: #1e3a8a;">Quick Actions</h6>
+
+                    <button class="btn btn-outline-secondary w-100 text-start mb-2" onclick="quickAction('stress')">
+                        <i class="fas fa-heart text-danger me-2"></i>Stress Help
+                    </button>
+                    <button class="btn btn-outline-secondary w-100 text-start mb-2" onclick="quickAction('module')">
+                        <i class="fas fa-book-open text-primary me-2"></i>Find Modules
+                    </button>
+                    <button class="btn btn-outline-secondary w-100 text-start mb-2" onclick="quickAction('counseling')">
+                        <i class="fas fa-comments text-success me-2"></i>Book Counseling
+                    </button>
+                    <button class="btn btn-outline-secondary w-100 text-start mb-3" onclick="quickAction('assessment')">
+                        <i class="fas fa-lightbulb text-warning me-2"></i>Assessments
+                    </button>
+
+                    <div class="border-top pt-3 mb-3">
+                        <h6 class="small fw-bold mb-2" style="color: #1e3a8a;">Common Topics</h6>
+                        <div class="d-flex flex-wrap gap-2">
+                            <span class="badge bg-light text-dark border" style="cursor: pointer;"
+                                onclick="quickAction('anxiety')">Anxiety</span>
+                            <span class="badge bg-light text-dark border" style="cursor: pointer;"
+                                onclick="quickAction('stress')">Stress</span>
+                            <span class="badge bg-light text-dark border" style="cursor: pointer;"
+                                onclick="quickAction('sleep')">Sleep</span>
+                            <span class="badge bg-light text-dark border" style="cursor: pointer;"
+                                onclick="quickAction('mindfulness')">Mindfulness</span>
+                        </div>
                     </div>
-                    <div class="text-white p-3 rounded-3 shadow-sm" style="max-width: 80%; background: linear-gradient(to right, #3b82f6, #22c55e);">
-                        <p class="mb-0">I need help with anxiety.</p>
+
+                    <div class="p-3 rounded-3" style="background-color: #eff6ff;">
+                        <p class="small mb-2" style="color: #2563eb;">
+                            <i class="fas fa-lightbulb me-1"></i><strong>Tip:</strong>
+                        </p>
+                        <p class="small mb-0" style="color: #2563eb;">
+                            This chatbot provides general guidance. For personalized support, please book a session with
+                            our counselors.
+                        </p>
                     </div>
                 </div>
             </div>
-
-            <div class="card-footer bg-white p-3 border-top">
-                <form class="d-flex gap-2">
-                    <input type="text" class="form-control bg-light border-0" placeholder="Type your message...">
-                    <button type="button" class="btn btn-primary-custom px-4"><i class="fas fa-paper-plane"></i></button>
-                </form>
-            </div>
         </div>
     </div>
+
+    <th:block layout:fragment="scripts">
+        <script th:src="@{/static/js/chatbot.js}"></script>
+    </th:block>
 </body>
+
 </html>

@@ -1,104 +1,98 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout/main_layout}">
-<head><title>Book Counseling</title></head>
+
+<head>
+    <title>Book Counseling</title>
+    <!-- Bootstrap Datepicker CSS -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+</head>
+
 <body>
     <div layout:fragment="content">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h2 class="fw-bold" style="color: #1e3a8a;">Counseling Appointments</h2>
-                <p class="text-muted">Book a session with our professional counselors</p>
+                <h1 class="fw-bold mb-2" style="color: #1e3a8a;">Counseling Appointments</h1>
+                <p style="color: #2563eb;">Book a session with our professional counselors</p>
             </div>
-            <button class="btn btn-success text-white fw-bold d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#bookingModal">
-                <i class="fas fa-plus"></i> Book New
+            <button class="btn text-white fw-semibold d-flex align-items-center gap-2"
+                style="background: linear-gradient(to right, #3b82f6, #22c55e);" data-bs-toggle="modal"
+                data-bs-target="#bookingModal">
+                <i class="fas fa-calendar-plus"></i> Book Appointment
             </button>
         </div>
 
-        <div class="card card-custom mb-4">
-            <div class="card-body p-4">
-                <h5 class="fw-bold mb-3 text-dark">Your Schedule</h5>
-                
-                <div class="p-3 rounded-3 border mb-3 d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center bg-light">
-                    <div class="d-flex gap-3 align-items-center">
-                        <div class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center" style="width: 50px; height: 50px;">
-                            <span class="fw-bold">SW</span>
-                        </div>
-                        <div>
-                            <h6 class="mb-0 fw-bold text-dark">Dr. Sarah Williams</h6>
-                            <div class="small text-muted d-flex gap-3 mt-1">
-                                <span><i class="far fa-calendar me-1"></i> Nov 15, 2025</span>
-                                <span><i class="far fa-clock me-1"></i> 10:00 AM</span>
-                                <span><i class="fas fa-video me-1"></i> Online</span>
-                            </div>
-                        </div>
+        <!-- Date and Time Selection -->
+        <div class="row g-4 mb-4">
+            <!-- Calendar -->
+            <div class="col-lg-8">
+                <div class="card card-custom p-4">
+                    <h5 class="fw-bold mb-3" style="color: #1e3a8a;">Select Date</h5>
+                    <div id="datepicker-container" class="d-flex justify-content-center"></div>
+                </div>
+            </div>
+
+            <!-- Available Time Slots -->
+            <div class="col-lg-4">
+                <div class="card card-custom p-4">
+                    <h5 class="fw-bold mb-3" style="color: #1e3a8a;">Available Time Slots</h5>
+                    <div id="selected-date-display" class="mb-3 text-muted small">
+                        Please select a date
                     </div>
-                    <div class="mt-3 mt-md-0 d-flex gap-2">
-                        <button class="btn btn-outline-success btn-sm"><i class="fas fa-video me-1"></i> Join Link</button>
-                        <button class="btn btn-outline-danger btn-sm"><i class="fas fa-times"></i></button>
+                    <div id="time-slots-container">
+                        <!-- Time slots will be rendered here -->
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card card-custom h-100 text-center p-4">
-                    <div class="mx-auto mb-3">
-                        <img src="https://ui-avatars.com/api/?name=Sarah+Williams&background=0D8ABC&color=fff" class="rounded-circle shadow-sm" width="80">
-                    </div>
-                    <h5 class="fw-bold text-dark">Dr. Sarah Williams</h5>
-                    <p class="text-muted small">Clinical Psychologist</p>
-                    <div class="d-flex justify-content-center gap-1 mb-3">
-                        <span class="badge bg-light text-dark border">Anxiety</span>
-                        <span class="badge bg-light text-dark border">Depression</span>
-                    </div>
-                    <button class="btn btn-primary-custom w-100">View Profile</button>
-                </div>
-            </div>
-            
-            <div class="col-md-4">
-                <div class="card card-custom h-100 text-center p-4">
-                    <div class="mx-auto mb-3">
-                        <img src="https://ui-avatars.com/api/?name=Michael+Chen&background=10b981&color=fff" class="rounded-circle shadow-sm" width="80">
-                    </div>
-                    <h5 class="fw-bold text-dark">Dr. Michael Chen</h5>
-                    <p class="text-muted small">Mental Health Counselor</p>
-                    <div class="d-flex justify-content-center gap-1 mb-3">
-                        <span class="badge bg-light text-dark border">Trauma</span>
-                        <span class="badge bg-light text-dark border">Relationships</span>
-                    </div>
-                    <button class="btn btn-primary-custom w-100">View Profile</button>
-                </div>
+        <!-- Our Counselors -->
+        <div class="card card-custom p-4 mb-4">
+            <h5 class="fw-bold mb-3" style="color: #1e3a8a;">Our Counselors</h5>
+            <div class="row g-4" id="counselors-container">
+                <!-- Counselor cards will be rendered here -->
             </div>
         </div>
 
+        <!-- Your Appointments -->
+        <div class="card card-custom p-4">
+            <h5 class="fw-bold mb-3" style="color: #1e3a8a;">Your Appointments</h5>
+            <div id="appointments-container">
+                <!-- Appointments will be rendered here -->
+            </div>
+        </div>
+
+        <!-- Booking Modal -->
         <div class="modal fade" id="bookingModal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Book Appointment</h5>
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content" style="border-radius: 16px; border: none;">
+                    <div class="modal-header border-bottom">
+                        <h5 class="modal-title fw-bold" style="color: #1e3a8a;">Book Counseling Appointment</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
-                    <div class="modal-body">
-                        <form>
-                            <div class="mb-3">
-                                <label class="form-label">Select Date</label>
-                                <input type="date" class="form-control">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Select Time</label>
-                                <select class="form-select">
-                                    <option>09:00 AM</option>
-                                    <option>10:00 AM</option>
-                                    <option>02:00 PM</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Confirm</button>
-                        </form>
+                    <div class="modal-body p-4">
+                        <div id="booking-summary">
+                            <!-- Booking summary will be rendered here -->
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn text-white"
+                            style="background: linear-gradient(to right, #3b82f6, #22c55e);" onclick="confirmBooking()">
+                            Confirm Booking
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
+
+    <th:block layout:fragment="scripts">
+        <!-- Bootstrap Datepicker JS -->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+        <script th:src="@{/static/js/counseling.js}"></script>
+    </th:block>
 </body>
+
 </html>
