@@ -1,12 +1,16 @@
 package com.nilecare.controller;
 
+import com.nilecare.model.User;
 import com.nilecare.repository.LearningModuleRepository;
 import com.nilecare.repository.LessonRepository;
+import com.nilecare.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import java.security.Principal;
 
 @Controller
 public class StudentController {
@@ -16,23 +20,22 @@ public class StudentController {
     
     @Autowired
     private LessonRepository lessonRepository;
+    
+    @Autowired
+    private UserService userService;
 
-    // 1. Learning Library (The page you got 404 on)
+    // 1. Learning Library
     @GetMapping("/learning")
-    public String library(Model model) {
-        // Fetch modules from DB so th:each="${modules}" works
+    public String library(Model model, Principal principal) {
         model.addAttribute("modules", learningModuleRepository.findAll());
-        return "student/library"; // Looks for views/student/library.html
+        addCurrentUser(model, principal);
+        return "student/library";
     }
 
     // 2. Track Progress
     @GetMapping("/progress")
-    public String trackProgress(Model model, javax.servlet.http.HttpSession session) {
-        // Pass user to model for frontend access if needed
-        Object currentUser = session.getAttribute("currentUser");
-        if (currentUser != null) {
-            model.addAttribute("currentUser", currentUser);
-        }
+    public String trackProgress(Model model, Principal principal) {
+        addCurrentUser(model, principal);
         return "student/progress";
     }
 
@@ -74,20 +77,15 @@ public class StudentController {
 
     // 9. Analytics
     @GetMapping("/analytics")
-    public String analytics(Model model, javax.servlet.http.HttpSession session) {
-        // Pass user to model for frontend access if needed
-        Object currentUser = session.getAttribute("currentUser");
-        if (currentUser != null) {
-            model.addAttribute("currentUser", currentUser);
-        }
+    public String analytics(Model model, Principal principal) {
+        addCurrentUser(model, principal);
         return "student/analytics";
     }
 
     // 10. Module Details
     @GetMapping("/modules/{id}")
     public String moduleDetails(@PathVariable Long id, Model model) {
-        // Fetch the specific module from DB
-        com.nilecare.model.LearningModule module = learningModuleRepository.findById(id).orElse(null);
+        com.nilecare.model.LearningModule module = learningModuleRepository.findById((Long) id).orElse(null);
         if (module != null) {
             model.addAttribute("module", module);
         }
@@ -97,13 +95,22 @@ public class StudentController {
     // 11. Lesson View
     @GetMapping("/lesson/{id}")
     public String lessonView(@PathVariable Long id, Model model) {
-        // Fetch the specific lesson from DB
         com.nilecare.model.Lesson lesson = lessonRepository.findByLessonId(id);
         if (lesson != null) {
             model.addAttribute("lesson", lesson);
-            // Also fetch all lessons from the same module for sidebar navigation
             model.addAttribute("moduleLessons", lessonRepository.findByModuleIdOrderByLessonOrder(lesson.getModuleId()));
         }
         return "student/lesson_view";
+    }
+    
+    // Helper method to add current user to model
+    private void addCurrentUser(Model model, Principal principal) {
+        if (principal != null) {
+            String email = principal.getName();
+            User user = userService.findByEmail(email);
+            if (user != null) {
+                model.addAttribute("currentUser", user);
+            }
+        }
     }
 }

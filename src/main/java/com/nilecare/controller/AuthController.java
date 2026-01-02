@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpSession;
-
 @Controller
 public class AuthController {
 
@@ -21,37 +19,19 @@ public class AuthController {
     // --- LOGIN ---
     @GetMapping("/login")
     public String loginPage() {
-        return "auth/auth"; // CHANGED: Points to auth.html
+        return "auth/auth"; // Show login form
     }
 
-    @PostMapping("/login")
-    public String handleLogin(@RequestParam String email, 
-                              @RequestParam String password, 
-                              HttpSession session, 
-                              Model model) {
-        
-        User user = userService.loginUser(email, password);
-        
-        if (user != null) {
-            session.setAttribute("currentUser", user);
-            
-            if (user.getRoles().stream().anyMatch(r -> r.getName() == Role.RoleType.ROLE_ADMIN)) {
-                return "redirect:/admin/dashboard";
-            } else {
-                return "redirect:/learning";
-            }
-        } else {
-            model.addAttribute("error", "Invalid email or password");
-            return "auth/auth"; // CHANGED: Return to auth.html on error
-        }
-    }
+    // Spring Security handles POST /login automatically - no need for manual handling
+    // The form posts to /login with username and password parameters
+    // Spring Security validates credentials using CustomUserDetailsService
+    // On success: redirect to defaultSuccessUrl (/dashboard)
+    // On failure: redirect to /login?error=true
 
     // --- REGISTER ---
-    // In AuthController.java
-
     @GetMapping("/register")
     public String registerPage() {
-        // Instead of returning "auth/register", we return login with a flag
+        // Redirect to login page with register view flag
         return "redirect:/login?view=register";
     }
 
@@ -64,7 +44,6 @@ public class AuthController {
         
         if (userService.emailExists(email)) {
             model.addAttribute("error", "Email already registered!");
-            // CRITICAL CHANGE: Return the unified auth page, NOT "auth/register"
             return "auth/auth"; 
         }
 
@@ -80,9 +59,10 @@ public class AuthController {
     }
 
     // --- LOGOUT ---
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate(); // Kill session
-        return "redirect:/login";
-    }
+    // Spring Security handles GET /logout and POST /logout automatically
+    // No need for manual logout handler
+    // Configured in SecurityConfig:
+    // - Invalidates session
+    // - Clears JSESSIONID cookie
+    // - Redirects to /login?logout=true
 }

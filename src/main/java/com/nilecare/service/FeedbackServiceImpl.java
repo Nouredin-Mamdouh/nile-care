@@ -69,12 +69,12 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     @Transactional(readOnly = true)
     public StudentFeedback getFeedbackById(Long feedbackId) {
-        return feedbackRepository.findById(feedbackId).orElse(null);
+        return feedbackRepository.findById((Long) feedbackId).orElse(null);
     }
 
     @Override
     public StudentFeedback updateFeedbackStatus(Long feedbackId, StudentFeedback.FeedbackStatus status) {
-        StudentFeedback feedback = feedbackRepository.findById(feedbackId).orElse(null);
+        StudentFeedback feedback = feedbackRepository.findById((Long) feedbackId).orElse(null);
         if (feedback != null) {
             feedback.setStatus(status);
             return feedbackRepository.save(feedback);
@@ -84,7 +84,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     @Override
     public StudentFeedback addResponse(Long feedbackId, String response) {
-        StudentFeedback feedback = feedbackRepository.findById(feedbackId).orElse(null);
+        StudentFeedback feedback = feedbackRepository.findById((Long) feedbackId).orElse(null);
         if (feedback != null) {
             feedback.setResponse(response);
             feedback.setStatus(StudentFeedback.FeedbackStatus.RESPONDED);
@@ -95,7 +95,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     @Override
     public void deleteFeedback(Long feedbackId) {
-        feedbackRepository.deleteById(feedbackId);
+        feedbackRepository.deleteById((Long) feedbackId);
     }
 
     @Override

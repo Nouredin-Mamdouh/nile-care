@@ -34,7 +34,7 @@ public class ProgressServiceImpl implements ProgressService {
 
     @Override
     public ProgressPageDTO getStudentProgress(Long userId) {
-        User user = userRepository.findById(userId)
+        User user = userRepository.findById((Long) userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         ProgressPageDTO dto = new ProgressPageDTO();
@@ -53,7 +53,7 @@ public class ProgressServiceImpl implements ProgressService {
 
     @Override
     public ProgressStatsDTO getProgressStats(Long userId) {
-        User user = userRepository.findById(userId)
+        User user = userRepository.findById((Long) userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         ProgressStatsDTO stats = new ProgressStatsDTO();
@@ -69,7 +69,7 @@ public class ProgressServiceImpl implements ProgressService {
 
     @Override
     public List<WeeklyActivityDTO> getWeeklyActivity(Long userId) {
-        User user = userRepository.findById(userId)
+        User user = userRepository.findById((Long) userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         List<StudentProgress> progressList = progressRepository.findByStudent(user);
@@ -105,7 +105,7 @@ public class ProgressServiceImpl implements ProgressService {
 
     @Override
     public List<RecentActivityDTO> getRecentActivities(Long userId) {
-        User user = userRepository.findById(userId)
+        User user = userRepository.findById((Long) userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         List<StudentProgress> progressList = progressRepository.findByStudent(user);
@@ -130,7 +130,7 @@ public class ProgressServiceImpl implements ProgressService {
 
     @Override
     public List<AchievementDTO> getAchievements(Long userId) {
-        User user = userRepository.findById(userId)
+        User user = userRepository.findById((Long) userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         List<StudentAchievement> achievements = achievementRepository.findByStudent(user);
@@ -148,7 +148,7 @@ public class ProgressServiceImpl implements ProgressService {
 
     @Override
     public ModuleDistributionDTO getModuleDistribution(Long userId) {
-        User user = userRepository.findById(userId)
+        User user = userRepository.findById((Long) userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Integer completed = progressRepository.countCompletedModulesByStudent(user);
@@ -160,10 +160,10 @@ public class ProgressServiceImpl implements ProgressService {
 
     @Override
     public void updateModuleProgress(Long userId, Long moduleId, Integer completionPercentage) {
-        User user = userRepository.findById(userId)
+        User user = userRepository.findById((Long) userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        LearningModule module = moduleRepository.findById(moduleId)
+        LearningModule module = moduleRepository.findById((Long) moduleId)
                 .orElseThrow(() -> new RuntimeException("Module not found"));
 
         StudentProgress progress = progressRepository.findByStudentAndModule(user, module)

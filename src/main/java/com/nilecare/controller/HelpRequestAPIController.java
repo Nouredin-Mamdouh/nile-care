@@ -3,6 +3,7 @@ package com.nilecare.controller;
 import com.nilecare.dto.HelpRequestDTO;
 import com.nilecare.model.User;
 import com.nilecare.service.HelpRequestService;
+import com.nilecare.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,21 +26,32 @@ public class HelpRequestAPIController {
     @Autowired
     private HelpRequestService helpRequestService;
 
+    @Autowired
+    private UserService userService;
+
     /**
      * Submit a new help request
      */
     @PostMapping
     public ResponseEntity<?> submitHelpRequest(
             @RequestBody Map<String, String> payload,
-            HttpSession session) {
+            Principal principal) {
         try {
             logger.info("Received help request submission: {}", payload);
             
-            User student = (User) session.getAttribute("currentUser");
-            if (student == null) {
-                logger.warn("Unauthorized help request submission - no currentUser in session");
+            if (principal == null) {
+                logger.warn("Unauthorized help request submission - no principal");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of("success", false, "message", "User not authenticated"));
+            }
+
+            String email = principal.getName();
+            User student = userService.findByEmail(email);
+            
+            if (student == null) {
+                logger.warn("User not found: {}", email);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("success", false, "message", "User not found"));
             }
 
             String category = payload.get("category");
@@ -70,13 +82,21 @@ public class HelpRequestAPIController {
      * Get all help requests for the logged-in user
      */
     @GetMapping
-    public ResponseEntity<?> getHelpRequests(HttpSession session) {
+    public ResponseEntity<?> getHelpRequests(Principal principal) {
         try {
-            User student = (User) session.getAttribute("currentUser");
-            if (student == null) {
-                logger.warn("Unauthorized help request fetch - no currentUser in session");
+            if (principal == null) {
+                logger.warn("Unauthorized help request fetch - no principal");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of("success", false, "message", "User not authenticated"));
+            }
+
+            String email = principal.getName();
+            User student = userService.findByEmail(email);
+            
+            if (student == null) {
+                logger.warn("User not found: {}", email);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("success", false, "message", "User not found"));
             }
 
             logger.info("Fetching help requests for user: {}", student.getEmail());
@@ -101,12 +121,18 @@ public class HelpRequestAPIController {
     @GetMapping("/status/{status}")
     public ResponseEntity<?> getHelpRequestsByStatus(
             @PathVariable String status,
-            HttpSession session) {
+            Principal principal) {
         try {
-            User student = (User) session.getAttribute("currentUser");
-            if (student == null) {
+            if (principal == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of("success", false, "message", "User not authenticated"));
+            }
+
+            String email = principal.getName();
+            User student = userService.findByEmail(email);
+            if (student == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("success", false, "message", "User not found"));
             }
 
             List<HelpRequestDTO> requests = helpRequestService.getHelpRequestsByStatus(student.getUserId(), status);
@@ -121,12 +147,18 @@ public class HelpRequestAPIController {
      * Get a single help request by ID
      */
     @GetMapping("/{id}")
-    public ResponseEntity<?> getHelpRequest(@PathVariable Long id, HttpSession session) {
+    public ResponseEntity<?> getHelpRequest(@PathVariable Long id, Principal principal) {
         try {
-            User student = (User) session.getAttribute("currentUser");
-            if (student == null) {
+            if (principal == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of("success", false, "message", "User not authenticated"));
+            }
+
+            String email = principal.getName();
+            User student = userService.findByEmail(email);
+            if (student == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("success", false, "message", "User not found"));
             }
 
             HelpRequestDTO request = helpRequestService.getHelpRequest(id);
@@ -144,12 +176,18 @@ public class HelpRequestAPIController {
     public ResponseEntity<?> updateHelpRequest(
             @PathVariable Long id,
             @RequestBody Map<String, String> payload,
-            HttpSession session) {
+            Principal principal) {
         try {
-            User student = (User) session.getAttribute("currentUser");
-            if (student == null) {
+            if (principal == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of("success", false, "message", "User not authenticated"));
+            }
+
+            String email = principal.getName();
+            User student = userService.findByEmail(email);
+            if (student == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("success", false, "message", "User not found"));
             }
 
             String status = payload.get("status");
@@ -174,12 +212,18 @@ public class HelpRequestAPIController {
     @GetMapping("/count/{status}")
     public ResponseEntity<?> getRequestCount(
             @PathVariable String status,
-            HttpSession session) {
+            Principal principal) {
         try {
-            User student = (User) session.getAttribute("currentUser");
-            if (student == null) {
+            if (principal == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of("success", false, "message", "User not authenticated"));
+            }
+
+            String email = principal.getName();
+            User student = userService.findByEmail(email);
+            if (student == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("success", false, "message", "User not found"));
             }
 
             long count = helpRequestService.getRequestCountByStatus(student.getUserId(), status);
@@ -194,12 +238,18 @@ public class HelpRequestAPIController {
      * Get resolution rate for user
      */
     @GetMapping("/resolution-rate")
-    public ResponseEntity<?> getResolutionRate(HttpSession session) {
+    public ResponseEntity<?> getResolutionRate(Principal principal) {
         try {
-            User student = (User) session.getAttribute("currentUser");
-            if (student == null) {
+            if (principal == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(Map.of("success", false, "message", "User not authenticated"));
+            }
+
+            String email = principal.getName();
+            User student = userService.findByEmail(email);
+            if (student == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("success", false, "message", "User not found"));
             }
 
             double rate = helpRequestService.getResolutionRate(student.getUserId());

@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" 
+      lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -43,8 +46,7 @@
 
             <nav class="sidebar-menu">
                 <!-- Student Menu -->
-                <div
-                    th:if="${session.currentUser != null and session.currentUser.roles[0].name.name() == 'ROLE_STUDENT'}">
+                <div sec:authorize="hasRole('STUDENT')">
                     <div class="menu-section-title">Student</div>
                     <a th:href="@{/learning}" class="nav-link-custom"
                         th:classappend="${#httpServletRequest.requestURI.contains('/learning') ? 'active' : ''}"
@@ -136,8 +138,7 @@
                 </div>
 
                 <!-- Admin Menu -->
-                <div
-                    th:if="${session.currentUser != null and session.currentUser.roles[0].name.name() == 'ROLE_ADMIN'}">
+                <div sec:authorize="hasRole('ADMIN')">
                     <div class="menu-section-title">Admin</div>
                     <a th:href="@{/admin/dashboard}" class="nav-link-custom"
                         th:classappend="${#httpServletRequest.requestURI.contains('dashboard') ? 'active' : ''}"
@@ -179,6 +180,7 @@
                     </a>
                     <a th:href="@{/admin/reports}" class="nav-link-custom"
                         th:classappend="${#httpServletRequest.requestURI.contains('reports') ? 'active' : ''}"
+                        sec:authorize="hasRole('ADMIN')"
                         role="menuitem">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -196,11 +198,13 @@
                 </div>
             </nav>
 
-            <div class="sidebar-footer">
-                <a th:href="@{/logout}" class="sidebar-logout" role="menuitem">
-                    <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
-                    <span>Logout</span>
-                </a>
+            <div class="sidebar-footer" sec:authorize="isAuthenticated()">
+                <form th:action="@{/logout}" method="post" style="margin: 0;">
+                    <button type="submit" class="sidebar-logout" role="menuitem" style="border: none; background: none; width: 100%; text-align: left; cursor: pointer;">
+                        <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                        <span>Logout</span>
+                    </button>
+                </form>
             </div>
         </aside>
 
@@ -313,15 +317,18 @@
                         </ul>
                     </div>
 
-                    <div class="dropdown" th:if="${session.currentUser != null}">
+                    <div class="dropdown">
                         <button class="user-menu-btn" data-bs-toggle="dropdown" aria-expanded="false"
                             aria-label="User menu">
                             <div class="avatar-circle">
-                                <span th:text="${session.currentUser.fullName.substring(0,1)}">U</span>
+                                <span sec:authentication="principal.initials" style="text-transform: uppercase;"></span>
                             </div>
                             <div class="user-info d-none d-md-block">
-                                <div class="user-name" th:text="${session.currentUser.fullName}">User</div>
-                                <div class="user-role" th:text="${session.currentUser.roles[0].name}">ROLE</div>
+                                <div class="user-name" sec:authentication="principal.fullName">User</div>
+                                <div class="user-role">
+                                    <span sec:authorize="hasRole('STUDENT')">Student</span>
+                                    <span sec:authorize="hasRole('ADMIN')">Administrator</span>
+                                </div>
                             </div>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
@@ -335,14 +342,14 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item dropdown-item-danger" th:href="@{/logout}">
-                                    <i class="fas fa-sign-out-alt me-2" aria-hidden="true"></i> Logout
-                                </a></li>
+                            <li>
+                                <form th:action="@{/logout}" method="post" style="margin: 0;">
+                                    <button type="submit" class="dropdown-item dropdown-item-danger" style="border: none; background: none; width: 100%; text-align: left; cursor: pointer;">
+                                        <i class="fas fa-sign-out-alt me-2" aria-hidden="true"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
                         </ul>
-                    </div>
-
-                    <div th:if="${session.currentUser == null}">
-                        <a th:href="@{/login}" class="btn btn-sm btn-login rounded-lg">Login</a>
                     </div>
                 </div>
             </header>

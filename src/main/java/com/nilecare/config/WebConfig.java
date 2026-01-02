@@ -10,6 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
+import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
 
 @Configuration
@@ -34,6 +35,7 @@ public class WebConfig implements WebMvcConfigurer {
         SpringTemplateEngine engine = new SpringTemplateEngine();
         engine.setTemplateResolver(templateResolver());
         engine.addDialect(new LayoutDialect()); // Enable Layouts
+        engine.addDialect(new SpringSecurityDialect()); // Enable Spring Security tags (sec:authorize, sec:authentication)
         return engine;
     }
 
@@ -44,19 +46,6 @@ public class WebConfig implements WebMvcConfigurer {
         resolver.setTemplateEngine(templateEngine());
         resolver.setCharacterEncoding("UTF-8");
         return resolver;
-    }
-
-    // 4. Auth Interceptor Bean
-    @Bean
-    public AuthInterceptor authInterceptor() {
-        return new AuthInterceptor();
-    }
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authInterceptor())
-                .addPathPatterns("/**") // Apply to URL
-                .excludePathPatterns("/static/**", "/login", "/register", "/"); // Exclude public pages
     }
 
     // 5. RESOURCE HANDLERS (CSS/JS)

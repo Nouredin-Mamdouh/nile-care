@@ -28,7 +28,7 @@ public class HelpRequestServiceImpl implements HelpRequestService {
 
     @Override
     public HelpRequestDTO submitHelpRequest(Long userId, String category, String subject, String message) {
-        User student = userRepository.findById(userId)
+        User student = userRepository.findById((Long) userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         HelpRequest helpRequest = new HelpRequest();
@@ -45,7 +45,7 @@ public class HelpRequestServiceImpl implements HelpRequestService {
     @Override
     @Transactional(readOnly = true)
     public List<HelpRequestDTO> getHelpRequests(Long userId) {
-        User student = userRepository.findById(userId)
+        User student = userRepository.findById((Long) userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         List<HelpRequest> requests = helpRequestRepository.findByStudentOrderByCreatedAtDesc(student);
@@ -57,7 +57,7 @@ public class HelpRequestServiceImpl implements HelpRequestService {
     @Override
     @Transactional(readOnly = true)
     public List<HelpRequestDTO> getHelpRequestsByStatus(Long userId, String status) {
-        User student = userRepository.findById(userId)
+        User student = userRepository.findById((Long) userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         HelpRequest.RequestStatus requestStatus = HelpRequest.RequestStatus.valueOf(status.toUpperCase());
@@ -70,14 +70,14 @@ public class HelpRequestServiceImpl implements HelpRequestService {
     @Override
     @Transactional(readOnly = true)
     public HelpRequestDTO getHelpRequest(Long requestId) {
-        HelpRequest request = helpRequestRepository.findById(requestId)
+        HelpRequest request = helpRequestRepository.findById((Long) requestId)
                 .orElseThrow(() -> new RuntimeException("Help request not found"));
         return convertToDTO(request);
     }
 
     @Override
     public HelpRequestDTO updateHelpRequest(Long requestId, String status, String response) {
-        HelpRequest request = helpRequestRepository.findById(requestId)
+        HelpRequest request = helpRequestRepository.findById((Long) requestId)
                 .orElseThrow(() -> new RuntimeException("Help request not found"));
 
         request.setStatus(HelpRequest.RequestStatus.valueOf(status.toUpperCase()));
@@ -90,7 +90,7 @@ public class HelpRequestServiceImpl implements HelpRequestService {
     @Override
     @Transactional(readOnly = true)
     public long getRequestCountByStatus(Long userId, String status) {
-        User student = userRepository.findById(userId)
+        User student = userRepository.findById((Long) userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         HelpRequest.RequestStatus requestStatus = HelpRequest.RequestStatus.valueOf(status.toUpperCase());
@@ -100,7 +100,7 @@ public class HelpRequestServiceImpl implements HelpRequestService {
     @Override
     @Transactional(readOnly = true)
     public double getResolutionRate(Long userId) {
-        User student = userRepository.findById(userId)
+        User student = userRepository.findById((Long) userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Double rate = helpRequestRepository.getResolutionRateForStudent(student, HelpRequest.RequestStatus.RESOLVED);

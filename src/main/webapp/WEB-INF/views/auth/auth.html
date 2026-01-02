@@ -1,21 +1,38 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout/main_layout}">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome - NileCare</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
+    <link rel="stylesheet" th:href="@{/static/css/variables.css}">
+    <link rel="stylesheet" th:href="@{/static/css/base.css}">
+    <link rel="stylesheet" th:href="@{/static/css/layout.css}">
+    <link rel="stylesheet" th:href="@{/static/css/components.css}">
+    <link rel="stylesheet" th:href="@{/static/css/animations.css}">
+    <link rel="stylesheet" th:href="@{/static/css/utilities.css}">
 </head>
+
 <body class="auth-page">
-    <div layout:fragment="content" class="d-flex align-items-center justify-content-center min-vh-100 p-4">
-        
+    <div class="d-flex align-items-center justify-content-center min-vh-100 p-4">
+
         <div class="container auth-container">
             <div class="row align-items-center">
-                
+
                 <div class="col-lg-6 d-none d-lg-block">
                     <div class="padding-start-xl pt-2 pb-4 d-flex align-items-center gap-3">
-                        <div class="d-flex align-items-center justify-content-center rounded-4 text-white auth-brand-badge bg-gradient-custom">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path></svg>
+                        <div
+                            class="d-flex align-items-center justify-content-center rounded-4 text-white auth-brand-badge bg-gradient-custom">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="white" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719">
+                                </path>
+                            </svg>
                         </div>
                         <div>
                             <h4 class="mb-0 fw-semibold auth-brand-title">NileCare</h4>
@@ -26,19 +43,31 @@
                     <div class="visual-container">
                         <div class="visual-bg"></div>
                         <div class="brand-circle-lg bg-gradient-custom">
-                            <svg width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/></svg>
+                            <svg width="96" height="96" viewBox="0 0 24 24" fill="none" stroke="white"
+                                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z" />
+                                <path
+                                    d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z" />
+                            </svg>
                         </div>
 
                         <div class="icon-float pos-heart icon-heart">
                             <i class="fas fa-heart"></i>
                         </div>
                         <div class="icon-float pos-message icon-message">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"></path></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="white" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719">
+                                </path>
+                            </svg>
                         </div>
                         <div class="icon-float pos-star icon-star">
                             <i class="fas fa-star"></i>
                         </div>
-                        
+
                         <div class="bubble-micro b1"></div>
                         <div class="bubble-micro b2"></div>
                         <div class="bubble-micro b3"></div>
@@ -49,7 +78,8 @@
 
                     <div class="text-center mt-2">
                         <h3 class="fw-semibold fs-5 mb-2 auth-cta-title">Your Journey to Wellness</h3>
-                        <p class="auth-cta-text">Access mental health resources, connect with counselors, and track your progress.</p>
+                        <p class="auth-cta-text">Access mental health resources, connect with counselors, and track your
+                            progress.</p>
                     </div>
                 </div>
 
@@ -57,34 +87,53 @@
                     <div class="card card-glass p-5">
                         <div class="mb-4">
                             <h4 class="fw-semibold text-dark mb-1" id="formTitle">Welcome</h4>
-                            <p class="text-muted auth-form-subtitle" id="formSubtitle">Sign in to your account or create a new one</p>
+                            <p class="text-muted auth-form-subtitle" id="formSubtitle">Sign in to your account or create
+                                a new one</p>
                         </div>
 
-                        <div th:if="${error}" class="alert alert-danger d-flex align-items-center mb-4 p-2 small border-0 bg-red-50 text-red-700">
+                        <div th:if="${param.error}"
+                            class="alert alert-danger d-flex align-items-center mb-4 p-3 small border-0">
                             <i class="fas fa-exclamation-circle me-2"></i>
-                            <span th:text="${error}">Error</span>
+                            <span>Invalid username or password</span>
+                        </div>
+
+                        <div th:if="${error}"
+                            class="alert alert-danger d-flex align-items-center mb-4 p-3 small border-0">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <span th:text="${error}">Error message goes here</span>
+                        </div>
+
+                        <div th:if="${param.logout}"
+                            class="alert alert-success d-flex align-items-center mb-4 p-3 small border-0">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <span>You have been logged out</span>
                         </div>
 
                         <div class="toggle-container">
-                            <button type="button" class="toggle-btn active" id="btn-login" onclick="setMode('login')">Login</button>
-                            <button type="button" class="toggle-btn" id="btn-register" onclick="setMode('register')">Register</button>
+                            <button type="button" class="toggle-btn active" id="btn-login"
+                                onclick="setMode('login')">Login</button>
+                            <button type="button" class="toggle-btn" id="btn-register"
+                                onclick="setMode('register')">Register</button>
                         </div>
 
                         <div id="login-form">
-                            <form th:action="@{/login}" method="post">
+                            <form th:action="@{/login}" method="post" th:csrf="true">
                                 <div class="mb-3">
                                     <label class="form-label small fw-bold text-muted mb-1">Email</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="far fa-envelope"></i></span>
-                                        <input type="email" name="email" class="form-control form-control-custom" placeholder="student@utm.my" required>
+                                        <input type="email" name="username" class="form-control form-control-custom"
+                                            placeholder="student@utm.my" required>
                                     </div>
-                                    <div class="mt-1"><small class="text-muted auth-inline-hint">Try: <span class="text-primary cursor-pointer">student@utm.my</span></small></div>
+                                    <div class="mt-1"><small class="text-muted auth-inline-hint">Try: <span
+                                                class="text-primary cursor-pointer">student@utm.my</span></small></div>
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label small fw-bold text-muted mb-1">Password</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                                        <input type="password" name="password" class="form-control form-control-custom" placeholder="••••••••" required>
+                                        <input type="password" name="password" class="form-control form-control-custom"
+                                            placeholder="••••••••" required>
                                     </div>
                                 </div>
                                 <button type="submit" class="btn-gradient">Sign In</button>
@@ -92,33 +141,37 @@
                         </div>
 
                         <div id="register-form">
-                            <form th:action="@{/register}" method="post">
+                            <form th:action="@{/register}" method="post" th:csrf="true">
                                 <div class="mb-3">
                                     <label class="form-label small fw-bold text-muted mb-1">Full Name</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="far fa-user"></i></span>
-                                        <input type="text" name="fullName" class="form-control form-control-custom" placeholder="John Doe" required>
+                                        <input type="text" name="fullName" class="form-control form-control-custom"
+                                            placeholder="John Doe" required>
                                     </div>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label small fw-bold text-muted mb-1">Email</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="far fa-envelope"></i></span>
-                                        <input type="email" name="email" class="form-control form-control-custom" placeholder="student@utm.my" required>
+                                        <input type="email" name="email" class="form-control form-control-custom"
+                                            placeholder="student@utm.my" required>
                                     </div>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label small fw-bold text-muted mb-1">Password</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                                        <input type="password" name="password" class="form-control form-control-custom" placeholder="••••••••" required>
+                                        <input type="password" name="password" class="form-control form-control-custom"
+                                            placeholder="••••••••" required>
                                     </div>
                                 </div>
-                                
+
                                 <div class="mb-4">
                                     <label class="form-label small fw-bold text-muted mb-2">Select Role</label>
                                     <label class="role-card">
-                                        <input class="form-check-input" type="radio" name="role" value="STUDENT" checked>
+                                        <input class="form-check-input" type="radio" name="role" value="STUDENT"
+                                            checked>
                                         <span>Student</span>
                                     </label>
                                     <label class="role-card">
@@ -162,14 +215,15 @@
                 }
             }
 
-            (function() {
+            (function () {
                 const urlParams = new URLSearchParams(window.location.search);
                 const hasError = /*[[${error != null}]]*/ false;
-                if(urlParams.get('view') === 'register' || hasError) {
+                if (urlParams.get('view') === 'register' || hasError) {
                     setTimeout(() => setMode('register'), 50);
                 }
             })();
         </script>
     </div>
 </body>
+
 </html>

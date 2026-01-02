@@ -5,7 +5,7 @@ import com.nilecare.model.User;
 import com.nilecare.repository.RoleRepository;
 import com.nilecare.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,12 +20,13 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RoleRepository roleRepository;
 
-    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional // Ensures the whole process happens or fails together
     public void registerUser(User user, String rawPassword, Role.RoleType roleType) {
-        // 1. Hash the password
+        // 1. Hash the password using Spring Security's PasswordEncoder bean
         String hashed = passwordEncoder.encode(rawPassword);
         user.setPasswordHash(hashed);
 
@@ -58,5 +59,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean emailExists(String email) {
         return userRepository.findByEmail(email).isPresent();
+    }
+    
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
     }
 }

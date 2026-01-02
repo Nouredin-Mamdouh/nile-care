@@ -4,6 +4,7 @@ import com.nilecare.dto.FeedbackPageDTO;
 import com.nilecare.model.StudentFeedback;
 import com.nilecare.model.User;
 import com.nilecare.service.FeedbackService;
+import com.nilecare.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,18 +26,28 @@ public class FeedbackAPIController {
     @Autowired
     private FeedbackService feedbackService;
 
+    @Autowired
+    private UserService userService;
+
     /**
      * GET /api/student/feedback - Fetch all feedback for authenticated student
      */
     @GetMapping
-    public ResponseEntity<?> getFeedback(HttpSession session) {
+    public ResponseEntity<?> getFeedback(Principal principal) {
         try {
-            User student = (User) session.getAttribute("currentUser");
-            
-            if (student == null) {
+            if (principal == null) {
                 logger.warn("Unauthorized access to feedback endpoint");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(createErrorResponse("User not authenticated"));
+            }
+
+            String email = principal.getName();
+            User student = userService.findByEmail(email);
+            
+            if (student == null) {
+                logger.warn("User not found: {}", email);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(createErrorResponse("User not found"));
             }
 
             logger.info("Fetching feedback for user: {}", student.getEmail());
@@ -60,14 +71,21 @@ public class FeedbackAPIController {
             @RequestParam Integer rating,
             @RequestParam String subject,
             @RequestParam String message,
-            HttpSession session) {
+            Principal principal) {
         try {
-            User student = (User) session.getAttribute("currentUser");
-            
-            if (student == null) {
+            if (principal == null) {
                 logger.warn("Unauthorized access to submit feedback endpoint");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(createErrorResponse("User not authenticated"));
+            }
+
+            String email = principal.getName();
+            User student = userService.findByEmail(email);
+            
+            if (student == null) {
+                logger.warn("User not found: {}", email);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(createErrorResponse("User not found"));
             }
 
             // Validate input
@@ -107,13 +125,19 @@ public class FeedbackAPIController {
     public ResponseEntity<?> respondToFeedback(
             @PathVariable Long feedbackId,
             @RequestParam String response,
-            HttpSession session) {
+            Principal principal) {
         try {
-            User user = (User) session.getAttribute("currentUser");
+            if (principal == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(createErrorResponse("User not authenticated"));
+            }
+
+            String email = principal.getName();
+            User user = userService.findByEmail(email);
             
             if (user == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(createErrorResponse("User not authenticated"));
+                    .body(createErrorResponse("User not found"));
             }
 
             logger.info("Adding response to feedback ID: {}", feedbackId);
@@ -141,13 +165,19 @@ public class FeedbackAPIController {
      * GET /api/student/feedback/stats - Get feedback statistics
      */
     @GetMapping("/stats")
-    public ResponseEntity<?> getFeedbackStats(HttpSession session) {
+    public ResponseEntity<?> getFeedbackStats(Principal principal) {
         try {
-            User student = (User) session.getAttribute("currentUser");
+            if (principal == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(createErrorResponse("User not authenticated"));
+            }
+
+            String email = principal.getName();
+            User student = userService.findByEmail(email);
             
             if (student == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(createErrorResponse("User not authenticated"));
+                    .body(createErrorResponse("User not found"));
             }
 
             logger.info("Fetching feedback stats for user: {}", student.getEmail());
@@ -168,13 +198,19 @@ public class FeedbackAPIController {
     @DeleteMapping("/{feedbackId}")
     public ResponseEntity<?> deleteFeedback(
             @PathVariable Long feedbackId,
-            HttpSession session) {
+            Principal principal) {
         try {
-            User user = (User) session.getAttribute("currentUser");
+            if (principal == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(createErrorResponse("User not authenticated"));
+            }
+
+            String email = principal.getName();
+            User user = userService.findByEmail(email);
             
             if (user == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(createErrorResponse("User not authenticated"));
+                    .body(createErrorResponse("User not found"));
             }
 
             logger.info("Deleting feedback ID: {}", feedbackId);
