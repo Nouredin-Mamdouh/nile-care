@@ -560,7 +560,7 @@ body.sidebar-open .sidebar-close {
     display: flex;
     flex-direction: column;
     background: linear-gradient(135deg, var(--blue-50) 0%, var(--green-50) 50%, var(--blue-50) 100%);
-    overflow: hidden;
+    overflow-y: auto;
 }
 
 .app-shell .scrollable-area {
@@ -2617,7 +2617,7 @@ body.sidebar-open .sidebar-close {
     position: fixed;
     top: 24px;
     right: 24px;
-    z-index: 9999;
+    z-index: 10003;
     pointer-events: auto;
     display: flex;
     flex-direction: column-reverse; /* New toasts appear on top */
@@ -4389,7 +4389,7 @@ body.sidebar-open .sidebar-close {
 }
 
 .text-success {
-    color: var(--green-500) !important;
+    color: var(--text-primary) !important;
 }
 
 @media (max-width: 575.98px) {
@@ -5122,6 +5122,14 @@ body.sidebar-open .sidebar-close {
     display: block;
 }
 
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.show {
+    display: block;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -5436,9 +5444,9 @@ body.sidebar-open .sidebar-close {
     flex-direction: column;
     transition: all 0.2s ease;
     max-width: 500px;
-    width: 90%;
+    width: auto;
     height: auto;
-    max-height: 47.3vh;
+    max-height: 85vh;
     overflow-y: auto;
     pointer-events: none;
 }
@@ -5680,5 +5688,429 @@ body.sidebar-open .sidebar-close {
         right: 1.5rem;
         width: 48px;
         height: 48px;
+    }
+}
+
+/* ===================== ROLE MANAGEMENT PAGE ===================== */
+
+/* Role Management Page Styling */
+.page-title {
+    font-size: 2rem;
+    letter-spacing: -0.02em;
+}
+
+/* Permission Items */
+.permission-item {
+    padding: 1rem;
+    background: #f8fafb;
+    border-radius: 0.75rem;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s ease;
+}
+
+.permission-item:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+.permission-item .form-check {
+    margin: 0;
+}
+
+.permission-item .form-check-input {
+    width: 3rem;
+    height: 1.5rem;
+    margin: 0;
+    border: 2px solid #cbd5e1;
+    border-radius: 9999px;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background: #e2e8f0;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.permission-item .form-check-input:checked {
+    background: #3b82f6;
+    border-color: #3b82f6;
+}
+
+.permission-item .form-check-input::before {
+    content: '';
+    position: absolute;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background: white;
+    top: 50%;
+    left: 0.125rem;
+    transform: translateY(-50%);
+    transition: left 0.2s ease;
+}
+
+.permission-item .form-check-input:checked::before {
+    left: calc(100% - 1.375rem);
+}
+
+/* Icon Boxes */
+.icon-box {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.bg-gradient-blue {
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+    color: white;
+}
+
+.bg-gradient-blue-green {
+    background: linear-gradient(135deg, #3b82f6, #22c55e);
+    color: white;
+}
+
+.bg-gradient-purple {
+    background: linear-gradient(135deg, #a855f7, #ec4899);
+    color: white;
+}
+
+.bg-gradient-green {
+    background: linear-gradient(135deg, #22c55e, #10b981);
+    color: white;
+}
+
+/* Role Header Card */
+.role-header-card {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(34, 197, 94, 0.05));
+    border-radius: 1rem;
+    border: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+/* Badges */
+.badge {
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.badge-blue {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.badge-green {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge-active {
+    background: #dcfce7;
+    color: #166534;
+}
+
+/* Tabs Styling */
+.nav-tabs-custom {
+    border-bottom: 2px solid #e2e8f0;
+    gap: 0.5rem;
+}
+
+.nav-tabs-custom .nav-link {
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: #64748b;
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    position: relative;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.nav-tabs-custom .nav-link:hover {
+    color: #475569;
+    border-bottom-color: #cbd5e1;
+}
+
+.nav-tabs-custom .nav-link.active {
+    color: #3b82f6;
+    border-bottom-color: #3b82f6;
+    background: transparent;
+}
+
+/* Form Elements for Modal */
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group:last-child {
+    margin-bottom: 0;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #1e293b;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    color: #1e293b;
+    background: white;
+    transition: all 0.2s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    color: #1e293b;
+    background: white;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%233b82f6'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1.25rem;
+    padding-right: 2.5rem;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.form-select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-select option {
+    color: #1e293b;
+    background: white;
+}
+
+/* Buttons */
+.btn {
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-primary {
+    background: #3b82f6;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.btn-secondary {
+    background: #e2e8f0;
+    color: #475569;
+}
+
+.btn-secondary:hover {
+    background: #cbd5e1;
+}
+
+.btn-gradient-primary {
+    background: linear-gradient(135deg, #3b82f6, #22c55e);
+    color: white;
+}
+
+.btn-gradient-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.btn-outline-custom {
+    background: transparent;
+    color: #3b82f6;
+    border: 1.5px solid #3b82f6;
+}
+
+.btn-outline-custom:hover {
+    background: #dbeafe;
+}
+
+.btn-outline-secondary {
+    background: transparent;
+    color: #64748b;
+    border: 1.5px solid #cbd5e1;
+}
+
+.btn-outline-secondary:hover {
+    background: #f1f5f9;
+    border-color: #94a3b8;
+}
+
+.btn-outline-danger {
+    background: transparent;
+    color: #ef4444;
+    border: 1.5px solid #fca5a5;
+    padding: 0.5rem 0.75rem;
+}
+
+.btn-outline-danger:hover {
+    background: #fee2e2;
+}
+
+.btn-sm {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+}
+
+.btn-danger {
+    background: #ef4444;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+}
+
+/* Table Styling */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+.table thead th {
+    background: transparent;
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: #64748b;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.table tbody td {
+    padding: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+    color: #475569;
+    vertical-align: middle;
+}
+
+.table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table-hover tbody tr:hover {
+    background: #f1f5f9;
+}
+
+.align-middle {
+    vertical-align: middle;
+}
+
+/* Status Badge Colors */
+.bg-success {
+    background: rgba(34, 197, 94, 0.08) !important;
+    color: var(--text-primary) !important;
+}
+
+.bg-warning {
+    background: #fef08a !important;
+    color: #713f12 !important;
+}
+
+.bg-primary {
+    background: #dbeafe !important;
+    color: #1e40af !important;
+}
+
+.bg-secondary {
+    background: #e5e7eb !important;
+    color: #374151 !important;
+}
+
+.bg-info {
+    background: #cffafe !important;
+    color: #164e63 !important;
+}
+
+.bg-danger {
+    background: #fee2e2 !important;
+    color: #991b1b !important;
+}
+
+/* Responsive Adjustments for Roles Page */
+@media (max-width: 768px) {
+    .role-header-card {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .role-header-card button {
+        width: 100%;
+    }
+
+    .nav-tabs-custom {
+        gap: 0;
+        flex-wrap: wrap;
+    }
+
+    .nav-tabs-custom .nav-link {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    .permission-item {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .table thead th,
+    .table tbody td {
+        padding: 0.75rem;
+        font-size: 0.8rem;
+    }
+
+    .modal {
+        width: 95%;
+        max-width: none;
     }
 }

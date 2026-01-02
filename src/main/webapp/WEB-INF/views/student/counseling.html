@@ -6,6 +6,279 @@
     <!-- Bootstrap Datepicker CSS -->
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <style>
+        /* Custom Calendar Styling - Clean from Scratch */
+        .datepicker {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            background: white;
+            padding: 16px;
+            width: 280px !important;
+            max-width: 280px;
+        }
+
+        #datepicker-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        #datepicker-container .datepicker {
+            position: static !important;
+            float: none !important;
+        }
+
+        .datepicker table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+        }
+
+        /* Header with Month/Year and Navigation */
+        .datepicker thead tr {
+            display: table-row;
+            height: 40px;
+            margin-bottom: 12px;
+        }
+
+        .datepicker thead th {
+            display: table-cell;
+            padding: 8px 4px;
+            text-align: center;
+            border: none;
+            background: transparent;
+            vertical-align: middle;
+        }
+
+        .datepicker thead th.prev,
+        .datepicker thead th.next {
+            width: 30px;
+            cursor: pointer;
+            color: #3b82f6;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 0;
+        }
+
+        .datepicker thead th.prev:hover:not(.disabled),
+        .datepicker thead th.next:hover:not(.disabled) {
+            color: #22c55e;
+        }
+
+        .datepicker thead th.prev.disabled,
+        .datepicker thead th.next.disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            color: #cbd5e1;
+        }
+
+        .datepicker thead th.datepicker-switch {
+            background: linear-gradient(135deg, #3b82f6 0%, #22c55e 100%);
+            color: white;
+            font-weight: 600;
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .datepicker thead th.datepicker-switch:hover {
+            opacity: 0.9;
+        }
+
+        /* Day names header */
+        .datepicker tbody tr:first-child {
+            margin-bottom: 8px;
+        }
+
+        /* Calendar dates grid */
+        .datepicker td {
+            padding: 10px 4px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            color: #475569;
+            width: 14.28%;
+            font-weight: 500;
+            border: none;
+        }
+
+        .datepicker td:hover:not(.old):not(.new):not(.disabled) {
+            background: #dbeafe;
+            color: #1e3a8a;
+            font-weight: 600;
+        }
+
+        .datepicker td.active {
+            background: linear-gradient(135deg, #3b82f6, #22c55e);
+            color: white;
+            font-weight: 600;
+        }
+
+        .datepicker td.today {
+            font-weight: 600;
+            color: #3b82f6;
+            border: 2px solid #3b82f6;
+        }
+
+        .datepicker td.old,
+        .datepicker td.new {
+            color: #cbd5e1;
+            cursor: not-allowed;
+        }
+
+        /* Month/Year picker view */
+        .datepicker-months,
+        .datepicker-years {
+            width: 100%;
+        }
+
+        .datepicker-months .month,
+        .datepicker-years .year {
+            display: inline-block;
+            width: 33.333%;
+            padding: 12px 4px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            color: #475569;
+            font-weight: 500;
+            box-sizing: border-box;
+        }
+
+        .datepicker-months .month:hover,
+        .datepicker-years .year:hover {
+            background: #dbeafe;
+            color: #1e3a8a;
+            font-weight: 600;
+        }
+
+        .datepicker-months .month.active,
+        .datepicker-years .year.active {
+            background: linear-gradient(135deg, #3b82f6, #22c55e);
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Time Slots Styling */
+        .time-slot {
+            padding: 12px;
+            margin: 8px 0;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            font-weight: 500;
+            color: #475569;
+        }
+
+        .time-slot:hover {
+            border-color: #3b82f6;
+            background: #dbeafe;
+            color: #3b82f6;
+        }
+
+        .time-slot.selected {
+            background: linear-gradient(135deg, #3b82f6, #22c55e);
+            color: white;
+            border-color: transparent;
+        }
+
+        .time-slot.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #f1f5f9;
+        }
+
+        /* Counselor Card Styling */
+        .counselor-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .counselor-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .counselor-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #22c55e);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 12px;
+            font-weight: 600;
+        }
+
+        .counselor-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e3a8a;
+            margin: 8px 0;
+        }
+
+        .counselor-specialty {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .counselor-rating {
+            color: #f59e0b;
+            font-size: 14px;
+        }
+
+        /* Modal Custom Styling */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #1e293b;
+            background: white;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+    </style>
 </head>
 
 <body>
@@ -15,32 +288,36 @@
                 <h1 class="fw-bold mb-2" style="color: #1e3a8a;">Counseling Appointments</h1>
                 <p style="color: #2563eb;">Book a session with our professional counselors</p>
             </div>
-            <button class="btn text-white fw-semibold d-flex align-items-center gap-2"
-                style="background: linear-gradient(to right, #3b82f6, #22c55e);" data-bs-toggle="modal"
-                data-bs-target="#bookingModal">
+            <button id="bookAppointmentBtn" class="btn text-white fw-semibold d-flex align-items-center gap-2"
+                style="background: linear-gradient(to right, #3b82f6, #22c55e);">
                 <i class="fas fa-calendar-plus"></i> Book Appointment
             </button>
         </div>
 
         <!-- Date and Time Selection -->
-        <div class="row g-4 mb-4">
-            <!-- Calendar -->
-            <div class="col-lg-8">
-                <div class="card card-custom p-4">
-                    <h5 class="fw-bold mb-3" style="color: #1e3a8a;">Select Date</h5>
-                    <div id="datepicker-container" class="d-flex justify-content-center"></div>
-                </div>
-            </div>
-
-            <!-- Available Time Slots -->
-            <div class="col-lg-4">
-                <div class="card card-custom p-4">
-                    <h5 class="fw-bold mb-3" style="color: #1e3a8a;">Available Time Slots</h5>
-                    <div id="selected-date-display" class="mb-3 text-muted small">
-                        Please select a date
+        <div class="mb-4">
+            <!-- Calendar and Time Slots Row -->
+            <div class="row g-4">
+                <!-- Calendar -->
+                <div class="col-lg-4">
+                    <div class="card card-custom p-0">
+                        <div class="p-4">
+                            <h6 class="fw-bold mb-3" style="color: #1e3a8a; font-size: 14px;">Select Date</h6>
+                            <div id="datepicker-container" class="d-flex justify-content-center"></div>
+                        </div>
                     </div>
-                    <div id="time-slots-container">
-                        <!-- Time slots will be rendered here -->
+                </div>
+                
+                <!-- Time Slots -->
+                <div class="col-lg-8">
+                    <div class="card card-custom p-4">
+                        <h6 class="fw-bold mb-3" style="color: #1e3a8a; font-size: 14px;">Select Time</h6>
+                        <div id="selected-date-display" class="mb-3 text-center" style="font-size: 13px; color: #64748b;">
+                            Please select a date
+                        </div>
+                        <div id="time-slots-container">
+                            <!-- Time slots will be rendered here -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -63,28 +340,68 @@
         </div>
 
         <!-- Booking Modal -->
-        <div class="modal fade" id="bookingModal" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content" style="border-radius: 16px; border: none;">
-                    <div class="modal-header border-bottom">
-                        <h5 class="modal-title fw-bold" style="color: #1e3a8a;">Book Counseling Appointment</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <div id="bookingModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Book Counseling Appointment</h2>
+                </div>
+                <div class="modal-body">
+                    <p class="modal-description">Review your appointment details below</p>
+                    
+                    <!-- Booking Summary -->
+                    <div class="mb-4" id="booking-summary">
+                        <!-- Summary will be rendered here -->
                     </div>
-                    <div class="modal-body p-4">
-                        <div id="booking-summary">
-                            <!-- Booking summary will be rendered here -->
-                        </div>
+
+                    <!-- Notes -->
+                    <div class="form-group">
+                        <label class="form-label">Additional Notes (Optional)</label>
+                        <textarea id="appointmentNotes" class="form-input" rows="3" placeholder="Any specific topics you'd like to discuss..."></textarea>
                     </div>
-                    <div class="modal-footer border-top">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn text-white"
-                            style="background: linear-gradient(to right, #3b82f6, #22c55e);" onclick="confirmBooking()">
-                            Confirm Booking
-                        </button>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" id="cancelBookingBtn">Cancel</button>
+                    <button class="btn btn-primary" id="confirmBookingBtn">Book Appointment</button>
                 </div>
             </div>
         </div>
+
+        <!-- Counselor Selection Modal -->
+        <div id="counselorSelectionModal" class="modal">
+            <div class="modal-content" style="max-width: 600px;">
+                <div class="modal-header">
+                    <h2 class="modal-title">Select a Counselor</h2>
+                </div>
+                <div class="modal-body">
+                    <p class="modal-description mb-4">Choose a counselor from the list below</p>
+                    <div id="counselor-selection-list" class="row g-3">
+                        <!-- Counselor list will be rendered here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" id="closeCounselorSelectionBtn">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cancel Appointment Confirmation Modal -->
+        <div id="cancelConfirmModal" class="modal">
+            <div class="modal-content modal-danger" style="max-width: 400px;">
+                <div class="modal-header">
+                    <h2 class="modal-title">Cancel Appointment?</h2>
+                </div>
+                <div class="modal-body">
+                    <p class="modal-description">Are you sure you want to cancel this appointment? This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" id="cancelConfirmCancelBtn">Keep Appointment</button>
+                    <button class="btn btn-danger" id="confirmCancelBtn">Yes, Cancel It</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overlay for Modal -->
+        <div id="modalOverlay" class="modal-overlay"></div>
     </div>
 
     <th:block layout:fragment="scripts">
@@ -93,6 +410,8 @@
         <!-- Bootstrap Datepicker JS -->
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+        <!-- Toast Notifications System -->
+        <script th:src="@{/static/js/toast-notifications.js}"></script>
         <script th:src="@{/static/js/counseling.js}"></script>
     </th:block>
 </body>

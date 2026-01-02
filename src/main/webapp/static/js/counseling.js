@@ -69,6 +69,88 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('datepicker-container').innerHTML =
             '<p class="text-muted text-center py-4">Calendar loading... Please refresh if it doesn\'t appear.</p>';
     }
+
+    // Set up modal controls (with timeout for DOM readiness)
+    setTimeout(function () {
+        const bookingModal = document.getElementById('bookingModal');
+        const counselorSelectionModal = document.getElementById('counselorSelectionModal');
+        const cancelConfirmModal = document.getElementById('cancelConfirmModal');
+        const modalOverlay = document.getElementById('modalOverlay');
+        
+        const cancelBookingBtn = document.getElementById('cancelBookingBtn');
+        const confirmBookingBtn = document.getElementById('confirmBookingBtn');
+        const bookAppointmentBtn = document.getElementById('bookAppointmentBtn');
+        const closeCounselorSelectionBtn = document.getElementById('closeCounselorSelectionBtn');
+        const cancelConfirmCancelBtn = document.getElementById('cancelConfirmCancelBtn');
+        const confirmCancelBtn = document.getElementById('confirmCancelBtn');
+
+        // Book appointment button - opens counselor selection modal
+        if (bookAppointmentBtn) {
+            bookAppointmentBtn.addEventListener('click', function () {
+                renderCounselorSelectionList();
+                if (counselorSelectionModal) {
+                    counselorSelectionModal.classList.add('active');
+                }
+                if (modalOverlay) {
+                    modalOverlay.classList.add('active');
+                }
+                document.body.style.overflow = 'hidden';
+            });
+        }
+
+        // Close counselor selection modal
+        if (closeCounselorSelectionBtn) {
+            closeCounselorSelectionBtn.addEventListener('click', function () {
+                if (counselorSelectionModal) counselorSelectionModal.classList.remove('active');
+                if (modalOverlay) modalOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        }
+
+        // Cancel booking button - closes booking modal
+        if (cancelBookingBtn) {
+            cancelBookingBtn.addEventListener('click', function () {
+                if (bookingModal) bookingModal.classList.remove('active');
+                if (modalOverlay) modalOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        }
+
+        // Confirm button - processes booking
+        if (confirmBookingBtn) {
+            confirmBookingBtn.addEventListener('click', confirmBooking);
+        }
+
+        // Cancel appointment modal - cancel button
+        if (cancelConfirmCancelBtn) {
+            cancelConfirmCancelBtn.addEventListener('click', function () {
+                if (cancelConfirmModal) cancelConfirmModal.classList.remove('active');
+                if (modalOverlay) modalOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        }
+
+        // Cancel appointment modal - confirm cancel button
+        if (confirmCancelBtn) {
+            confirmCancelBtn.addEventListener('click', function () {
+                confirmCancelAppointment();
+            });
+        }
+
+        // Modal overlay click to close
+        if (modalOverlay) {
+            modalOverlay.addEventListener('click', function (e) {
+                if (e.target === modalOverlay) {
+                    // Close all modals
+                    if (bookingModal) bookingModal.classList.remove('active');
+                    if (counselorSelectionModal) counselorSelectionModal.classList.remove('active');
+                    if (cancelConfirmModal) cancelConfirmModal.classList.remove('active');
+                    modalOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        }
+    }, 100);
 });
 
 // Initialize Bootstrap Datepicker
@@ -159,16 +241,11 @@ function renderCounselors() {
                 <i class="fas fa-star text-warning"></i>
                 <span class="small fw-semibold">${counselor.rating}</span>
             </div>
-            <div class="d-flex justify-content-center flex-wrap gap-1 mb-3">
+            <div class="d-flex justify-content-center flex-wrap gap-1">
                 ${counselor.specialty.map(spec =>
             `<span class="badge bg-light text-dark border small">${spec}</span>`
         ).join('')}
             </div>
-            <button class="btn w-100 text-white" 
-                    style="background: linear-gradient(to right, #3b82f6, #22c55e);"
-                    onclick="selectCounselor('${counselor.id}')">
-                Book Session
-            </button>
         `;
 
         col.appendChild(card);
@@ -176,13 +253,66 @@ function renderCounselors() {
     });
 }
 
-// Select counselor and open modal
-function selectCounselor(counselorId) {
-    selectedCounselor = counselors.find(c => c.id === counselorId);
-    updateBookingSummary();
+// Render counselor selection list in modal
+function renderCounselorSelectionList() {
+    const container = document.getElementById('counselor-selection-list');
+    container.innerHTML = '';
 
-    const modal = new bootstrap.Modal(document.getElementById('bookingModal'));
-    modal.show();
+    counselors.forEach(function (counselor) {
+        const col = document.createElement('div');
+        col.className = 'col-md-6';
+
+        const card = document.createElement('div');
+        card.className = 'card p-3 cursor-pointer';
+        card.style.cursor = 'pointer';
+        card.style.border = selectedCounselor && selectedCounselor.id === counselor.id ? '2px solid #3b82f6' : '1px solid #e2e8f0';
+        card.style.borderRadius = '8px';
+        card.style.transition = 'all 0.2s ease';
+
+        card.innerHTML = `
+            <div class="d-flex align-items-center gap-3">
+                <img src="${counselor.avatar}" 
+                     class="rounded-circle" 
+                     width="50" 
+                     height="50"
+                     alt="${counselor.name}">
+                <div class="flex-grow-1">
+                    <h6 class="fw-bold mb-1" style="color: #1e3a8a;">${counselor.name}</h6>
+                    <p class="text-muted small mb-0">${counselor.title}</p>
+                    <div class="d-flex gap-1 mt-1">
+                        <i class="fas fa-star text-warning" style="font-size: 12px;"></i>
+                        <span class="small fw-semibold">${counselor.rating}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        card.addEventListener('click', function () {
+            selectedCounselor = counselor;
+            renderCounselorSelectionList(); // Re-render to show selection
+            setTimeout(function () {
+                // Open booking modal
+                const counselorSelectionModal = document.getElementById('counselorSelectionModal');
+                const bookingModal = document.getElementById('bookingModal');
+                if (counselorSelectionModal) counselorSelectionModal.classList.remove('active');
+                if (bookingModal) bookingModal.classList.add('active');
+                updateBookingSummary();
+            }, 100);
+        });
+
+        card.addEventListener('mouseover', function () {
+            card.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
+            card.style.transform = 'translateY(-2px)';
+        });
+
+        card.addEventListener('mouseout', function () {
+            card.style.boxShadow = '';
+            card.style.transform = '';
+        });
+
+        col.appendChild(card);
+        container.appendChild(col);
+    });
 }
 
 // Update booking summary in modal
@@ -255,8 +385,17 @@ function updateBookingSummary() {
 
 // Confirm booking
 function confirmBooking() {
-    if (!selectedCounselor || !selectedDate || !selectedTime) {
-        alert('Please select a counselor, date, and time slot');
+    // Validate all required fields
+    if (!selectedCounselor) {
+        ToastNotifications.showToast('Please select a counselor', 'warning');
+        return;
+    }
+    if (!selectedDate) {
+        ToastNotifications.showToast('Please select a date', 'warning');
+        return;
+    }
+    if (!selectedTime) {
+        ToastNotifications.showToast('Please select a time slot', 'warning');
         return;
     }
 
@@ -273,16 +412,24 @@ function confirmBooking() {
     appointments.unshift(newAppointment);
     renderAppointments();
 
-    // Close modal
-    const modal = bootstrap.Modal.getInstance(document.getElementById('bookingModal'));
-    modal.hide();
+    // Close modal using custom system
+    const bookingModal = document.getElementById('bookingModal');
+    const modalOverlay = document.getElementById('modalOverlay');
+    if (bookingModal) {
+        bookingModal.classList.remove('active');
+    }
+    if (modalOverlay) {
+        modalOverlay.classList.remove('active');
+    }
+    document.body.style.overflow = '';
 
     // Reset selections
     selectedCounselor = null;
     selectedTime = null;
+    selectedDate = null;
 
-    // Show success message
-    showToast('Appointment booked successfully!', 'success');
+    // Show success message with toast
+    ToastNotifications.showSuccessToast('Appointment booked successfully!');
 }
 
 // Render appointments
@@ -352,40 +499,115 @@ function renderAppointments() {
 
 // Join appointment (placeholder)
 function joinAppointment(appointmentId) {
-    showToast('Joining video call...', 'info');
+    ToastNotifications.showToast('Joining video call...', 'info');
     // In a real application, this would open the video call interface
 }
 
 // Cancel appointment
 function cancelAppointment(appointmentId) {
-    if (confirm('Are you sure you want to cancel this appointment?')) {
+    // Store the appointment ID for confirmation
+    window.appointmentToCancel = appointmentId;
+    
+    // Open cancel confirmation modal
+    const cancelConfirmModal = document.getElementById('cancelConfirmModal');
+    const modalOverlay = document.getElementById('modalOverlay');
+    if (cancelConfirmModal) {
+        cancelConfirmModal.classList.add('active');
+    }
+    if (modalOverlay) {
+        modalOverlay.classList.add('active');
+    }
+    document.body.style.overflow = 'hidden';
+}
+
+// Confirm cancel appointment
+function confirmCancelAppointment() {
+    const appointmentId = window.appointmentToCancel;
+    if (appointmentId) {
         const appointment = appointments.find(a => a.id === appointmentId);
         if (appointment) {
             appointment.status = 'cancelled';
             renderAppointments();
-            showToast('Appointment cancelled', 'warning');
+            ToastNotifications.showToast('Appointment cancelled', 'warning');
         }
     }
+    
+    // Close modal
+    const cancelConfirmModal = document.getElementById('cancelConfirmModal');
+    const modalOverlay = document.getElementById('modalOverlay');
+    if (cancelConfirmModal) {
+        cancelConfirmModal.classList.remove('active');
+    }
+    if (modalOverlay) {
+        modalOverlay.classList.remove('active');
+    }
+    document.body.style.overflow = '';
+    window.appointmentToCancel = null;
 }
 
 // Show toast notification
 function showToast(message, type) {
-    // Create toast element
+    // Use global ToastNotifications if available
+    if (typeof ToastNotifications !== 'undefined') {
+        if (type === 'success') {
+            ToastNotifications.showSuccessToast(message);
+        } else if (type === 'error' || type === 'danger') {
+            ToastNotifications.showErrorAlert(message, 'danger');
+        } else if (type === 'warning') {
+            ToastNotifications.showToast(message, 'warning');
+        } else {
+            ToastNotifications.showToast(message, type || 'info');
+        }
+        return;
+    }
+
+    // Fallback to custom toast if ToastNotifications not available
+    const toastContainer = document.getElementById('toast-container') || createToastContainer();
     const toast = document.createElement('div');
-    toast.className = `alert alert-${type} position-fixed top-0 end-0 m-3`;
-    toast.style.zIndex = '9999';
+    
+    let alertClass = 'alert-success';
+    let icon = 'fa-check-circle';
+    
+    if (type === 'error' || type === 'danger') {
+        alertClass = 'alert-danger';
+        icon = 'fa-exclamation-circle';
+    } else if (type === 'warning') {
+        alertClass = 'alert-warning';
+        icon = 'fa-exclamation-triangle';
+    } else if (type === 'info') {
+        alertClass = 'alert-info';
+        icon = 'fa-info-circle';
+    }
+    
+    toast.className = `alert ${alertClass} position-fixed top-0 end-0 m-3`;
+    toast.style.zIndex = '10003'; // Above modals (10002) and overlay (10001)
     toast.style.minWidth = '300px';
+    toast.style.animation = 'slideIn 0.3s ease-out';
     toast.innerHTML = `
         <div class="d-flex align-items-center justify-content-between">
-            <span>${message}</span>
-            <button type="button" class="btn-close btn-close-white ms-3" onclick="this.parentElement.parentElement.remove()"></button>
+            <div class="d-flex align-items-center gap-2">
+                <i class="fas ${icon}"></i>
+                <span>${message}</span>
+            </div>
+            <button type="button" class="btn-close ms-3" onclick="this.parentElement.parentElement.remove()"></button>
         </div>
     `;
 
-    document.body.appendChild(toast);
+    toastContainer.appendChild(toast);
 
     // Auto remove after 3 seconds
     setTimeout(function () {
         toast.remove();
     }, 3000);
+}
+
+// Helper to create toast container if it doesn't exist
+function createToastContainer() {
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        document.body.appendChild(container);
+    }
+    return container;
 }
