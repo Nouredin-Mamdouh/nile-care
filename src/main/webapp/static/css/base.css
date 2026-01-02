@@ -1,0 +1,99 @@
+/* --- 3. GLOBAL RESETS --- */
+body {
+    font-family: var(--font-main);
+    color: var(--slate-800);
+    /* Original Light Gradient Background */
+    background: linear-gradient(135deg, var(--blue-50) 0%, var(--green-50) 50%, var(--blue-50) 100%);
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* Auth page base */
+.auth-page {
+    overflow: hidden;
+}
+.auth-page .sidebar,
+.auth-page .top-nav {
+    display: none !important;
+}
+.auth-page .main-content {
+    margin-left: 0 !important;
+}
+.auth-page .auth-container {
+    max-width: 1100px;
+}
+.auth-page #register-form {
+    display: none;
+}
+.auth-page .auth-brand-badge {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+    box-shadow: 0 4px 10px rgba(34, 211, 238, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.auth-page .auth-brand-title {
+    color: #1e3a8a;
+    font-size: 1.25rem;
+}
+.auth-page .auth-brand-subtitle {
+    color: #3b82f6;
+    font-weight: 500;
+}
+.auth-page .auth-cta-title {
+    color: #1e3a8a;
+}
+.auth-page .auth-cta-text {
+    color: #3b82f6;
+    font-size: 0.95rem;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+.auth-page .auth-inline-hint {
+    font-size: 0.75rem;
+}
+.auth-page .auth-form-subtitle {
+    font-size: 0.9rem;
+}
+.auth-page .card-glass {
+    background: rgba(255, 255, 255, 0.97);
+    border: 1px solid var(--blue-100);
+    border-radius: 24px;
+    box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.25);
+}
+.auth-page .input-group-text {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-right: none;
+    color: #94a3b8;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    padding-left: 1rem;
+}
+.auth-page .form-control-custom {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: none;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    padding: 0.8rem;
+    color: #1e293b;
+    font-size: 0.95rem;
+}
+.auth-page .form-control-custom:focus {
+    background-color: #fff;
+    border-color: #cbd5e1;
+    box-shadow: none;
+}
+.auth-page .form-control-custom:focus + .input-group-text,
+.auth-page .input-group:focus-within .input-group-text {
+    background-color: #fff;
+    border-color: #cbd5e1;
+    color: #3b82f6;
+}
