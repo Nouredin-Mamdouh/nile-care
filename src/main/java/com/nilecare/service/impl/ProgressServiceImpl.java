@@ -123,7 +123,7 @@ public class ProgressServiceImpl implements ProgressService {
                             progress.getModule().getTitle(),
                             progress.getCompletionPercentage(),
                             timeAgo,
-                            progress.getStatus() == StudentProgress.Status.COMPLETED,
+                            "COMPLETED".equals(progress.getStatus()),
                             color
                     );
                 })
@@ -177,9 +177,9 @@ public class ProgressServiceImpl implements ProgressService {
         progress.setLastAccessed(LocalDateTime.now());
 
         if (completionPercentage >= 100) {
-            progress.setStatus(StudentProgress.Status.COMPLETED);
+            progress.setStatus("COMPLETED");
         } else if (completionPercentage > 0) {
-            progress.setStatus(StudentProgress.Status.IN_PROGRESS);
+            progress.setStatus("IN_PROGRESS");
         }
 
         progressRepository.save(progress);

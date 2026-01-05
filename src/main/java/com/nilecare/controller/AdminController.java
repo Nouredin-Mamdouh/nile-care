@@ -109,13 +109,6 @@ public class AdminController {
         return "admin/users";
     }
 
-    @GetMapping("/reports")
-    public String reports(Model model, Principal principal) {
-        model.addAttribute("currentPage", "reports");
-        addCurrentUser(model, principal);
-        return "admin/reports";
-    }
-
     @PostMapping("/users/add")
     public String addUser(@RequestParam("fullName") String fullName,
                          @RequestParam("email") String email,
