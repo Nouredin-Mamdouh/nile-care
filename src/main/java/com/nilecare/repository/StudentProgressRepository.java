@@ -37,4 +37,11 @@ public interface StudentProgressRepository extends JpaRepository<StudentProgress
 
     @Query("SELECT sp FROM StudentProgress sp WHERE sp.student = :student ORDER BY sp.lastAccessed DESC")
     List<StudentProgress> findRecentActivities(@Param("student") User student, Pageable pageable);
+
+    /**
+     * Count student progress records by status
+     * @param status Status to filter by ('COMPLETED', 'IN_PROGRESS', 'NOT_STARTED')
+     * @return Count of student progress records with the given status
+     */
+    long countByStatus(String status);
 }

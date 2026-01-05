@@ -30,8 +30,7 @@ public class StudentProgress {
     private Integer completionPercentage = 0;
 
     @Column(name = "status")
-    @Enumerated(EnumType.STRING)
-    private Status status = Status.NOT_STARTED;
+    private String status;
 
     @Column(name = "last_accessed")
     private LocalDateTime lastAccessed;
@@ -41,12 +40,6 @@ public class StudentProgress {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
-
-    public enum Status {
-        NOT_STARTED,
-        IN_PROGRESS,
-        COMPLETED
-    }
 
     @PreUpdate
     protected void onUpdate() {

@@ -52,4 +52,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @return Count of users created before the specified date
      */
     long countByCreatedAtBefore(LocalDateTime date);
+
+    /**
+     * Count users created within a date range
+     * @param startDate The start of the date range (inclusive)
+     * @param endDate The end of the date range (inclusive)
+     * @return Count of users created between startDate and endDate
+     */
+    long countByCreatedAtBetween(LocalDateTime startDate, LocalDateTime endDate);
 }
