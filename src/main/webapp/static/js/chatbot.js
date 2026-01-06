@@ -1,11 +1,10 @@
-// Chatbot Module JavaScript
-// Handles message display, user input, and bot responses
+// Chatbot Module JavaScript - Connected to Google Gemini API
 
 // Message storage
 let messages = [
     {
         id: '1',
-        text: "Hello! I'm your MindCare AI assistant. I'm here to help you with mental health resources, learning modules, and general support. How can I assist you today?",
+        text: "Hello! I'm your MindCare AI assistant. I'm connected to Google AI to help you better. How can I assist you today?",
         sender: 'bot',
         timestamp: new Date(),
         suggestions: [
@@ -17,51 +16,20 @@ let messages = [
     }
 ];
 
-// Predefined bot responses
-const predefinedResponses = {
-    'stress': "I understand you're dealing with stress. We have excellent resources to help! I recommend starting with our 'Stress Management Fundamentals' module. It covers breathing exercises, time management, and cognitive strategies. Would you like me to guide you there?",
-    'anxiety': "Anxiety can be challenging. Our 'Mindfulness & Meditation' module has proven techniques to help manage anxiety. We also offer the GAD-7 assessment to help you understand your anxiety levels better. What would you like to explore first?",
-    'sleep': "Sleep is crucial for mental health! Check out our 'Sleep Hygiene & Rest' module for practical strategies to improve your sleep patterns. It includes tips on creating a sleep-friendly environment and establishing healthy routines.",
-    'module': "We offer several learning modules covering topics like stress management, mindfulness, emotional regulation, sleep hygiene, and building healthy relationships. Each module includes videos, articles, and practical exercises. Which topic interests you most?",
-    'counseling': "Booking a counseling session is easy! Navigate to the 'Counseling' section from the sidebar. You can view our professional counselors' profiles, check their availability, and book a session that fits your schedule. Would you like me to explain more about our counselors?",
-    'assessment': "We offer validated self-assessment tools including PHQ-9 for depression and GAD-7 for anxiety. These tools can help you understand your current mental health status. The assessments are private, and results come with personalized recommendations. Would you like to take one?",
-    'help': "I can help you with:\n• Finding and navigating learning modules\n• Understanding self-assessments\n• Booking counseling appointments\n• Getting mental health tips and resources\n• Answering questions about the platform\n\nWhat would you like to know more about?",
-    'mindfulness': "Mindfulness is a powerful tool for mental wellbeing. Our platform offers guided meditation exercises, breathing techniques, and mindfulness practices. These can help reduce stress, improve focus, and enhance emotional regulation. Would you like to start with a beginner's guide?"
-};
-
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function () {
     renderMessages();
 
     // Add enter key listener to input
     const messageInput = document.getElementById('message-input');
-    messageInput.addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            sendMessage();
-        }
-    });
-});
-
-// Get bot response based on user message
-function getBotResponse(userMessage) {
-    const lowerMessage = userMessage.toLowerCase();
-
-    // Check for keyword matches
-    for (const [key, response] of Object.entries(predefinedResponses)) {
-        if (lowerMessage.includes(key)) {
-            return {
-                text: response,
-                suggestions: key === 'help' ? [] : ['Tell me more', 'What else can you help with?', 'Book counseling']
-            };
-        }
+    if(messageInput){
+        messageInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
     }
-
-    // Default response
-    return {
-        text: "I'm here to help! You can ask me about learning modules, counseling sessions, self-assessments, or general mental health support. What would you like to know?",
-        suggestions: ['Show me modules', 'How to book counseling', 'Mental health tips', 'Take an assessment']
-    };
-}
+});
 
 // Send a message
 function sendMessage() {
@@ -70,7 +38,7 @@ function sendMessage() {
 
     if (!messageText) return;
 
-    // Add user message
+    // 1. Add User Message to UI
     const userMessage = {
         id: Date.now().toString(),
         text: messageText,
@@ -80,54 +48,63 @@ function sendMessage() {
     };
 
     messages.push(userMessage);
-    messageInput.value = '';
+    messageInput.value = ''; // Clear input
     renderMessages();
 
-    // Simulate bot typing and response
-    setTimeout(function () {
-        const botResponse = getBotResponse(messageText);
+    // 2. Send to Java Backend (Gemini API)
+    // We show a "Thinking..." indicator by adding a temporary loading message if desired, 
+    // but for now, we will just wait for the response.
+    
+    fetch('/api/chat/send', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: messageText })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // 3. Create Bot Message from API Data
         const botMessage = {
             id: (Date.now() + 1).toString(),
-            text: botResponse.text,
+            text: data.response, // This comes from Gemini
             sender: 'bot',
             timestamp: new Date(),
-            suggestions: botResponse.suggestions
+            suggestions: [] // You can add static suggestions here if you want
         };
 
         messages.push(botMessage);
         renderMessages();
-    }, 1000);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        const errorMessage = {
+            id: (Date.now() + 1).toString(),
+            text: "I'm having trouble connecting to the server. Please try again.",
+            sender: 'bot',
+            timestamp: new Date(),
+            suggestions: []
+        };
+        messages.push(errorMessage);
+        renderMessages();
+    });
 }
 
 // Quick action handler
 function quickAction(topic) {
     const messageInput = document.getElementById('message-input');
-
     let message = '';
+    
+    // We convert the topic button clicks into natural language questions for the AI
     switch (topic) {
-        case 'stress':
-            message = 'Help with stress management';
-            break;
-        case 'module':
-            message = 'What learning modules are available?';
-            break;
-        case 'counseling':
-            message = 'How do I book a counseling session?';
-            break;
-        case 'assessment':
-            message = 'Tell me about self-assessments';
-            break;
-        case 'anxiety':
-            message = 'I need help with anxiety';
-            break;
-        case 'sleep':
-            message = 'Help me with sleep issues';
-            break;
-        case 'mindfulness':
-            message = 'Tell me about mindfulness';
-            break;
-        default:
-            message = topic;
+        case 'stress': message = 'I need help with stress management.'; break;
+        case 'module': message = 'What learning modules are available?'; break;
+        case 'counseling': message = 'How do I book a counseling session?'; break;
+        case 'assessment': message = 'Tell me about self-assessments.'; break;
+        case 'anxiety': message = 'I need help with anxiety.'; break;
+        case 'sleep': message = 'I am having trouble sleeping.'; break;
+        case 'mindfulness': message = 'Tell me about mindfulness.'; break;
+        default: message = topic;
     }
 
     messageInput.value = message;
@@ -141,9 +118,11 @@ function handleSuggestion(suggestion) {
     sendMessage();
 }
 
-// Render all messages
+// Render all messages (Kept exactly the same as your original file to preserve styling)
 function renderMessages() {
     const container = document.getElementById('chat-messages');
+    if(!container) return;
+    
     container.innerHTML = '';
 
     messages.forEach(function (message) {
@@ -185,9 +164,11 @@ function renderMessages() {
         const messageText = document.createElement('p');
         messageText.className = 'mb-0';
         messageText.style.whiteSpace = 'pre-line';
-        messageText.textContent = message.text;
+        // Parse simple markdown bolding if Gemini sends it (**text**)
+        let formattedText = message.text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+        messageText.innerHTML = formattedText; 
+        
         bubble.appendChild(messageText);
-
         bubbleContainer.appendChild(bubble);
 
         // Suggestions
@@ -226,7 +207,10 @@ function renderMessages() {
 
 // Format timestamp
 function formatTime(date) {
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
+    if(!date) return '';
+    // Ensure date is a Date object (in case it came from JSON as string)
+    const d = new Date(date);
+    const hours = d.getHours().toString().padStart(2, '0');
+    const minutes = d.getMinutes().toString().padStart(2, '0');
     return `${hours}:${minutes}`;
 }

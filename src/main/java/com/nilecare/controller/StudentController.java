@@ -55,10 +55,10 @@ public class StudentController {
     }
 
     // 5. Chatbot
-    @GetMapping("/chat")
-    public String chatbot() {
-        return "student/chatbot";
-    }
+    //@GetMapping("/chat")
+    //public String chatbot() {
+     //   return "student/chatbot";
+    //}
 
     // 6. Feedback
     @GetMapping("/feedback")
