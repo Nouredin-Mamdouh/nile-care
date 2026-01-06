@@ -16,6 +16,9 @@ import java.util.Optional;
 @Repository
 public interface StudentProgressRepository extends JpaRepository<StudentProgress, Long> {
 
+    // ==========================================
+    // 1. EXISTING METHODS (Kept as they are useful)
+    // ==========================================
     List<StudentProgress> findByStudent(User student);
 
     Optional<StudentProgress> findByStudentAndModule(User student, LearningModule module);
@@ -38,10 +41,26 @@ public interface StudentProgressRepository extends JpaRepository<StudentProgress
     @Query("SELECT sp FROM StudentProgress sp WHERE sp.student = :student ORDER BY sp.lastAccessed DESC")
     List<StudentProgress> findRecentActivities(@Param("student") User student, Pageable pageable);
 
-    /**
-     * Count student progress records by status
-     * @param status Status to filter by ('COMPLETED', 'IN_PROGRESS', 'NOT_STARTED')
-     * @return Count of student progress records with the given status
-     */
     long countByStatus(String status);
+
+
+    // ==========================================
+    // 2. NEW METHODS (Required for ProgressService)
+    // ==========================================
+
+    /**
+     * Find all progress for a student using just their ID.
+     * (Matches 'studentProgressRepo.findByUserId' in Service)
+     */
+    List<StudentProgress> findByStudent_UserId(Long userId);
+
+    /**
+     * Find specific module progress using just IDs.
+     * (Matches 'studentProgressRepo.findByUserIdAndModuleId' in Service)
+     */
+    @Query("SELECT sp FROM StudentProgress sp WHERE sp.student.userId = :userId AND sp.module.moduleId = :moduleId")
+    StudentProgress findByUserIdAndModuleId(@Param("userId") Long userId, @Param("moduleId") Long moduleId);
+    
+    // Note: If you prefer Optional, change return type to Optional<StudentProgress>
+    // But our current Service expects a direct object or null.
 }

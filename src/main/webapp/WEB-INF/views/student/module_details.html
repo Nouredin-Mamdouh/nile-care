@@ -7,17 +7,15 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <!-- Page Header -->
         <div class="mb-4">
-            <h2 class="fw-semibold text-blue-900 mb-1" th:text="${module != null ? module.title : 'Understanding and Managing Stress'}">Module Title</h2>
-            <p class="text-blue-600 small" th:text="${module != null ? module.description : 'Learn essential stress management techniques'}">Module Description</p>
+            <h2 class="fw-semibold text-blue-900 mb-1" th:text="${module != null ? module.title : 'Module Title'}">Module Title</h2>
+            <p class="text-blue-600 small" th:text="${module != null ? module.description : 'Module Description'}">Module Description</p>
         </div>
 
-        <!-- Hero Section with Gradient -->
         <div class="card card-custom mb-4" style="border: none; padding: 0; overflow: hidden; box-shadow: 0 10px 30px rgba(59, 130, 246, 0.15);">
             <div class="module-hero-gradient">
                 <div class="text-center text-white module-hero-content">
-                    <h1 class="mb-3 module-hero-title">Understanding and Managing Stress</h1>
+                    <h1 class="mb-3 module-hero-title" th:text="${module != null ? module.title : 'Understanding and Managing Stress'}">Understanding and Managing Stress</h1>
                     <div class="d-flex align-items-center justify-content-center gap-3 flex-wrap">
                         <span class="badge module-hero-badge">Intermediate</span>
                         <span class="badge module-hero-badge">Mental Wellness</span>
@@ -26,11 +24,8 @@
             </div>
         </div>
 
-        <!-- Main Content Grid -->
         <div class="row g-4">
-            <!-- Main Content Column -->
             <div class="col-12 col-lg-9">
-                <!-- Tabs Navigation -->
                 <ul class="nav nav-pills mb-4 module-tabs-nav" role="tablist">
                     <li class="nav-item module-tab-item" role="presentation">
                         <button class="nav-link module-tab-link active" id="overview-tab" data-bs-toggle="tab" data-bs-target="#overview" type="button" role="tab" aria-controls="overview" aria-selected="true">Overview</button>
@@ -46,12 +41,9 @@
                     </li>
                 </ul>
 
-                <!-- Tab Content -->
                 <div class="tab-content">
-                    <!-- Overview Tab -->
                     <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview-tab">
                         <div class="card card-custom" style="border: 1px solid #dbeafe; padding: 1.5rem;">
-                            <!-- Tab Header -->
                             <div class="d-flex justify-content-between align-items-start mb-4">
                                 <div>
                                     <h3 class="fw-semibold text-blue-900 mb-1">Module Overview</h3>
@@ -64,7 +56,6 @@
                                 </div>
                             </div>
 
-                            <!-- Metadata Cards -->
                             <div class="row g-3 mb-4">
                                 <div class="col-12 col-sm-6 col-md-4">
                                     <div class="module-metadata-card blue">
@@ -95,227 +86,111 @@
                                 </div>
                             </div>
 
-                            <!-- Progress Section -->
                             <div class="mb-4">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <span class="module-progress-label">Your Progress</span>
-                                    <span class="module-progress-percentage">35% Complete</span>
+                                    <span class="module-progress-percentage">0% Complete</span>
                                 </div>
                                 <div class="progress module-progress-bar-container">
-                                    <div class="progress-bar module-progress-bar-fill" role="progressbar" style="width: 35%;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar module-progress-bar-fill" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
-                                <p class="module-last-access">Last accessed: 2 hours ago</p>
+                                <p class="module-last-access">Start your journey today</p>
                             </div>
 
-                            <!-- Description -->
                             <div class="mb-4">
                                 <h4 class="module-section-title">Description</h4>
-                                <p class="module-description-text">
+                                <p class="module-description-text" th:text="${module != null ? module.description : 'Module contents...'}">
                                     This comprehensive module explores the nature of stress and provides practical strategies for managing it effectively. 
-                                    You'll learn to identify your personal stress triggers, understand the physiological and psychological effects of stress, 
-                                    and develop a toolkit of evidence-based coping mechanisms.
                                 </p>
                             </div>
 
-                            <!-- Learning Objectives -->
                             <div class="mb-4">
                                 <h4 class="module-section-title mb-3">Learning Objectives</h4>
                                 <ul class="module-objectives-list">
                                     <li class="module-objective-item">
                                         <i class="fas fa-check-circle module-objective-check"></i>
-                                        <span>Understand the biological and psychological mechanisms of stress</span>
+                                        <span>Understand the biological and psychological mechanisms</span>
                                     </li>
                                     <li class="module-objective-item">
                                         <i class="fas fa-check-circle module-objective-check"></i>
-                                        <span>Identify personal stress triggers and patterns</span>
+                                        <span>Identify personal triggers and patterns</span>
                                     </li>
                                     <li class="module-objective-item">
                                         <i class="fas fa-check-circle module-objective-check"></i>
                                         <span>Learn and practice effective coping strategies</span>
                                     </li>
-                                    <li class="module-objective-item">
-                                        <i class="fas fa-check-circle module-objective-check"></i>
-                                        <span>Develop a personalized stress management plan</span>
-                                    </li>
-                                    <li class="module-objective-item">
-                                        <i class="fas fa-check-circle module-objective-check"></i>
-                                        <span>Recognize when to seek professional help</span>
-                                    </li>
                                 </ul>
                             </div>
 
-                            <!-- Prerequisites -->
-                            <div class="mb-4">
-                                <h4 class="module-section-title">Prerequisites</h4>
-                                <p class="text-blue-700 mb-0">
-                                    No prior knowledge required. This module is suitable for anyone interested in learning stress management techniques.
-                                </p>
-                            </div>
-
-                            <!-- Action Button -->
                             <div class="pt-2">
-                                <a th:href="@{/lesson/1}" class="btn module-action-btn w-100 text-decoration-none">
-                                    <i class="fas fa-play me-2"></i>Continue Learning
+                                <a th:href="@{/lesson/{id}(id=${firstLessonId})}" th:if="${firstLessonId != null}" class="btn module-action-btn w-100 text-decoration-none">
+                                    <i class="fas fa-play me-2"></i>Start Learning
                                 </a>
+                                <button th:if="${firstLessonId == null}" class="btn module-action-btn w-100 text-decoration-none" disabled>
+                                    <i class="fas fa-clock me-2"></i>Coming Soon
+                                </button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Content Tab -->
                     <div class="tab-pane fade" id="content" role="tabpanel" aria-labelledby="content-tab">
                         <div class="card card-custom" style="border: 1px solid #dbeafe; padding: 1.5rem;">
                             <h3 class="fw-semibold text-blue-900 mb-1">Lesson List</h3>
                             <p class="text-blue-600 small mb-4">Complete lessons in order to progress</p>
 
                             <div class="accordion" id="lessonAccordion">
-                                <!-- Lesson 1 -->
-                                <div class="lesson-accordion-item">
+                                
+                                <div th:if="${lessons == null or lessons.isEmpty()}" class="alert alert-info">
+                                    No lessons are currently available for this module.
+                                </div>
+
+                                <div class="lesson-accordion-item" th:each="lesson, iterStat : ${lessons}">
                                     <h2 class="accordion-header">
-                                        <button class="accordion-button lesson-accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#lesson1" aria-expanded="true" aria-controls="lesson1">
+                                        <button class="accordion-button lesson-accordion-button collapsed" type="button" 
+                                                data-bs-toggle="collapse" 
+                                                th:data-bs-target="'#collapseLesson-' + ${lesson.lessonId}" 
+                                                aria-expanded="false" 
+                                                th:aria-controls="'collapseLesson-' + ${lesson.lessonId}">
                                             <div class="d-flex align-items-center gap-3 w-100">
-                                                <div class="lesson-status-badge completed">
-                                                    <i class="fas fa-check text-white"></i>
+                                                <div class="lesson-status-badge current">
+                                                    <span th:text="${iterStat.count}" class="text-white">1</span>
                                                 </div>
                                                 <div class="text-start flex-grow-1">
-                                                    <p class="lesson-title">Introduction to Stress</p>
+                                                    <p class="lesson-title" th:text="${lesson.title}">Lesson Title</p>
                                                     <div class="lesson-meta">
-                                                        <span><i class="fas fa-video me-1"></i>Video</span>
+                                                        <span><i class="fas fa-file-alt me-1"></i>Lesson</span>
                                                         <span><i class="fas fa-clock me-1"></i>15 min</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </button>
                                     </h2>
-                                    <div id="lesson1" class="accordion-collapse collapse show" data-bs-parent="#lessonAccordion">
+                                    <div th:id="'collapseLesson-' + ${lesson.lessonId}" class="accordion-collapse collapse" data-bs-parent="#lessonAccordion">
                                         <div class="lesson-accordion-body">
-                                            <p class="lesson-description">This lesson covers essential concepts about introduction to stress and its impact on daily life.</p>
-                                            <a th:href="@{/lesson/1}" class="btn btn-sm lesson-start-btn text-decoration-none">Review Lesson</a>
+                                            <p class="lesson-description" th:text="${lesson.content != null ? #strings.abbreviate(lesson.content, 100) : 'Click below to start this lesson.'}">
+                                                Lesson content preview...
+                                            </p>
+                                            <a th:href="@{/lesson/{id}(id=${lesson.lessonId})}" class="btn btn-sm lesson-start-btn text-decoration-none">Start Lesson</a>
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- Lesson 2 -->
-                                <div class="lesson-accordion-item">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button lesson-accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#lesson2" aria-expanded="false" aria-controls="lesson2">
-                                            <div class="d-flex align-items-center gap-3 w-100">
-                                                <div class="lesson-status-badge completed">
-                                                    <i class="fas fa-check text-white"></i>
-                                                </div>
-                                                <div class="text-start flex-grow-1">
-                                                    <p class="lesson-title">Identifying Stressors</p>
-                                                    <div class="lesson-meta">
-                                                        <span><i class="fas fa-file-alt me-1"></i>Text</span>
-                                                        <span><i class="fas fa-clock me-1"></i>20 min</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </button>
-                                    </h2>
-                                    <div id="lesson2" class="accordion-collapse collapse" data-bs-parent="#lessonAccordion">
-                                        <div class="lesson-accordion-body">
-                                            <p class="lesson-description">This lesson covers essential concepts about identifying stressors and recognizing stress patterns.</p>
-                                            <a th:href="@{/lesson/2}" class="btn btn-sm lesson-start-btn text-decoration-none">Review Lesson</a>
-                                        </div>
-                                    </div>
                                 </div>
-
-                                <!-- Lesson 3 (Current) -->
-                                <div class="lesson-accordion-item">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button lesson-accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#lesson3" aria-expanded="false" aria-controls="lesson3">
-                                            <div class="d-flex align-items-center gap-3 w-100">
-                                                <div class="lesson-status-badge current">
-                                                    3
-                                                </div>
-                                                <div class="text-start flex-grow-1">
-                                                    <p class="lesson-title">Coping Strategies</p>
-                                                    <div class="lesson-meta">
-                                                        <span><i class="fas fa-file-alt me-1"></i>Text</span>
-                                                        <span><i class="fas fa-clock me-1"></i>25 min</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </button>
-                                    </h2>
-                                    <div id="lesson3" class="accordion-collapse collapse" data-bs-parent="#lessonAccordion">
-                                        <div class="lesson-accordion-body">
-                                            <p class="lesson-description">This lesson covers essential concepts about coping strategies and their application.</p>
-                                            <a th:href="@{/lesson/3}" class="btn btn-sm lesson-start-btn text-decoration-none">Start Lesson</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Lesson 4 -->
-                                <div class="lesson-accordion-item">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button lesson-accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#lesson4" aria-expanded="false" aria-controls="lesson4">
-                                            <div class="d-flex align-items-center gap-3 w-100">
-                                                <div class="lesson-status-badge current">
-                                                    4
-                                                </div>
-                                                <div class="text-start flex-grow-1">
-                                                    <p class="lesson-title">Practical Exercises</p>
-                                                    <div class="lesson-meta">
-                                                        <span><i class="fas fa-video me-1"></i>Video</span>
-                                                        <span><i class="fas fa-clock me-1"></i>30 min</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </button>
-                                    </h2>
-                                    <div id="lesson4" class="accordion-collapse collapse" data-bs-parent="#lessonAccordion">
-                                        <div class="lesson-accordion-body">
-                                            <p class="lesson-description">This lesson covers practical exercises for stress management.</p>
-                                            <a th:href="@{/lesson/4}" class="btn btn-sm lesson-start-btn text-decoration-none">Start Lesson</a>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Lesson 5 -->
-                                <div class="lesson-accordion-item" style="margin-bottom: 0;">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button lesson-accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#lesson5" aria-expanded="false" aria-controls="lesson5">
-                                            <div class="d-flex align-items-center gap-3 w-100">
-                                                <div class="lesson-status-badge current">
-                                                    5
-                                                </div>
-                                                <div class="text-start flex-grow-1">
-                                                    <p class="lesson-title">Knowledge Check</p>
-                                                    <div class="lesson-meta">
-                                                        <span><i class="fas fa-question-circle me-1"></i>Quiz</span>
-                                                        <span><i class="fas fa-clock me-1"></i>10 min</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </button>
-                                    </h2>
-                                    <div id="lesson5" class="accordion-collapse collapse" data-bs-parent="#lessonAccordion">
-                                        <div class="lesson-accordion-body">
-                                            <p class="lesson-description">This lesson is a knowledge check quiz to test your understanding.</p>
-                                            <a th:href="@{/lesson/5}" class="btn btn-sm lesson-start-btn text-decoration-none">Start Quiz</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
-                    <!-- Resources Tab -->
                     <div class="tab-pane fade" id="resources" role="tabpanel" aria-labelledby="resources-tab">
                         <div class="card card-custom" style="border: 1px solid #dbeafe; padding: 1.5rem;">
                             <h3 class="fw-semibold text-blue-900 mb-1">Learning Resources</h3>
                             <p class="text-blue-600 small mb-4">Additional materials to enhance your learning</p>
 
                             <div class="d-flex flex-column gap-3">
-                                <!-- Resource 1 -->
                                 <div class="resource-item">
                                     <div class="d-flex align-items-center gap-3">
                                         <div class="resource-icon-container">
                                             <i class="fas fa-file-pdf resource-icon"></i>
                                         </div>
                                         <div>
-                                            <p class="resource-title">Stress Management Handbook</p>
+                                            <p class="resource-title">Module Handbook</p>
                                             <div class="resource-meta">
                                                 <span>PDF</span>
                                                 <span>• 2.4 MB</span>
@@ -326,298 +201,38 @@
                                         <i class="fas fa-download me-1"></i>Download
                                     </button>
                                 </div>
-
-                                <!-- Resource 2 -->
-                                <div class="resource-item">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="resource-icon-container">
-                                            <i class="fas fa-file-pdf resource-icon"></i>
-                                        </div>
-                                        <div>
-                                            <p class="resource-title">Daily Stress Log Worksheet</p>
-                                            <div class="resource-meta">
-                                                <span>PDF</span>
-                                                <span>• 1.1 MB</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <button class="btn btn-sm resource-btn">
-                                        <i class="fas fa-download me-1"></i>Download
-                                    </button>
-                                </div>
-
-                                <!-- Resource 3 -->
-                                <div class="resource-item">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="resource-icon-container">
-                                            <i class="fas fa-file-pdf resource-icon"></i>
-                                        </div>
-                                        <div>
-                                            <p class="resource-title">Relaxation Techniques Guide</p>
-                                            <div class="resource-meta">
-                                                <span>PDF</span>
-                                                <span>• 3.2 MB</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <button class="btn btn-sm resource-btn">
-                                        <i class="fas fa-download me-1"></i>Download
-                                    </button>
-                                </div>
-
-                                <!-- Resource 4 -->
-                                <div class="resource-item">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="resource-icon-container">
-                                            <i class="fas fa-link resource-icon"></i>
-                                        </div>
-                                        <div>
-                                            <p class="resource-title">Recommended Reading List</p>
-                                            <div class="resource-meta">
-                                                <span>Link</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <button class="btn btn-sm resource-btn">
-                                        <i class="fas fa-external-link-alt me-1"></i>Open
-                                    </button>
-                                </div>
-
-                                <!-- Resource 5 -->
-                                <div class="resource-item">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="resource-icon-container">
-                                            <i class="fas fa-link resource-icon"></i>
-                                        </div>
-                                        <div>
-                                            <p class="resource-title">Mindfulness App Resources</p>
-                                            <div class="resource-meta">
-                                                <span>Link</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <button class="btn btn-sm resource-btn">
-                                        <i class="fas fa-external-link-alt me-1"></i>Open
-                                    </button>
-                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Progress Tab -->
                     <div class="tab-pane fade" id="progress" role="tabpanel" aria-labelledby="progress-tab">
                         <div class="card card-custom" style="border: 1px solid #dbeafe; padding: 1.5rem;">
                             <h3 class="fw-semibold text-blue-900 mb-1">Your Progress</h3>
                             <p class="text-blue-600 small mb-4">Track your learning journey</p>
 
-                            <!-- Overall Completion -->
                             <div class="mb-4">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <span class="text-blue-900 fw-500">Overall Completion</span>
-                                    <span class="module-overall-completion">35%</span>
+                                    <span class="module-overall-completion">0%</span>
                                 </div>
                                 <div class="progress module-progress-bar-lg">
-                                    <div class="progress-bar module-progress-bar-fill" role="progressbar" style="width: 35%;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="progress-bar module-progress-bar-fill" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             </div>
 
-                            <!-- Time Spent -->
                             <div class="mb-4 module-time-spent-card">
                                 <div class="d-flex align-items-center gap-2 module-time-spent-label mb-1">
                                     <i class="fas fa-clock"></i>
                                     <span>Total Time Spent</span>
                                 </div>
-                                <p class="module-time-spent-value">1 hour 25 minutes</p>
-                            </div>
-
-                            <!-- Timeline -->
-                            <div class="mb-4">
-                                <h4 class="text-blue-900 fw-600 mb-3">Completion Timeline</h4>
-                                <div class="d-flex flex-column gap-3">
-                                    <div class="timeline-item">
-                                        <div class="timeline-dot"></div>
-                                        <div>
-                                            <p class="timeline-title">Started Module</p>
-                                            <p class="timeline-date">3 days ago</p>
-                                        </div>
-                                    </div>
-                                    <div class="timeline-item">
-                                        <div class="timeline-dot"></div>
-                                        <div>
-                                            <p class="timeline-title">Completed Lesson 1</p>
-                                            <p class="timeline-date">2 days ago</p>
-                                        </div>
-                                    </div>
-                                    <div class="timeline-item">
-                                        <div class="timeline-dot"></div>
-                                        <div>
-                                            <p class="timeline-title">Completed Lesson 2</p>
-                                            <p class="timeline-date">2 hours ago</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Badges -->
-                            <div>
-                                <h4 class="text-blue-900 fw-600 mb-3">Earned Badges</h4>
-                                <div class="row g-3">
-                                    <div class="col-4">
-                                        <div class="badge-card earned">
-                                            <i class="fas fa-trophy badge-icon earned"></i>
-                                            <p class="badge-name earned">Quick Learner</p>
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="badge-card locked">
-                                            <i class="fas fa-trophy badge-icon locked"></i>
-                                            <p class="badge-name locked">Stress Master</p>
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="badge-card locked">
-                                            <i class="fas fa-trophy badge-icon locked"></i>
-                                            <p class="badge-name locked">Perfect Score</p>
-                                        </div>
-                                    </div>
-                                </div>
+                                <p class="module-time-spent-value">0 minutes</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Sidebar -->
-            <div class="col-12 col-lg-3">
-                <div class="card card-custom sidebar-summary-card sticky-top">
-                    <h4 class="sidebar-summary-title">Quick Summary</h4>
-
-                    <!-- Progress Card -->
-                    <div class="mb-4">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="sidebar-progress-label">Progress</span>
-                            <span class="sidebar-progress-value">35%</span>
-                        </div>
-                        <div class="progress sidebar-progress-bar">
-                            <div class="progress-bar module-progress-bar-fill" role="progressbar" style="width: 35%;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-
-                    <!-- Current Lesson -->
-                    <div class="mb-4 sidebar-current-lesson-card">
-                        <p class="sidebar-current-lesson-label">Current Lesson</p>
-                        <p class="sidebar-current-lesson-title">Lesson 3: Coping Strategies</p>
-                    </div>
-
-                    <!-- Time Remaining -->
-                    <div class="mb-4 sidebar-time-card">
-                        <p class="sidebar-time-label">Time Remaining</p>
-                        <p class="sidebar-time-value">~1 hour 15 min</p>
-                    </div>
-
-                    <!-- Action Buttons -->
-                    <a th:href="@{/lesson/1}" class="btn w-100 mb-2 sidebar-continue-btn text-decoration-none">
-                        <i class="fas fa-play me-2"></i>Continue Learning
-                    </a>
-                    <a th:href="@{/learning}" class="btn w-100 mb-2 sidebar-back-btn text-decoration-none">
-                        <i class="fas fa-arrow-left me-2"></i>Back to Modules
-                    </a>
-                    <a th:href="@{/support/request}" class="btn w-100 sidebar-help-btn text-decoration-none">
-                        <i class="fas fa-question-circle me-2"></i>Ask for Help
-                    </a>
-                </div>
+            
             </div>
-        </div>
     </div>
 </body>
-
-<!-- Scripts Fragment -->
-<th:block layout:fragment="scripts">
-    <script src="/nile-care/static/js/toast-notifications.js"></script>
-    <script th:inline="javascript">
-        const contextPath = /*[[@{/}]]*/ '';
-        
-        // Bookmark SVG icons
-        const outlineSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>';
-        const filledSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#3b82f6" stroke="#3b82f6" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>';
-        
-        // Initialize bookmark icon
-        function initBookmarkIcon() {
-            const bookmarkIcon = document.querySelector('.module-bookmark-icon');
-            if (bookmarkIcon) {
-                bookmarkIcon.innerHTML = outlineSVG;
-            }
-        }
-        
-        // Handle bookmark toggle
-        document.addEventListener('click', function(e) {
-            const btn = e.target.closest('.module-bookmark-btn');
-            if (btn) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const icon = btn.querySelector('.module-bookmark-icon');
-                const wasBookmarked = btn.classList.contains('is-bookmarked');
-                const isBookmarked = !wasBookmarked;
-                
-                if (!isBookmarked) {
-                    btn.classList.remove('is-bookmarked');
-                    icon.innerHTML = outlineSVG;
-                    btn.setAttribute('aria-pressed', 'false');
-                    showToast('Removed from bookmarks', 'success');
-                } else {
-                    btn.classList.add('is-bookmarked');
-                    icon.innerHTML = filledSVG;
-                    btn.setAttribute('aria-pressed', 'true');
-                    showToast('Added to bookmarks', 'success');
-                }
-            }
-        });
-
-        // Handle action buttons
-        document.querySelectorAll('.module-action-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                showToast('Starting module...', 'success');
-            });
-        });
-
-        // Handle resource downloads and opens
-        document.querySelectorAll('.resource-item').forEach(item => {
-            const btn = item.querySelector('button');
-            if (btn) {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    const isDownload = btn.innerHTML.includes('download');
-                    if (isDownload) {
-                        showToast('Resource downloading...', 'success');
-                    } else {
-                        showToast('Opening resource...', 'success');
-                    }
-                });
-            }
-        });
-
-        // Toast notification function
-        function showToast(message, type = 'info') {
-            if (typeof ToastNotifications !== 'undefined' && ToastNotifications) {
-                if (type === 'success') {
-                    ToastNotifications.showSuccessToast(message);
-                } else if (type === 'info') {
-                    ToastNotifications.showToast(message);
-                } else {
-                    ToastNotifications.showErrorAlert(message);
-                }
-            } else {
-                console.log('[' + type.toUpperCase() + '] ' + message);
-            }
-        }
-
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            initBookmarkIcon();
-        });
-    </script>
-</th:block>
 </html>

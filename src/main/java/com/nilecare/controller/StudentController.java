@@ -1,6 +1,8 @@
 package com.nilecare.controller;
 
 import com.nilecare.model.User;
+import com.nilecare.model.Lesson;
+import com.nilecare.model.LearningModule;
 import com.nilecare.repository.LearningModuleRepository;
 import com.nilecare.repository.LessonRepository;
 import com.nilecare.service.UserService;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class StudentController {
@@ -85,9 +88,20 @@ public class StudentController {
     // 10. Module Details
     @GetMapping("/modules/{id}")
     public String moduleDetails(@PathVariable Long id, Model model) {
-        com.nilecare.model.LearningModule module = learningModuleRepository.findById((Long) id).orElse(null);
+        // 1. Fetch the Module
+        LearningModule module = learningModuleRepository.findById(id).orElse(null);
+        
         if (module != null) {
             model.addAttribute("module", module);
+            
+            // [FIXED] Updated to use the new Repository method name (removed underscore)
+            List<Lesson> lessons = lessonRepository.findByModuleIdOrderByLessonOrder(id);
+            model.addAttribute("lessons", lessons);
+            
+            // 3. Start Module Button Helper
+            if (!lessons.isEmpty()) {
+                model.addAttribute("firstLessonId", lessons.get(0).getLessonId());
+            }
         }
         return "student/module_details";
     }
@@ -95,10 +109,15 @@ public class StudentController {
     // 11. Lesson View
     @GetMapping("/lesson/{id}")
     public String lessonView(@PathVariable Long id, Model model) {
-        com.nilecare.model.Lesson lesson = lessonRepository.findByLessonId(id);
+        Lesson lesson = lessonRepository.findByLessonId(id);
+        
         if (lesson != null) {
             model.addAttribute("lesson", lesson);
-            model.addAttribute("moduleLessons", lessonRepository.findByModuleIdOrderByLessonOrder(lesson.getModuleId()));
+            
+            Long moduleId = lesson.getModuleId();
+            
+            // [FIXED] Updated to use the new Repository method name (removed underscore)
+            model.addAttribute("moduleLessons", lessonRepository.findByModuleIdOrderByLessonOrder(moduleId));
         }
         return "student/lesson_view";
     }
