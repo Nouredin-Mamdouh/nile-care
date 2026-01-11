@@ -27,7 +27,7 @@ public class SecurityConfig {
         http
             .authorizeRequests()
                 // Public pages
-                .antMatchers("/", "/login", "/register", "/auth/**").permitAll()
+                .antMatchers("/", "/login", "/register", "/auth/**", "/error/**", "/test/**").permitAll()
                 .antMatchers("/static/**", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
                 
                 // Role-based access
@@ -57,6 +57,9 @@ public class SecurityConfig {
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .permitAll()
+            .and()
+            .exceptionHandling()
+                .accessDeniedPage("/error/403")
             .and()
             .csrf()
                 .ignoringAntMatchers("/api/**"); // Optional: if you have REST APIs
