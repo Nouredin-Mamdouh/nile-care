@@ -41,7 +41,6 @@ public class AuthController {
     public String handleRegister(@RequestParam String fullName, 
                                  @RequestParam String email, 
                                  @RequestParam String password, 
-                                 @RequestParam String role,
                                  Model model) {
         
         if (userService.emailExists(email)) {
@@ -53,9 +52,8 @@ public class AuthController {
         newUser.setFullName(fullName);
         newUser.setEmail(email);
         
-        Role.RoleType roleType = role.equals("ADMIN") ? Role.RoleType.ROLE_ADMIN : Role.RoleType.ROLE_STUDENT;
-        
-        userService.registerUser(newUser, password, roleType);
+        // Always register as STUDENT - role selection removed for security
+        userService.registerUser(newUser, password);
         
         return "redirect:/login?registered=true";
     }

@@ -30,17 +30,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional // Ensures the whole process happens or fails together
-    public void registerUser(User user, String rawPassword, Role.RoleType roleType) {
+    public void registerUser(User user, String rawPassword) {
         // 1. Hash the password using Spring Security's PasswordEncoder bean
         String hashed = passwordEncoder.encode(rawPassword);
         user.setPasswordHash(hashed);
 
-        // 2. Assign the Role
-        Role userRole = roleRepository.findByName(roleType);
-        if (userRole == null) {
-            throw new RuntimeException("Error: Role " + roleType + " not found.");
+        // 2. Assign STUDENT role (hardcoded for security - prevents privilege escalation)
+        Role studentRole = roleRepository.findByName(Role.RoleType.ROLE_STUDENT);
+        if (studentRole == null) {
+            throw new RuntimeException("Error: STUDENT role not found in database.");
         }
-        user.getRoles().add(userRole);
+        user.getRoles().add(studentRole);
 
         // 3. Save to DB
         userRepository.save(user);

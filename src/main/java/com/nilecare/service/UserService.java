@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface UserService {
-    void registerUser(User user, String rawPassword, Role.RoleType roleType);
+    void registerUser(User user, String rawPassword);
     User loginUser(String email, String rawPassword);
     boolean emailExists(String email);
     User findByEmail(String email);
