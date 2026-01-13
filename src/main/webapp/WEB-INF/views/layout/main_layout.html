@@ -26,8 +26,9 @@
     <div class="wrapper">
         <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
             <div class="sidebar-header">
-                <a th:href="@{/learning}" class="logo-link" role="img"
-                    aria-label="NileCare - Learning & Wellness Platform">
+                <a th:href="${#authorization.expression('hasRole(''ADMIN'')')} ? @{/admin/dashboard} : 
+           (${#authorization.expression('hasRole(''COUNSELOR'')')} ? @{/counselor/dashboard} : @{/learning})"
+                    class="logo-link" role="img" aria-label="NileCare - Learning & Wellness Platform">
                     <div class="d-flex align-items-center gap-3">
                         <div class="logo-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"

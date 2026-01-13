@@ -93,6 +93,20 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
+        .btn-gradient-orange {
+            background: linear-gradient(to right, #f97316, #ea580c);
+            border: none;
+            color: white;
+            transition: all 0.2s;
+        }
+
+        .btn-gradient-orange:hover {
+            background: linear-gradient(to right, #ea580c, #d97706);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
         /* Activity Item Styling */
         .activity-item {
             padding: 0.75rem;
@@ -235,26 +249,75 @@
             </div>
         </div>
 
-        <!-- Quick Actions Card -->
-        <div class="card card-custom border-0 mb-4">
-            <div class="card-header bg-white border-0 pt-4">
-                <h5 class="text-blue-900 fw-bold mb-0">Quick Actions</h5>
-            </div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-12 col-md-6">
-                        <a th:href="@{/admin/reports}"
-                            class="btn btn-gradient-blue w-100 py-4 d-flex flex-column align-items-center gap-2">
-                            <i class="fas fa-chart-bar" style="font-size: 1.5rem;"></i>
-                            <span>View Reports</span>
-                        </a>
+        <!-- Quick Actions Section -->
+        <div class="mb-4">
+            <h5 class="text-blue-900 fw-bold mb-3">Quick Actions</h5>
+            <div class="row g-3">
+                <!-- Manage Users Card -->
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="card card-custom border-0 h-100">
+                        <div class="card-body p-4 d-flex flex-column align-items-center text-center gap-3">
+                            <div class="icon-box bg-gradient-blue">
+                                <i class="fas fa-users fa-lg"></i>
+                            </div>
+                            <div>
+                                <h6 class="text-blue-900 fw-bold mb-3">Manage Users</h6>
+                                <a th:href="@{/admin/users}" class="btn btn-gradient-blue btn-sm px-4">
+                                    Go to Users
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-12 col-md-6">
-                        <a th:href="@{/admin/users}"
-                            class="btn btn-gradient-green w-100 py-4 d-flex flex-column align-items-center gap-2">
-                            <i class="fas fa-users" style="font-size: 1.5rem;"></i>
-                            <span>Manage Users</span>
-                        </a>
+                </div>
+
+                <!-- Help Requests Card -->
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="card card-custom border-0 h-100">
+                        <div class="card-body p-4 d-flex flex-column align-items-center text-center gap-3">
+                            <div class="icon-box bg-gradient-orange">
+                                <i class="fas fa-life-ring fa-lg"></i>
+                            </div>
+                            <div>
+                                <h6 class="text-blue-900 fw-bold mb-3">Help Requests</h6>
+                                <a th:href="@{/admin/help-requests}" class="btn btn-gradient-orange btn-sm px-4">
+                                    View Requests
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review Feedback Card -->
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="card card-custom border-0 h-100">
+                        <div class="card-body p-4 d-flex flex-column align-items-center text-center gap-3">
+                            <div class="icon-box bg-gradient-green">
+                                <i class="fas fa-comments fa-lg"></i>
+                            </div>
+                            <div>
+                                <h6 class="text-blue-900 fw-bold mb-3">Review Feedback</h6>
+                                <a th:href="@{/admin/feedback}" class="btn btn-gradient-green btn-sm px-4">
+                                    View Feedback
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- View Reports Card -->
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="card card-custom border-0 h-100">
+                        <div class="card-body p-4 d-flex flex-column align-items-center text-center gap-3">
+                            <div class="icon-box bg-gradient-purple">
+                                <i class="fas fa-chart-bar fa-lg"></i>
+                            </div>
+                            <div>
+                                <h6 class="text-blue-900 fw-bold mb-3">View Reports</h6>
+                                <a th:href="@{/admin/reports}" class="btn btn-gradient-purple btn-sm px-4">
+                                    See Reports
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

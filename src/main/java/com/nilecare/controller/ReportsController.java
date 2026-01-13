@@ -5,14 +5,14 @@ import com.nilecare.repository.StudentProgressRepository;
 import com.nilecare.repository.UserRepository;
 import com.nilecare.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
@@ -111,42 +111,49 @@ public class ReportsController {
     /**
      * Export admin report data as CSV
      * Generates a CSV file with module statistics and user growth data
+     * Uses PrintWriter for direct response output to avoid view resolution issues
      * 
+     * @param response HttpServletResponse for writing CSV directly
      * @param principal Spring Security Principal containing authenticated user info
-     * @return ResponseEntity with CSV content and attachment headers
      */
     @GetMapping("/export/csv")
-    public ResponseEntity<String> exportReportAsCSV(Principal principal) {
-        // Verify user is authenticated and is admin
+    public void exportReportAsCSV(HttpServletResponse response, Principal principal) throws IOException {
+        // Verify user is authenticated
         if (principal == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication required");
+            return;
         }
 
-        // Build CSV content
-        StringBuilder csvContent = new StringBuilder();
+        // Set response headers for CSV download
+        response.setContentType("text/csv; charset=UTF-8");
+        response.setHeader("Content-Disposition", "attachment; filename=\"nilecare_admin_report.csv\"");
+        
+        PrintWriter writer = response.getWriter();
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         // ========== CSV HEADER ==========
-        csvContent.append("NileCare Admin Report\n");
-        csvContent.append("Generated on: ").append(LocalDateTime.now().format(dateFormatter)).append("\n\n");
+        writer.println("NileCare Admin Report");
+        writer.println("Generated on: " + LocalDateTime.now().format(dateFormatter));
+        writer.println();
 
         // ========== SECTION 1: MODULE STATISTICS ==========
-        csvContent.append("Module Statistics\n");
-        csvContent.append("Report Type,Count\n");
+        writer.println("=== Module Statistics ===");
+        writer.println("Status,Count");
 
         long completedCount = studentProgressRepository.countByStatus("COMPLETED");
         long inProgressCount = studentProgressRepository.countByStatus("IN_PROGRESS");
         long notStartedCount = studentProgressRepository.countByStatus("NOT_STARTED");
         long totalEnrollments = completedCount + inProgressCount + notStartedCount;
 
-        csvContent.append("Completed,").append(completedCount).append("\n");
-        csvContent.append("In Progress,").append(inProgressCount).append("\n");
-        csvContent.append("Not Started,").append(notStartedCount).append("\n");
-        csvContent.append("Total Enrollments,").append(totalEnrollments).append("\n\n");
+        writer.println("Completed," + completedCount);
+        writer.println("In Progress," + inProgressCount);
+        writer.println("Not Started," + notStartedCount);
+        writer.println("Total Enrollments," + totalEnrollments);
+        writer.println();
 
         // ========== SECTION 2: USER GROWTH - LAST 6 MONTHS ==========
-        csvContent.append("User Growth\n");
-        csvContent.append("Month,New Registrations\n");
+        writer.println("=== User Growth (Last 6 Months) ===");
+        writer.println("Month,New Registrations");
 
         for (int i = 5; i >= 0; i--) {
             YearMonth month = YearMonth.now().minusMonths(i);
@@ -154,32 +161,24 @@ public class ReportsController {
             LocalDateTime monthEnd = month.atEndOfMonth().atTime(23, 59, 59);
             long usersInMonth = userRepository.countByCreatedAtBetween(monthStart, monthEnd);
             
-            // Format as "Jan 2026" style
             String monthLabel = month.format(DateTimeFormatter.ofPattern("MMM yyyy"));
-            csvContent.append(monthLabel).append(",").append(usersInMonth).append("\n");
+            writer.println(monthLabel + "," + usersInMonth);
         }
 
-        csvContent.append("\n");
+        writer.println();
 
         // ========== SECTION 3: OVERALL STATISTICS ==========
-        csvContent.append("Overall Statistics\n");
-        csvContent.append("Metric,Value\n");
+        writer.println("=== Overall Statistics ===");
+        writer.println("Metric,Value");
         
         long totalUsers = userRepository.count();
         long studentCount = userRepository.countStudents();
         long unverifiedCount = userRepository.countByVerifiedFalse();
 
-        csvContent.append("Total Users,").append(totalUsers).append("\n");
-        csvContent.append("Total Students,").append(studentCount).append("\n");
-        csvContent.append("Unverified Users,").append(unverifiedCount).append("\n");
+        writer.println("Total Users," + totalUsers);
+        writer.println("Total Students," + studentCount);
+        writer.println("Unverified Users," + unverifiedCount);
 
-        // ========== SET RESPONSE HEADERS ==========
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Disposition", "attachment; filename=\"admin_report.csv\"");
-        headers.add("Content-Type", "text/csv; charset=UTF-8");
-
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(csvContent.toString());
+        writer.flush();
     }
 }
