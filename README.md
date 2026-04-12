@@ -7,13 +7,13 @@
 ![Thymeleaf](https://img.shields.io/badge/Thymeleaf-005F0F?style=for-the-badge\&logo=Thymeleaf\&logoColor=white)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge\&logo=bootstrap\&logoColor=white)
 
-NileCare is a comprehensive, full-stack web application designed to bridge the gap between academic progress and student mental health. It provides a secure, centralized environment where students can access learning materials, schedule counseling sessions, and track their wellness - all overseen by a robust administrative backend.
+NileCare is a full-stack mental health and wellness platform built with Java Spring and MySQL. It features a student-facing portal with gamified wellness resource tracking (like meditation, sleep hygiene), a psychologist dashboard for appointment and slot management, and an administrative panel for user role authorization and resource management. The platform's core innovation is a threshold-based assessment engine that identifies students in need and facilitates immediate booking with mental health professionals.
 
 ---
 
 ## 🚀 Key Features
 
-### 🛡️ Core Infrastructure & Security (My Focus)
+### 🛡️ Core Infrastructure & Security
 
 * **Strict Role-Based Access Control (RBAC):**
   Multi-tiered security architecture distinguishing between `STUDENT`, `COUNSELOR`, and `ADMIN` roles, utilizing **Spring Security** to protect endpoints and sensitive data.
@@ -29,7 +29,7 @@ NileCare is a comprehensive, full-stack web application designed to bridge the g
 
 ---
 
-### 📚 Learning & Wellness Modules (Team Contributions)
+### 📚 Learning & Wellness Modules
 
 * **Learning Management System (LMS):**
   Interactive learning modules with structured content delivery and student progress tracking.
