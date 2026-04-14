@@ -111,8 +111,8 @@ NileCare is a full-stack mental health platform built with Java Spring (MVC) and
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/nilecare.git
-cd nilecare
+git clone https://github.com/Nouredin-Mamdouh/nile-care.git
+cd nile-care
 ```
 
 ---
